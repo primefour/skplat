@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "__assert.h"
 #include "mutex.h"
+#include "spinlock.h"
 
 template <typename MutexType>
 class BaseScopedLock {
@@ -76,5 +77,6 @@ class BaseScopedLock {
 };
 
 typedef BaseScopedLock<Mutex> ScopedLock;
+typedef BaseScopedLock<SpinLock> ScopedSpinLock;
 
 #endif /* LOCK_H_ */
