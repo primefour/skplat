@@ -16,8 +16,9 @@
 #include "JNI_OnLoad.h"
 
 extern "C" {
-    /*
 extern int RegisterSklog(JNIEnv* env);
+
+/*
 extern int RegisterKXAlarm(JNIEnv* env);
 extern int RegisterABEvent(JNIEnv* env);
 extern int RegisterND(JNIEnv* env);
@@ -48,8 +49,9 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved) {
     ScopeJEnv jenv(jvm);
     VarCache::Singleton()->SetJvm(jvm);
 
-    /*
     RegisterSklog(env);
+
+    /*
     RegisterKXAlarm(env);
     RegisterABEvent(env);
     RegisterND(env);
