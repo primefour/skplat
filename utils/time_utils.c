@@ -12,39 +12,14 @@
 #else
 #include <stdatomic.h>
 #endif
+#include<unistd.h>
 
-#include <linux/android_alarm.h>
+//#include <linux/android_alarm.h>
 #include <fcntl.h>
 
 uint64_t gettickcount() {
-    static int s_fd = -1;
-    static int errcode  = 0;
-    if (s_fd == -1 && EACCES != errcode) {
-        int fd = open("/dev/alarm", O_RDONLY);
-        if (-1 == fd) errcode = errno;
-#if __ANDROID_API__< 21 && !defined(__LP64__)
-        if (__atomic_cmpxchg(-1, fd, &s_fd)) {
-            close(fd);
-        }
-#else
-        atomic_int x = ATOMIC_VAR_INIT(s_fd);
-        int expect = -1;
-        if (!atomic_compare_exchange_strong(&x, &expect, fd)) {
-        	close(fd);
-        }
-        s_fd = atomic_load(&x);
-#endif
-    }
-
     struct timespec ts;
-    int result = ioctl(s_fd, ANDROID_ALARM_GET_TIME(ANDROID_ALARM_ELAPSED_REALTIME), &ts);
-
-    if (result != 0) {
-        // XXX: there was an error, probably because the driver didn't
-        // exist ... this should return
-        // a real error, like an exception!
-        clock_gettime(CLOCK_BOOTTIME, &ts);
-    }
+    clock_gettime(CLOCK_BOOTTIME, &ts);
     return (uint64_t)ts.tv_sec*1000 + (uint64_t)ts.tv_nsec/1000000;
 }
 
