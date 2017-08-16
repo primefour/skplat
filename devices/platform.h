@@ -13,5 +13,7 @@ intmax_t GetMainTid();
 void ConsolePrint(int level,const char *_log);
 //wrap of console print
 void ConsolePrintf(const char* _tips_format, ...);
+int getNetInfo();
+
 #endif
 

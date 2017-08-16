@@ -4,3 +4,4 @@ libs/
 *.swp
 cscope*
 tags
+*.swo

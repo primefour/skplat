@@ -9,10 +9,13 @@ PROJECT_ROOT_PATH := $(LOCAL_PATH)/../
 PROJECT_LOG_PATH := $(PROJECT_ROOT_PATH)/log/
 PROJECT_UTILS_PATH := $(PROJECT_ROOT_PATH)/utils/
 PROJECT_DEVICES_PATH := $(PROJECT_ROOT_PATH)/devices/
+PROJECT_NETWORK_PATH := $(PROJECT_ROOT_PATH)/network/
+
 
 LOCAL_C_INCLUDES += $(PROJECT_UTILS_PATH) \
 	$(PROJECT_LOG_PATH) \
-	$(PROJECT_DEVICES_PATH) \ 
+	$(PROJECT_DEVICES_PATH) \
+	$(PROJECT_NETWORK_PATH) \ 
 
 #local jni interface file
 JNI_SRC := $(wildcard $(LOCAL_PATH)/*.*)
@@ -27,9 +30,14 @@ UTILS_SRC := $(filter %.cc %.c,$(UTILS_SRC))
 LOG_SRC := $(wildcard $(PROJECT_LOG_PATH)/*.*)
 LOG_SRC := $(filter %.cc %.c,$(LOG_SRC))
 
-#utils source file list
+#devices source file list
 DEVICES_SRC += $(wildcard $(PROJECT_DEVICES_PATH)/*.*)
 DEVICES_SRC := $(filter %.cc %.c,$(DEVICES_SRC))
+
+#network source file list
+NETWORK_SRC += $(wildcard $(PROJECT_NETWORK_PATH)/*.*)
+NETWORK_SRC := $(filter %.cc %.c,$(NETWORK_SRC))
+
 
 
 #LOCAL_SHARED_LIBRARIES := -lstdc++ libstlport
@@ -42,6 +50,7 @@ LOCAL_SRC_FILES += $(UTILS_SRC)
 LOCAL_SRC_FILES += $(LOG_SRC)
 LOCAL_SRC_FILES += $(DEVICES_SRC)
 LOCAL_SRC_FILES += $(JNI_SRC)
+LOCAL_SRC_FILES += $(NETWORK_SRC)
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
 LOCAL_SRC_FILES:= $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
