@@ -46,15 +46,32 @@ LOCAL_LDLIBS    := -lm -llog -lz
 $(info NDK_PROJECT_PATH =$(NDK_PROJECT_PATH))
 $(info PROJECT_ROOT_PATH =$(PROJECT_ROOT_PATH))  
 
+$(info NDK_PROJECT_PATH =$(UTILS_SRC))
+
+#add source code
 LOCAL_SRC_FILES += $(UTILS_SRC)
 LOCAL_SRC_FILES += $(LOG_SRC)
 LOCAL_SRC_FILES += $(DEVICES_SRC)
 LOCAL_SRC_FILES += $(JNI_SRC)
 LOCAL_SRC_FILES += $(NETWORK_SRC)
 
+#add local include file 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
+
+###third party source code import####
+##sqlite
+SQLITE_DIR=$(PROJECT_ROOT_PATH)/vendors/sqlite/
+include $(PROJECT_ROOT_PATH)/vendors/sqlite/sqlite.mk
+LOCAL_SRC_FILES += $(SQLITE_SRC_FILES)
+LOCAL_C_INCLUDES += $(SQLITE_C_INCLUDES)
+
+##remove jni
 LOCAL_SRC_FILES:= $(LOCAL_SRC_FILES:$(LOCAL_PATH)/%=%)
 
+
 LOCAL_CFLAGS := -Os -Wall -Wno-sign-compare -Wno-unused-local-typedefs -D__STDC_FORMAT_MACROS
+LOCAL_CFLAGS += -Wno-unused-parameter -Wno-int-to-pointer-cast
+LOCAL_CFLAGS += -Wno-uninitialized -Wno-parentheses
+LOCAL_CPPFLAGS += -Wno-conversion-null
 
 include $(BUILD_SHARED_LIBRARY)
