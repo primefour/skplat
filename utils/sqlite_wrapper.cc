@@ -1,7 +1,42 @@
 #include<stdio.h>
 #include<sqlite3.h>
 #include"sklog.h"
+
+#ifdef SKLOG_TAG
+#undef SKLOG_TAG
+#define SKLOG_TAG "sqlite_log"
+#endif
+
 static const int SQLITE_SOFT_HEAP_LIMIT = 8 * 1024 * 1024;
+static const int SQLITE_BUSY_TIMEOUT_MS = 2500;
+static const int SQLITE_ENABLE_TRACE = 1;
+static const int SQLITE_ENABLE_PROFILE = 1;
+
+struct SQLite{
+    sqlite3* const db;
+    const int openFlags;
+    std::string path;
+    volatile bool canceled;
+    SQLite(sqlite3* db, int openFlags, const std::string& path):
+                db(db), openFlags(openFlags), path(path), canceled(false) { }
+};
+
+// Called each time a statement begins execution, when tracing is enabled.
+static void trace_callback(void *data, const char *sql) {
+    skinfo("sqlite sql : %s", sql);
+}
+
+// Called each time a statement finishes execution, when profiling is enabled.
+static void profile_callback(void *data, const char *sql, sqlite3_uint64 tm) {
+    skinfo("sqlite sql:%s took %0.3f ms",sql, tm * 0.000001f);
+}
+
+// Called after each SQLite VM instruction when cancelation is enabled.
+static int cancel_callback(void* data) {
+    SQLite* sqlitedb= static_cast<SQLite*>(data);
+    return sqlitedb->canceled;
+}
+
 
 static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *message ,int n) {
     const char *error_msg = NULL;
@@ -97,4 +132,86 @@ void sqlite3_init() {
     // Initialize SQLite.
     sqlite3_initialize();
 }
+
+static int coll_localized( void *not_used, int nKey1, const void *pKey1, int nKey2, const void *pKey2){
+    int rc, n;
+    n = nKey1<nKey2 ? nKey1 : nKey2;
+    rc = memcmp(pKey1, pKey2, n);
+    if( rc==0 ){
+        rc = nKey1 - nKey2;
+    }
+    return rc;
+}
+
+
+SQLite* sqlite3_open(char *dbname,int flags = -1){
+    int open_flags = 0;
+
+    if(flags == -1){
+        open_flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+    }else{
+        open_flags = flags;
+    }
+
+    sqlite3* db;
+    int err = sqlite3_open_v2(dbname, &db,open_flags, NULL);
+    if (err != SQLITE_OK) {
+        return NULL;
+    }
+
+    err = sqlite3_create_collation(db, "localized", SQLITE_UTF8, 0, coll_localized);
+    if (err != SQLITE_OK) {
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    // Check that the database is really read/write when that is what we asked for.
+    if ((open_flags & SQLITE_OPEN_READWRITE) && sqlite3_db_readonly(db, NULL)) {
+        skerror("Could not open the database in read/write mode.");
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    // Set the default busy handler to retry automatically before returning SQLITE_BUSY.
+    err = sqlite3_busy_timeout(db, BUSY_TIMEOUT_MS);
+    if (err != SQLITE_OK) {
+        skerro("Could not set busy timeout");
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    // Create wrapper object.
+    Sqlite* sqlitedb= new Sqlite(db, open_flags, path);
+
+    // Enable tracing and profiling if requested.
+    if (SQLITE_ENABLE_TRACE) {
+        sqlite3_trace(db, &trace_callback, sqlitedb);
+    }
+    if (SQLITE_ENABLE_PROFILE) {
+        sqlite3_profile(db, &profile_callback,sqlitedb); 
+    }
+
+    skinfo("Opened connection %p with dbname: %s", db,dbname); 
+    return sqlitedb;
+}
+
+
+void sqlite3_close(SQLite **sqlitedb) {
+    if(*sqlitedb == NULL){
+        return ;
+    }
+
+    ALOGV("Closing connection %p", (*sqlite)->db);
+    int err = sqlite3_close((*sqlitedb)->db);
+    if (err != SQLITE_OK) {
+        // This can happen if sub-objects aren't closed first.  Make sure the caller knows.
+        skerror("sqlite3_close(%p) failed: %d", (*sqlitedb)->db, err);
+        return;
+    }
+    delete *sqlitedb;
+    *sqlitedb = NULL;
+}
+
+
+
 
