@@ -38,7 +38,7 @@ static int cancel_callback(void* data) {
 }
 
 
-static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *message ,int n) {
+static void sqlitew_error_info(int errcode, const char* sqlite_msg,char *message ,int n) {
     const char *error_msg = NULL;
     error_msg = "SQLITE-ERROR";
     switch (errcode & 0xff) { /* mask off extended error code */
@@ -57,7 +57,7 @@ static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *mes
             break;
         case SQLITE_DONE:
             error_msg = "SQLITE_DONE";
-            sqlite3Message = NULL; // SQLite error message is irrelevant in this case
+            sqlite_msg = NULL; // SQLite error message is irrelevant in this case
             break;
         case SQLITE_FULL:
             error_msg = "SQLITE_FULL";
@@ -99,20 +99,20 @@ static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *mes
             error_msg = "SQLiteError";
             break;
     }
-    snprintf(message,n,"%s (code %d)%s",error_msg,errcode,sqlite3Message); 
+    snprintf(message,n,"%s (code %d)%s",error_msg,errcode,sqlite_msg); 
 }
 
 // Called each time a message is logged.
-static void sqlite3_log_callback(void* data, int err_code, const char* msg) {
+static void sqlitew_log_callback(void* data, int err_code, const char* msg) {
     char log_buff[4096]={0};
     bool verboseLog = !!data;
     if(verboseLog){
-        sqlite3_error_info(err_code,msg,log_buff,sizeof(log_buff));
+        sqlitew_error_info(err_code,msg,log_buff,sizeof(log_buff));
         skinfo("%s",log_buff);
     }
 }
 
-void sqlite3_init() {
+void sqlitew_init() {
     // Enable multi-threaded mode.  In this mode, SQLite is safe to use by multiple
     // threads as long as no two threads use the same database connection at the same
     // time (which we guarantee in the SQLite database wrappers).
@@ -123,7 +123,7 @@ void sqlite3_init() {
     bool verboseLog = android_util_Log_isVerboseLogEnabled(SQLITE_LOG_TAG);
 #endif
     bool verboseLog = false;
-    sqlite3_config(SQLITE_CONFIG_LOG, &sqlite3_log_callback, verboseLog ? (void*)1 : NULL);
+    sqlite3_config(SQLITE_CONFIG_LOG, &sqlitew_log_callback, verboseLog ? (void*)1 : NULL);
 
     // The soft heap limit prevents the page cache allocations from growing
     // beyond the given limit, no matter what the max page cache sizes are
@@ -144,7 +144,7 @@ static int coll_localized( void *not_used, int nKey1, const void *pKey1, int nKe
 }
 
 
-SQLite* sqlite3_open(char *dbname,int flags = -1){
+SQLite* sqlitew_open(char *dbname,int flags = -1){
     int open_flags = 0;
 
     if(flags == -1){
@@ -196,7 +196,7 @@ SQLite* sqlite3_open(char *dbname,int flags = -1){
 }
 
 
-void sqlite3_close(SQLite **sqlitedb) {
+void sqlitew_close(SQLite **sqlitedb) {
     if(*sqlitedb == NULL){
         return ;
     }
@@ -210,6 +210,22 @@ void sqlite3_close(SQLite **sqlitedb) {
     }
     delete *sqlitedb;
     *sqlitedb = NULL;
+}
+
+
+//sql string should be encoded with utf8
+sqlite3_stmt* sqlitew_prepare_sql(SQLite *sqlitedb,const char *sql){
+    sqlite3_stmt* statement;
+    if(sql == NULL || sqlitedb == NULL){
+        return NULL;
+    }
+
+    int err = sqlite3_prepare_v2(sqlitedb->db, sql,strlen(sql), &statement, NULL);
+    if( rc !=SQLITE_OK ){
+        skerror("sqlite prepare fail (%s) failed: %d",sql,err);
+        return NULL;
+    }
+    return statement;
 }
 
 
