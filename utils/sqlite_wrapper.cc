@@ -38,7 +38,7 @@ static int cancel_callback(void* data) {
 }
 
 
-static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *message ,int n) {
+static void sqlitew_error_info(int errcode, const char* sqlite_msg,char *message ,int n) {
     const char *error_msg = NULL;
     error_msg = "SQLITE-ERROR";
     switch (errcode & 0xff) { /* mask off extended error code */
@@ -57,7 +57,7 @@ static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *mes
             break;
         case SQLITE_DONE:
             error_msg = "SQLITE_DONE";
-            sqlite3Message = NULL; // SQLite error message is irrelevant in this case
+            sqlite_msg = NULL; // SQLite error message is irrelevant in this case
             break;
         case SQLITE_FULL:
             error_msg = "SQLITE_FULL";
@@ -99,20 +99,20 @@ static void sqlite3_error_info(int errcode, const char* sqlite3Message,char *mes
             error_msg = "SQLiteError";
             break;
     }
-    snprintf(message,n,"%s (code %d)%s",error_msg,errcode,sqlite3Message); 
+    snprintf(message,n,"%s (code %d)%s",error_msg,errcode,sqlite_msg); 
 }
 
 // Called each time a message is logged.
-static void sqlite3_log_callback(void* data, int err_code, const char* msg) {
+static void sqlitew_log_callback(void* data, int err_code, const char* msg) {
     char log_buff[4096]={0};
     bool verboseLog = !!data;
     if(verboseLog){
-        sqlite3_error_info(err_code,msg,log_buff,sizeof(log_buff));
+        sqlitew_error_info(err_code,msg,log_buff,sizeof(log_buff));
         skinfo("%s",log_buff);
     }
 }
 
-void sqlite3_init() {
+void sqlitew_init() {
     // Enable multi-threaded mode.  In this mode, SQLite is safe to use by multiple
     // threads as long as no two threads use the same database connection at the same
     // time (which we guarantee in the SQLite database wrappers).
@@ -123,7 +123,7 @@ void sqlite3_init() {
     bool verboseLog = android_util_Log_isVerboseLogEnabled(SQLITE_LOG_TAG);
 #endif
     bool verboseLog = false;
-    sqlite3_config(SQLITE_CONFIG_LOG, &sqlite3_log_callback, verboseLog ? (void*)1 : NULL);
+    sqlite3_config(SQLITE_CONFIG_LOG, &sqlitew_log_callback, verboseLog ? (void*)1 : NULL);
 
     // The soft heap limit prevents the page cache allocations from growing
     // beyond the given limit, no matter what the max page cache sizes are
@@ -144,7 +144,7 @@ static int coll_localized( void *not_used, int nKey1, const void *pKey1, int nKe
 }
 
 
-SQLite* sqlite3_open(char *dbname,int flags = -1){
+SQLite* sqlitew_open(char *dbname,int flags = -1){
     int open_flags = 0;
 
     if(flags == -1){
@@ -196,7 +196,7 @@ SQLite* sqlite3_open(char *dbname,int flags = -1){
 }
 
 
-void sqlite3_close(SQLite **sqlitedb) {
+void sqlitew_close(SQLite **sqlitedb) {
     if(*sqlitedb == NULL){
         return ;
     }
@@ -211,6 +211,109 @@ void sqlite3_close(SQLite **sqlitedb) {
     delete *sqlitedb;
     *sqlitedb = NULL;
 }
+
+
+//sql string should be encoded with utf8
+sqlite3_stmt* sqlitew_prepare_sql(SQLite *sqlitedb,const char *sql){
+    sqlite3_stmt* statement;
+    if(sql == NULL || sqlitedb == NULL){
+        return NULL;
+    }
+
+    int err = sqlite3_prepare_v2(sqlitedb->db, sql,strlen(sql), &statement, NULL);
+    if( rc !=SQLITE_OK ){
+        skerror("sqlite prepare fail (%s) failed: %d",sql,err);
+        return NULL;
+    }
+    return statement;
+}
+
+//create network database
+//1.table dns (host text,ip text,ip_type int,dnt_type) 
+//2.table connect(ip text,conn_profile long,fail_times int,invalidate int)
+//3.table task(host text,path text,data bobl,task_state int,percent int, send_only int,try_time int,save_path text,offset long)
+static void create_networkdb_table(SQLite *sqlite){
+    const char *dns_sql = "create table dns if not exist (host text,ip text,ip_type int,dns_type int);";
+    const char *connect_sql = "create table connect if not exist(ip text,conn_profile int,fail_times int,invalid int);";
+    const char *task_sql = "create table task(id int primary key autoincrement,host text,path text,data blob,tast_state \
+                                    int,percent int ,send_only int ,try_time int, save_path text,offset int);";
+    char *zErr = NULL;
+    rc = sqlite3_exec(sqlite->db,dns_sql,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        utf8_printf(p->out, "/****** %s ******/\n", zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+    }
+
+    rc = sqlite3_exec(sqlite->db,connect_sql,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        utf8_printf(p->out, "/****** %s ******/\n", zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+    }
+
+    rc = sqlite3_exec(sqlite->db,task_sql,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        utf8_printf(p->out, "/****** %s ******/\n", zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+    }
+}
+
+SQLite* gsqlitedb = NULL;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INIT;
+
+void networkdb_init(){
+    const char *dbname = "/sdcard/netwr.db";
+    pthread_mutex_lock(&mutex);
+    if(gsqlitedb != NULL){
+        pthread_mutex_unlock(&mutex);
+        return;
+    }
+    sqlitew_init();
+    SQLite* gsqlitedb = sqlitew_open(dbname);
+    if (gsqlitedb == NULL){
+        skerror("create db %s fail ",dbname);
+        pthread_mutex_unlock(&mutex);
+        return;
+    }
+    create_networkdb_table(sqlitedb);
+    pthread_mutex_unlock(&mutex);
+}
+
+
+
+
+
+//sql string execute
+static int run_schema_dump_query( ShellState *p, const char *zQuery){
+    int rc;
+    char *zErr = 0;
+    rc = sqlite3_exec(p->db, zQuery, dump_callback, p, &zErr);
+    if( rc==SQLITE_CORRUPT ){
+        char *zQ2;
+        int len = strlen30(zQuery);
+        raw_printf(p->out, "/****** CORRUPTION ERROR *******/\n");
+        if( zErr ){
+            utf8_printf(p->out, "/****** %s ******/\n", zErr);
+            sqlite3_free(zErr);
+            zErr = 0;
+        }
+        zQ2 = malloc( len+100 );
+        if( zQ2==0 ) return rc;
+        sqlite3_snprintf(len+100, zQ2, "%s ORDER BY rowid DESC", zQuery);
+        rc = sqlite3_exec(p->db, zQ2, dump_callback, p, &zErr);
+        if( rc ){
+            utf8_printf(p->out, "/****** ERROR: %s ******/\n", zErr);
+        }else{
+            rc = SQLITE_CORRUPT;
+        }
+        sqlite3_free(zErr);
+        free(zQ2);
+    }
+    return rc;
+}
+
 
 
 
