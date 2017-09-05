@@ -233,7 +233,7 @@ sqlite3_stmt* sqlitew_prepare_sql(SQLite *sqlitedb,const char *sql){
 //2.table connect(ip text,conn_profile long,fail_times int,invalidate int)
 //3.table task(host text,path text,data bobl,task_state int,percent int, send_only int,try_time int,save_path text,offset long)
 static void create_networkdb_table(SQLite *sqlite){
-    const char *dns_sql = "create table dns if not exist (host text,ip text,ip_type int,dns_type int);";
+    const char *dns_sql = "create table dns if not exist (host text,ip text,ip_type int,dns_type int,dns_server text,count_down int);";
     const char *connect_sql = "create table connect if not exist(ip text,conn_profile int,fail_times int,invalid int);";
     const char *task_sql = "create table task(id int primary key autoincrement,host text,path text,data blob,tast_state \
                                     int,percent int ,send_only int ,try_time int, save_path text,offset int);";
@@ -281,38 +281,33 @@ void networkdb_init(){
     pthread_mutex_unlock(&mutex);
 }
 
+struct network_dns{
+    char *host;
+    char *host_ip;
+    char *dsn_server;
+    int ip_type;
+    int dns_type;
+};
 
 
-
-
-//sql string execute
-static int run_schema_dump_query( ShellState *p, const char *zQuery){
-    int rc;
-    char *zErr = 0;
-    rc = sqlite3_exec(p->db, zQuery, dump_callback, p, &zErr);
-    if( rc==SQLITE_CORRUPT ){
-        char *zQ2;
-        int len = strlen30(zQuery);
-        raw_printf(p->out, "/****** CORRUPTION ERROR *******/\n");
-        if( zErr ){
-            utf8_printf(p->out, "/****** %s ******/\n", zErr);
-            sqlite3_free(zErr);
-            zErr = 0;
-        }
-        zQ2 = malloc( len+100 );
-        if( zQ2==0 ) return rc;
-        sqlite3_snprintf(len+100, zQ2, "%s ORDER BY rowid DESC", zQuery);
-        rc = sqlite3_exec(p->db, zQ2, dump_callback, p, &zErr);
-        if( rc ){
-            utf8_printf(p->out, "/****** ERROR: %s ******/\n", zErr);
-        }else{
-            rc = SQLITE_CORRUPT;
-        }
-        sqlite3_free(zErr);
-        free(zQ2);
-    }
-    return rc;
+int insert_dns_entries(network_dns *entries){
 }
+int update_dns_entries(network_dns *entries){
+
+}
+int delete_dns_entries(network_dns *entries){
+
+}
+
+
+struct network_conn{
+    int fail_times;
+    char *host_ip;
+    int validate;
+    long conn_time;
+};
+
+int insert_connect_entries(
 
 
 
