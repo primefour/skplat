@@ -291,15 +291,12 @@ void sqlitew_exec_sql(SQLite *sqlitedb,const char *sql,void *pArg,int (xCallback
 
 
 //create network database
-//1.table dns (host text,ip text,ip_type int,dnt_type) 
-//2.table connect(ip text,conn_profile long,fail_times int,invalidate int)
-//3.table task(host text,path text,data bobl,task_state int,percent int, send_only int,try_time int,save_path text,offset long)
 static void create_networkdb_table(SQLite *sqlite){
     //don't change items order of create language
     const char *host_sql = "create table thost if not exists (host text,port int,type int);";
     const char *dns_sql = "create table dns if not exists (host text,ip text,dns_server text,ip_type int default 0,"
                                 "dns_type int default 0,fail_times int default 0,conn_profile int64 default 0x0fffffff);";
-    const char *task_sql = "create table task if not exists (id int primary key autoincrement,host text,path text,data blob,tast_state \
+    const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,port int,task_state \
                                     int,percent int ,send_only int ,try_time int, save_path text,offset int);";
 
     char *zErr = NULL;
@@ -623,7 +620,94 @@ int delete_host(SQLite *sqlite,const char *host,int port){
 
 //this is task table operate 
 //insert update delete
-//const char *task_sql = "create table task if not exists (id int primary key autoincrement,host text,path text,data blob,tast_state \
-//                                   int,percent int ,send_only int ,try_time int, save_path text,offset int);";
+//const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,task_state \
+//                                    int,percent int ,send_only int ,try_time int, save_path text,offset int);";
+
+struct task_data{
+    unsigned char *data;
+    long length;
+};
+
+enum TASK_TYPE{
+    HTTPS_TASK,
+    HTTP_TASK,
+    HTTP_DOWNLOAD_TASK,
+    HTTPS_DOWNLOAD_TASK,
+    TLS_TASK,
+    TCP_TASK,
+    TASK_TYPE_MAX,
+};
+
+
+enum TASK_STATE {
+    TASK_IDLE,
+    TASK_INIT,
+    TASK_CONN,
+    TASK_SEND,
+    TASK_RECV,
+    TASK_DONE,
+    TASK_FAIL,
+};
+
+struct task_info{
+    std::string task_id; //task name or id
+    std::string host; //server
+    std::string server_path; //client visit path
+    std::string save_path; //the path where download data save
+    task_data send_data; //send data;
+    task_data recv_data;
+    int64_t offset; //start point of download
+    int64_t offset_count; //the size should download from server
+    int64_t sends; //the data size of has send
+    int64_t send_count; //the data size for send
+    int64_t recvs; //data size of has recv
+    int64_t recv_count; //the data size should recv
+    short port; //server port
+    bool send_only; 
+    int task_state;
+    int try_time; //retry times
+    int task_type;
+};
+
+// const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,port int,task_state \
+  //                                  int default 0,percent int default 0,send_only int default 1,try_time int default  5, \
+  //                                  save_path text,offset int default 0);";
+
+int insert_task(SQLite sqlite, task_info * entry){
+    char sql_buff[4096*2]={0};
+
+    if(entry == NULL|| entry->task_id.empty() || entry->host.empty()){
+        return -1;
+    }
+
+    snprintf(sql_buff,sizeof(sql_buff),"insert into dns(task_id,host,path,port,send_only,try_time,save_path,offset)" \
+            "values ('%s','%s','%s',%d,%d,%d,'%s',%d);",
+            entry->task_id.c_str(),
+            entry->host.c_str(),
+            !entry->path.empty()?entry->path.c_str():"NULL",
+            entry->send_only,
+            entry->try_time,
+            !entry->save_path.empty() ?entry->save_path.c_str():"NULL",
+            etnry->offset);
+
+    rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        skerror("sqlite sql %s %s",sql_buff,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        return -1;
+    }
+    return 0;
+
+}
+
+int update_task_state(SQLite sqlite,const char *task_id,int state){
+
+}
+
+int update_task_progress(SQLite *sqlite,const char *task_id,int percent){
+
+}
+
 
 
