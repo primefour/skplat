@@ -417,7 +417,7 @@ int dns_check_host_exist(SQLite *sqlite,const string host,const string ip){
         return -1;
     }
 
-    std::string sql = "select count(*) where host =";
+    std::string sql = "select count(*) from dns where host =";
     sql += host;
     sql += "AND ip=";
     sql = sql + ip + ";";
@@ -629,24 +629,25 @@ struct task_data{
 };
 
 enum TASK_TYPE{
-    HTTPS_TASK,
-    HTTP_TASK,
-    HTTP_DOWNLOAD_TASK,
-    HTTPS_DOWNLOAD_TASK,
-    TLS_TASK,
-    TCP_TASK,
+    TASK_TYPE_HTTP,
+    TASK_TYPE_HTTPS,
+    TASK_TYPE_HTTP_DOWNLOAD,
+    TASK_TYPE_HTTPS_DOWNLOAD,
+    TASK_TYPE_TLS,
+    TASK_TYPE_TCP,
     TASK_TYPE_MAX,
 };
 
 
 enum TASK_STATE {
-    TASK_IDLE,
-    TASK_INIT,
-    TASK_CONN,
-    TASK_SEND,
-    TASK_RECV,
-    TASK_DONE,
-    TASK_FAIL,
+    TASK_STATE_IDLE,
+    TASK_STATE_INIT,
+    TASK_STATE_CONN,
+    TASK_STATE_SEND,
+    TASK_STATE_RECV,
+    TASK_STATE_DONE,
+    TASK_STATE_FAIL,
+    TASK_STATE_MAX,
 };
 
 struct task_info{
@@ -680,7 +681,7 @@ int insert_task(SQLite sqlite, task_info * entry){
         return -1;
     }
 
-    snprintf(sql_buff,sizeof(sql_buff),"insert into dns(task_id,host,path,port,send_only,try_time,save_path,offset)" \
+    snprintf(sql_buff,sizeof(sql_buff),"insert into task(task_id,host,path,port,send_only,try_time,save_path,offset)" \
             "values ('%s','%s','%s',%d,%d,%d,'%s',%d);",
             entry->task_id.c_str(),
             entry->host.c_str(),
@@ -701,13 +702,198 @@ int insert_task(SQLite sqlite, task_info * entry){
 
 }
 
-int update_task_state(SQLite sqlite,const char *task_id,int state){
+int check_task(SQLite sqlite,const char *task_id){
+    if(task_id == NULL){
+        return 0;
+    }
 
+    std::string sql = "select count(*) from task where task_id = '";
+    sql += task_id ;
+    sql += "';";
+    sqlite3_stmt *pStmt = NULL,
+    int rc = sqlite3_prepare_v2(sqlite->db,sql.c_str(), -1, &pStmt,NULL);
+    if(rc!=SQLITE_OK || pStmt == NULL){
+        skerror("prepare sql %s  fail ",sql.c_str());
+        return -1;
+    }
+    rc = sqlite3_step(pStmt);
+    int count = 0;
+    if(rc != SQLITE_ROW){
+        skerror("execute sql  %s fail ",sql.c_str());
+    }else{
+        count = sqlite3_column_int(pStmt,0);
+    }
+    sqlite3_finalize(pStmt);
+    return count;
+}
+
+int update_task_state(SQLite sqlite,const char *task_id,int state){
+    char sql_buff[4096] ={0};
+    if(task_id == NULL || state > TASK_STATE_MAX || state < 0){
+        return -1;
+    }
+
+    if(check_task(sqlite,task_id)){
+        snprintf(sql_buff,sizeof(sql_buff),"update task set state = %d where task_id = '%s'",state,task_id);
+        rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+        if(rc != SQLITE_OK){
+            skerror("sqlite sql %s %s",sql_buff,zErr);
+            sqlite3_free(zErr);
+            zErr = NULL;
+            return -1;
+        }
+        return 0;
+    }else{
+        return -1;
+    }
 }
 
 int update_task_progress(SQLite *sqlite,const char *task_id,int percent){
-
+    char sql_buff[4096] ={0};
+    if(task_id == NULL || percent < 0){
+        return -1;
+    }
+    if(check_task(sqlite,task_id)){
+        snprintf(sql_buff,sizeof(sql_buff),"update task set progress = %d where task_id = '%s'",percent,task_id);
+        rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+        if(rc != SQLITE_OK){
+            skerror("sqlite sql %s %s",sql_buff,zErr);
+            sqlite3_free(zErr);
+            zErr = NULL;
+            return -1;
+        }
+        return 0;
+    }else{
+        return -1;
+    }
 }
 
+
+
+int delete_task(SQLite *sqlite,const char *task_id){
+    char sql_buff[4096] ={0};
+
+    if(task_id == NULL){
+        return -1;
+    }
+
+    snprintf(sql_buff,sizeof(sql_buff),"delete from task where task_id = '%s';",task_id)
+
+    rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        skerror("sqlite sql %s %s",sql_buff,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        return -1;
+    }
+    return 0;
+}
+
+/*
+struct task_info{
+    std::string task_id; //task name or id
+    std::string host; //server
+    std::string server_path; //client visit path
+    std::string save_path; //the path where download data save
+    task_data send_data; //send data;
+    task_data recv_data;
+    int64_t offset; //start point of download
+    int64_t offset_count; //the size should download from server
+    int64_t sends; //the data size of has send
+    int64_t send_count; //the data size for send
+    int64_t recvs; //data size of has recv
+    int64_t recv_count; //the data size should recv
+    short port; //server port
+    bool send_only; 
+    int task_state;
+    int try_time; //retry times
+    int task_type;
+};
+*/
+
+
+
+static int task_table_callback(void*p,sqlite3_stmt *pStmt){
+    std::vector<task_info> *ptr_dns = (std::vector<task_info>*)p;
+    task_info entry; 
+    int i = 0;
+    //host text
+    entry->host = std::string(sqlite_column_text(pStmt,i++));
+    //ip text
+    entry->ip = std::string(sqlite_column_text(pStmt,i++));
+    //dns_server text
+    entry->dns_server = std::string(sqlite_column_text(pStmt,i++));
+    //ip_type int
+    entry->ip_type = sqlite_column_int(pStmt,i++);
+    //dns_type int
+    entry->dns_type = sqlite_column_int(pStmt,i++);
+    //fail times int
+    entry->fail_times = sqlite_column_int(pStmt,i++);
+    //conn profile int64_t
+    entry->conn_profile = sqlite_column_int64(pStmt,i++);
+    //add to vector
+    ptr_dns->push_back(entry);
+}
+
+int get_task_by_state(SQLite *sqlite,std::vector<task_info> &tasks,int state){
+    char sql_buff[4096]={0};
+    snprintf(sql_buff,sizeof(sql_buff), "select (task_id,host,path,data,port,task_state,percent,send_only,"
+        "try_time,save_path,offset) from task where task_state =  %d ",state);
+    sqlite3_stmt *pStmt = NULL;
+    int rc = sqlitew_exec_sql(sqlite,sql_buff,&tasks,task_table_callback);
+    if(rc != SQLITE_OK){
+        skerror("query fail %s ",sql_buff);
+        return -1;
+    }else{
+        return tasks.size();
+    }
+}
+
+
+int get_all_task(SQLite *sqlite,std::vector<task_info> &tasks){
+    char sql_buff[4096]={0};
+    snprintf(sql_buff,sizeof(sql_buff), "select (task_id,host,path,data,port,task_state,percent,send_only,"
+        "try_time,save_path,offset) from task");
+    sqlite3_stmt *pStmt = NULL;
+    int rc = sqlitew_exec_sql(sqlite,sql_buff,&tasks,task_table_callback);
+    if(rc != SQLITE_OK){
+        skerror("query fail %s ",sql_buff);
+        return -1;
+    }else{
+        return tasks.size();
+    }
+}
+
+int get_task_by_id(SQLite *sqlite,std::vector<task_info> &tasks,const char *task_id){
+    char sql_buff[4096]={0};
+    if(task_id == NULL){
+        return -1;
+    }
+    snprintf(sql_buff,sizeof(sql_buff), "select (task_id,host,path,data,port,task_state,percent,send_only,"
+        "try_time,save_path,offset) from task where task_id = '%s' ",task_id);
+    sqlite3_stmt *pStmt = NULL;
+    int rc = sqlitew_exec_sql(sqlite,sql_buff,&tasks,task_table_callback);
+    if(rc != SQLITE_OK){
+        skerror("query fail %s ",sql_buff);
+        return -1;
+    }else{
+        return tasks.size();
+    }
+}
+
+int get_idle_task(SQLite *sqlite,std::vector<task_info> &tasks){
+    return get_task_by_state(sqlite,tasks,TASK_STATE_IDLE);
+}
+
+int get_fail_task(SQLite *sqlite,std::vector<task_info> &tasks){
+    return get_task_by_state(sqlite,tasks,TASK_STATE_FAIL);
+}
+
+
+    //const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,port int,task_state \
+                                    int,percent int ,send_only int ,try_time int, save_path text,offset int);";
+int get_done_task(SQLite *sqlite,std::vector<task_info> &tasks){
+    return get_task_by_state(sqlite,tasks,TASK_STATE_DONE);
+}
 
 
