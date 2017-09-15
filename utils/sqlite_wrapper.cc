@@ -295,9 +295,12 @@ static void create_networkdb_table(SQLite *sqlite){
     //don't change items order of create language
     const char *host_sql = "create table thost if not exists (host text,port int,type int);";
     const char *dns_sql = "create table dns if not exists (host text,ip text,dns_server text,ip_type int default 0,"
-                                "dns_type int default 0,fail_times int default 0,conn_profile int64 default 0x0fffffff);";
+                                "dns_type int default 0,fail_times int default 0,use_times int default 0,"
+                                "conn_profile int64 default 0x0fffffff);";
+
     const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,port int,task_state \
-                                    int,percent int ,send_only int ,try_time int, save_path text,offset int);";
+                                    int,percent int ,send_only int ,try_time int, save_path text,offset int, \
+                                    start_time int64,conn_time int64,time_out int64);";
 
     char *zErr = NULL;
     rc = sqlite3_exec(sqlite->db,host_sql,NULL,NULL, &zErr);
@@ -359,16 +362,6 @@ enum DNSTYPE{
     DNSTYPE_HTTPS 
 };
 
-enum DNSQUERY_MASK{
-    DNS_HOST_MASK = 1<<0,
-    DNS_IP_MASK = 1<<1,
-    DNS_SERVER_MASK = 1<<2,
-    DNS_IPTYPE_MASK = 1<<3,
-    DNS_DNSTYPE_MASK = 1<<4,
-    DNS_FAILTIMES_MASK = 1<<5,
-    DNS_CPROFILE_MASK = 1<<6,
-};
-
 struct network_dns{
     std::string host;
     std::string ip;
@@ -383,7 +376,7 @@ struct network_dns{
 int insert_dns(SQLite *sqlite,network_dns *entry){
     char sql_buff[4096]={0};
 
-    if(entry == NULL|| entry->ip.entry()){
+    if(entry == NULL|| entry->ip.empty()){
         return -1;
     }
 
@@ -410,27 +403,26 @@ int insert_dns(SQLite *sqlite,network_dns *entry){
 }
 
 //(host text,ip text,ip_type int,dns_type int,dns_server text,count_down int);";
-int dns_check_host_exist(SQLite *sqlite,const string host,const string ip){
+int dns_host_exist(SQLite *sqlite,const char *host,const char *ip){
+    char sql_buff[4096]={0};
     sqlite3_stmt *pStmt = NULL;
-    if(host.empty() || ip.empty()){
+    if(host == NULL || ip == NULL){
         skwarn("input value is invalidate");
         return -1;
     }
 
-    std::string sql = "select count(*) from dns where host =";
-    sql += host;
-    sql += "AND ip=";
-    sql = sql + ip + ";";
+    snprintf(sql_buff,sizeof(sql_buff),"select count(*) from dns where host = '%s' AND ip = '%s' ;",host,ip);
+    int rc = sqlite3_prepare_v2(sqlite->db,sql_buff, -1, &pStmt,NULL);
 
-    int rc = sqlite3_prepare_v2(sqlite->db,sql.c_str(), -1, &pStmt,NULL);
     if(rc!=SQLITE_OK || pStmt == NULL){
-        skerror("prepare sql %s  fail ",sql.c_str());
+        skerror("prepare sql %s  fail ",sql_buff);
         return -1;
     }
     rc = sqlite3_step(pStmt);
     int count = 0;
+
     if(rc != SQLITE_ROW){
-        skerror("execute sql  %s fail ",sql.c_str());
+        skerror("execute sql  %s fail ",sql_buff);
     }else{
         count = sqlite3_column_int(pStmt,0);
     }
@@ -461,29 +453,11 @@ static int dns_callback(void*p,sqlite3_stmt *pStmt){
     ptr_dns->push_back(entry);
 }
 
-int query_dns(SQLite *sqlite,network_dns *entry,DNSQUERY_MASK mask,std::vector<network_dns> &ips){
-    std::string sql = "select (host,ip,dns_server,ip_type,dns_type,fail_times,conn_profile) where ";
-    sqlite3_stmt *pStmt = NULL;
-    if(entry == NULL){
-        return -1;
-    }
 
-    if(mask & DNS_HOST_MASK &&!entry->host.empty()){
-        sql = sql + " host = " + entry->host;
-    }
-
-    if(mask & DNS_IP_MASK && !entry->ip.enmpty()){
-        sql = sql + " ip = " + entry->ip;
-    }
-
-    if(mask & DNS_IPTYPE_MASK && entry->ip_type >=0 ){
-        sql = sql + " ip_type = " + entry->ip_type;
-    }
-
-    if(mask & DNS_DNSTYPE_MASK && entry->dns_type >=0 ){
-        sql = sql + " dns_type = " + entry->dns_type;
-    }
-    sql += " ;";
+int get_host_by_ip_type(SQLite *sqlite,const char *ip,std::vector<network_dns> &ips){
+    char sql_buff[4096]={0};
+    snprintf(sql_buff,sizeof(sql_buff),"select (host,ip,dns_server,ip_type,dns_type,"
+                                "fail_times,conn_profile) from dns where ip = '%s' order by conn_profile;",ip);
     int rc = sqlitew_exec_sql(sqlite,sql.c_str(),&ips,dns_callback);
     if(rc != SQLITE_OK){
         skerror("query fail %s ",sql.c_str());
@@ -491,6 +465,54 @@ int query_dns(SQLite *sqlite,network_dns *entry,DNSQUERY_MASK mask,std::vector<n
     }else{
         return ips.size();
     }
+}
+
+int get_ip_by_host(SQLite *sqlite,const char *host,std::vector<network_dns> &ips){
+
+    char sql_buff[4096]={0};
+    snprintf(sql_buff,sizeof(sql_buff),"select (host,ip,dns_server,ip_type,dns_type,"
+                                    "fail_times,conn_profile) from dns where host = '%s' order by conn_profile;",host);
+
+    int rc = sqlitew_exec_sql(sqlite,sql.c_str(),&ips,dns_callback);
+    if(rc != SQLITE_OK){
+        skerror("query fail %s ",sql.c_str());
+        return -1;
+    }else{
+        return ips.size();
+    }
+
+}
+
+int get_all_host(SQLite *sqlite,std::vector<network_dns> &ips){
+
+    char sql_buff[4096]={0};
+    snprintf(sql_buff,sizeof(sql_buff),"select (host,ip,dns_server,ip_type,dns_type,"
+                                    "fail_times,conn_profile) from dns order by conn_profile;"); 
+
+    int rc = sqlitew_exec_sql(sqlite,sql.c_str(),&ips,dns_callback);
+    if(rc != SQLITE_OK){
+        skerror("query fail %s ",sql.c_str());
+        return -1;
+    }else{
+        return ips.size();
+    }
+
+}
+
+int update_dns_usetimes(SQLite *sqlite,const char *host,const char *ip,int64_t conn_profile){
+    char sql_buff[4096] ={0};
+    if(host == NULL || ip == NULL){
+        return -1;
+    }
+    snprintf(sql_buff,sizeof(sql_buff),"update dns set use_times = use_times +1 where host = '%s' and ip = '%s' ;",host,ip);
+    rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        skerror("update %s fail %s ",sql_buff,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        return -1;
+    }
+    return 0;
 }
 
 
@@ -548,7 +570,7 @@ int delete_dns_entries(SQLite *sqlite, network_dns *entries,const char *host,con
     if(host == NULL || ip == NULL){
         return -1;
     }
-    snprintf(sql_buff,sizeof(sql_buff),"delete from dns where host = %s and ip = %s ;", host, ip)
+    snprintf(sql_buff,sizeof(sql_buff),"delete from dns where host = %s and ip = %s ;", host, ip);
     rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
     if(rc != SQLITE_OK){
         skerror("sqlite sql %s %s",sql_buff,zErr);
@@ -558,6 +580,46 @@ int delete_dns_entries(SQLite *sqlite, network_dns *entries,const char *host,con
     }
     return 0;
 }
+
+int delete_dns_by_sucess(SQLite *sqlite,float percent){
+    char sql_buff[4096] ={0};
+
+    if(percent < 0 ){
+        return -1;
+    }
+
+    snprintf(sql_buff,sizeof(sql_buff),"delete from dns where fail_times/use_time < %f ;",percent);
+    rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        skerror("sqlite sql %s %s",sql_buff,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        return -1;
+    }
+    return 0;
+}
+
+int delete_dns_by_connprofile(SQLite *sqlite, int64_t limit){
+    char sql_buff[4096] ={0};
+
+    if(percent < 0 ){
+        return -1;
+    }
+
+    snprintf(sql_buff,sizeof(sql_buff),"delete from dns where conn_profile > %lld;",limit);
+
+    rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+
+    if(rc != SQLITE_OK){
+        skerror("sqlite sql %s %s",sql_buff,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        return -1;
+    }
+    return 0;
+}
+
+
 
 
 //host sql operate
@@ -601,13 +663,13 @@ int insert_host(SQLite *sqlite,const char *host,int port,int type){
     return 0;
 }
 
-int delete_host(SQLite *sqlite,const char *host,int port){
+int delete_host_by_port(SQLite *sqlite,const char *host,int port){
     if(host == NULL){
         skwarn("host is error %s ",host);
         return -1;
     }
     char sql_buff[4096] ={0};
-    snprintf(sql_buff,sizeof(sql_buff),"delete from thost where host='%s' AND port = %d ", host,port);
+    snprintf(sql_buff,sizeof(sql_buff),"delete from thost where host='%s' AND port = %d;", host,port);
     rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
     if(rc != SQLITE_OK){
         skerror("sqlite sql %s %s",sql_buff,zErr);
@@ -618,15 +680,22 @@ int delete_host(SQLite *sqlite,const char *host,int port){
     return 0;
 }
 
-//this is task table operate 
-//insert update delete
-//const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,task_state \
-//                                    int,percent int ,send_only int ,try_time int, save_path text,offset int);";
-
-struct task_data{
-    unsigned char *data;
-    long length;
-};
+int delete_host_by_host(SQLite *sqlite,const char *host){
+    if(host == NULL){
+        skwarn("host is error %s ",host);
+        return -1;
+    }
+    char sql_buff[4096] ={0};
+    snprintf(sql_buff,sizeof(sql_buff),"delete from thost where host='%s';", host,port);
+    rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        skerror("sqlite sql %s %s",sql_buff,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        return -1;
+    }
+    return 0;
+}
 
 enum TASK_TYPE{
     TASK_TYPE_HTTP,
@@ -655,8 +724,8 @@ struct task_info{
     std::string host; //server
     std::string server_path; //client visit path
     std::string save_path; //the path where download data save
-    task_data send_data; //send data;
-    task_data recv_data;
+    AutoBuffer send_data; //send data;
+    AutoBuffer recv_data;
     int64_t offset; //start point of download
     int64_t offset_count; //the size should download from server
     int64_t sends; //the data size of has send
@@ -668,11 +737,11 @@ struct task_info{
     int task_state;
     int try_time; //retry times
     int task_type;
+    int64_t conn_timeout;
+    int64_t timeout;
+    int64_t start_time;
+    int64_t end_time;
 };
-
-// const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,port int,task_state \
-  //                                  int default 0,percent int default 0,send_only int default 1,try_time int default  5, \
-  //                                  save_path text,offset int default 0);";
 
 int insert_task(SQLite sqlite, task_info * entry){
     char sql_buff[4096*2]={0};
@@ -681,15 +750,17 @@ int insert_task(SQLite sqlite, task_info * entry){
         return -1;
     }
 
-    snprintf(sql_buff,sizeof(sql_buff),"insert into task(task_id,host,path,port,send_only,try_time,save_path,offset)" \
-            "values ('%s','%s','%s',%d,%d,%d,'%s',%d);",
+    snprintf(sql_buff,sizeof(sql_buff),"insert into task(task_id,host,path,port,send_only,try_time,save_path"
+                            " ,offset,timeout,conn_timeout) values ('%s','%s','%s',%d,%d,%d,'%s',%d,%lld,%lld);",
             entry->task_id.c_str(),
             entry->host.c_str(),
             !entry->path.empty()?entry->path.c_str():"NULL",
             entry->send_only,
             entry->try_time,
             !entry->save_path.empty() ?entry->save_path.c_str():"NULL",
-            etnry->offset);
+            etnry->offset,
+            entry->timeout,
+            entry->conn_timeout);
 
     rc = sqlite3_exec(sqlite->db,sql_buff,NULL,NULL, &zErr);
     if(rc != SQLITE_OK){
@@ -889,9 +960,6 @@ int get_fail_task(SQLite *sqlite,std::vector<task_info> &tasks){
     return get_task_by_state(sqlite,tasks,TASK_STATE_FAIL);
 }
 
-
-    //const char *task_sql = "create table task if not exists (task_id text,host text,path text,data blob,port int,task_state \
-                                    int,percent int ,send_only int ,try_time int, save_path text,offset int);";
 int get_done_task(SQLite *sqlite,std::vector<task_info> &tasks){
     return get_task_by_state(sqlite,tasks,TASK_STATE_DONE);
 }
