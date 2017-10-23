@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<sqlite3.h>
-#include"sklog.h"
+//#include"sklog.h"
 
 #ifdef SKLOG_TAG
 #undef SKLOG_TAG
@@ -174,7 +174,7 @@ SQLite* sqlitew_open(char *dbname,int flags = -1){
     }
 
     // Set the default busy handler to retry automatically before returning SQLITE_BUSY.
-    err = sqlite3_busy_timeout(db, BUSY_TIMEOUT_MS);
+    err = sqlite3_busy_timeout(db, SQLITE_BUSY_TIMEOUT_MS);
     if (err != SQLITE_OK) {
         skerro("Could not set busy timeout");
         sqlite3_close(db);
@@ -1061,6 +1061,10 @@ int get_fail_task(SQLite *sqlite,std::vector<task_info> &tasks){
 
 int get_done_task(SQLite *sqlite,std::vector<task_info> &tasks){
     return get_task_by_state(sqlite,tasks,TASK_STATE_DONE);
+}
+
+int main(int argc,char **argv){
+    return 0;
 }
 
 
