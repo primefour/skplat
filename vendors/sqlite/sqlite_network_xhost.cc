@@ -2,11 +2,15 @@
 #include<vector>
 #include<string>
 #include"sqlite_network_xhost.h"
+#include"sqlite_wrapper.h"
 extern "C" {
 #include"sqlite3.h"
 }
 
 static int xhost_callback(void*p,sqlite3_stmt *pStmt){
+    if(p == NULL){
+        return -1;
+    }
     std::vector<NetworkXHost> *ptr_xhost = (std::vector<NetworkXHost>*)p;
     NetworkXHost entry; 
     int i = 0;
@@ -14,27 +18,27 @@ static int xhost_callback(void*p,sqlite3_stmt *pStmt){
     //host name or ip 
     const char *host_ptr = (const char *)sqlite3_column_text(pStmt,i++);
     entry.host = host_ptr;    
-
     //host listen port 
     entry.port = sqlite3_column_int(pStmt,i++);
     //host type 
     entry.type = sqlite3_column_int(pStmt,i++);
-
     //add to vector
     skinfo("host %s port %d type %d \n",entry.host.c_str(),entry.port,entry.type);
     ptr_xhost->push_back(entry);
+    return 1;
 }
+
 
 int get_xhost_all_hosts(SQLite *sqlite,std::vector<NetworkXHost> &ips){
     char sql_buff[4096]={0};
-    snprintf(sql_buff,sizeof(sql_buff),"select (host,port,type) from xhost ;");
-    sqlitew_exec_sql(sqlite,sql_buff,&ips,xhost_callback);
+    snprintf(sql_buff,sizeof(sql_buff),"select host,port,type  from xhost ;");
+    sqlitew_exec_sql(sqlite,sql_buff,(void*)&ips,xhost_callback);
     return ips.size();
 }
 
 int get_xhost_by_type(SQLite *sqlite,std::vector<NetworkXHost> &ips,int type ){
     char sql_buff[4096]={0};
-    snprintf(sql_buff,sizeof(sql_buff),"select (host,port,type) from xhost where type = %d;",type);
+    snprintf(sql_buff,sizeof(sql_buff),"select host,port,type from xhost where type = %d;",type);
     sqlitew_exec_sql(sqlite,sql_buff,&ips,xhost_callback);
     return ips.size();
 }

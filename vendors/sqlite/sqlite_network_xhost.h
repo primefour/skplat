@@ -3,9 +3,7 @@
 #include<stdio.h>
 #include<vector>
 #include<string>
-extern "C"{
 #include"sqlite_wrapper.h"
-}
 
 enum XHOST_TYPE{
     HTTP_SERVER,

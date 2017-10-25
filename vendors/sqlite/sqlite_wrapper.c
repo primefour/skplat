@@ -247,7 +247,8 @@ void sqlitew_exec_stmt(void *pArg, sqlite3_stmt *pStmt, /* Statment to run */
             /* if data and types extracted successfully... */
             do{
                 /* call the supplied callback with the result row data */
-                if(xCallback(pArg,pStmt)){
+                if(xCallback(pArg,pStmt) < 0 ){
+                    skwarn("sql abort by user \n");
                     rc = SQLITE_ABORT;
                 }else{
                     rc = sqlite3_step(pStmt);
@@ -265,10 +266,9 @@ void sqlitew_exec_stmt(void *pArg, sqlite3_stmt *pStmt, /* Statment to run */
 /*
 **Run a sql statement
 */
-
-void sqlitew_exec_sql(SQLite *sqlitedb,const char *sql,void *pArg,int (xCallback)(void *pArg,sqlite3_stmt *tStmt)){
+int sqlitew_exec_sql(SQLite *sqlitedb,const char *sql,void *pArg,int (xCallback)(void *pArg,sqlite3_stmt *tStmt)){
     if(sqlitedb == NULL || sqlitedb->db == NULL || sql == NULL){
-        return ;
+        return -1;
     }
     sqlite3 *db = sqlitedb->db;
     pthread_mutex_lock(&sqlitedb->mutex);
@@ -279,14 +279,5 @@ void sqlitew_exec_sql(SQLite *sqlitedb,const char *sql,void *pArg,int (xCallback
         skerror("exec sql %s fail",sql);
     }
     pthread_mutex_unlock(&sqlitedb->mutex);
+    return rc;
 }
-
-extern void networkdb_init();
-
-int main(int argc,char **argv){
-    networkdb_init();
-    //insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
-    return 0;
-}
-
-

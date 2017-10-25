@@ -4,6 +4,7 @@
 #include<pthread.h>
 #include<assert.h>
 #include"sqlite_wrapper.h"
+#include"sqlite_network_xhost.h"
 
 //create network database
 static void create_networkdb_table(SQLite *sqlite){
@@ -43,16 +44,7 @@ static void create_networkdb_table(SQLite *sqlite){
 SQLite *network_db = NULL;
 pthread_mutex_t network_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-SQLite* get_networkdb(){
-    assert(network_db != NULL);
-    if(network_db  == NULL){
-        skerror("Please call network init before calling this function\n"); 
-    }
-    return network_db;
-}
-
-
-void networkdb_init(){
+static void networkdb_init(){
     const char *dbname = "./netwr.db";
     pthread_mutex_lock(&network_mutex );
     if(network_db != NULL){
@@ -69,3 +61,46 @@ void networkdb_init(){
     create_networkdb_table(network_db);
     pthread_mutex_unlock(&network_mutex );
 }
+
+SQLite* get_networkdb(){
+    if(network_db  == NULL){
+        networkdb_init();
+    }
+    assert(network_db != NULL);
+    return network_db;
+}
+
+int main(int argc,char **argv){
+    insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"ibaidu.com",80,HTTP_SERVER);
+    delete_xhost_by_port(get_networkdb(),"baidu.com",80);
+    delete_xhost_by_host(get_networkdb(),"ibaidu.com");
+
+    insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"ibaidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"ibaidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"ibaidu.com",80,HTTP_SERVER);
+    insert_xhost_host(get_networkdb(),"ibaidu.com",80,HTTP_SERVER);
+
+    std::vector<NetworkXHost> hosts ;
+
+    //get_xhost_by_type(get_networkdb(),hosts,HTTP_SERVER);
+    get_xhost_all_hosts(get_networkdb(),hosts);
+
+    std::vector<NetworkXHost>::iterator begin = hosts.begin();
+    std::vector<NetworkXHost>::iterator end = hosts.end();
+    skinfo("\n");
+    skinfo("\n");
+    while (begin < end){
+        skinfo("host %s port %d type %d \n",begin->host.c_str(),begin->port,begin->type);
+        begin ++;
+    }
+    return 0;
+}
+
+
+
+

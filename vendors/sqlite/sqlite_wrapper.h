@@ -27,7 +27,7 @@ void sqlitew_exec_stmt(void *pArg, sqlite3_stmt *pStmt, /* Statment to run */
 /*
 **Run a sql statement
 */
-void sqlitew_exec_sql(SQLite *sqlitedb,const char *sql, void *pArg,
+int sqlitew_exec_sql(SQLite *sqlitedb,const char *sql, void *pArg,
                     int (xCallback)(void *pArg,sqlite3_stmt *tStmt));
 
 #endif //__SQLITE_WRAPPER_H__
