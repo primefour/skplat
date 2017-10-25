@@ -285,6 +285,7 @@ extern void networkdb_init();
 
 int main(int argc,char **argv){
     networkdb_init();
+    //insert_xhost_host(get_networkdb(),"baidu.com",80,HTTP_SERVER);
     return 0;
 }
 

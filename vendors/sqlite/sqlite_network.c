@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<pthread.h>
+#include<assert.h>
 #include"sqlite_wrapper.h"
 
 //create network database
@@ -41,6 +42,16 @@ static void create_networkdb_table(SQLite *sqlite){
 
 SQLite *network_db = NULL;
 pthread_mutex_t network_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+SQLite* get_networkdb(){
+    assert(network_db != NULL);
+    if(network_db  == NULL){
+        skerror("Please call network init before calling this function\n"); 
+    }
+    return network_db;
+}
+
+
 void networkdb_init(){
     const char *dbname = "./netwr.db";
     pthread_mutex_lock(&network_mutex );
