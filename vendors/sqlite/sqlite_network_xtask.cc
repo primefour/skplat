@@ -1,123 +1,84 @@
-
-    //const char *dns_sql = "create table dns if not exists (host text,ip text,dns_server text,ip_type int default 0,"
-                                //"dns_type int default 0,conn_profile int64 default 0x0fffff,fail_times int default 0);";
-
-
-//host sql operate
-//const char *host_sql = "create table host if not exists (host text,type int);";
-//insert,delete
-enum TASK_TYPE{
-    TASK_TYPE_HTTP,
-    TASK_TYPE_HTTPS,
-    TASK_TYPE_HTTP_DOWNLOAD,
-    TASK_TYPE_HTTPS_DOWNLOAD,
-    TASK_TYPE_TLS,
-    TASK_TYPE_TCP,
-    TASK_TYPE_MAX,
-};
-
-
-enum TASK_STATE {
-    TASK_STATE_IDLE,
-    TASK_STATE_INIT,
-    TASK_STATE_CONN,
-    TASK_STATE_SEND,
-    TASK_STATE_RECV,
-    TASK_STATE_DONE,
-    TASK_STATE_FAIL,
-    TASK_STATE_MAX,
-};
-
-    const char *task_sql = "create table task if not exists (task_id text,host text,access_path text,\
-                                    save_path text,src_path text,sends int64,send_count int64, \
-                                    recvs int64,recv_count int64,port int ,send_only int,task_state int, \
-                                    retry_times int,task_type int,conn_timeout int64,task_timeout int64, \
-                                    start_time int64,end_time int64,send_data blob,recv_data blob);";
-
-
-
-
-struct task_info{
-    std::string task_id; //task name or id
-    std::string host; //server
-    std::string access_path; //client visit path
-
-    //file send or download
-    std::string save_path; //the path download data where to save
-    //send file 
-    std::string src_path; //send a file to server
-
-    //send data 
-    int64_t sends; //the data size of has send
-    int64_t send_count; //the data size for send
-
-    //recv data
-    int64_t recvs; //data size of has recv
-    int64_t recv_count; //the data size should recv
-
-    short port; //server port
-    bool send_only; 
-    int task_state;
-    int retry_time; //retry times
-    int task_type;
-
-    int64_t conn_timeout; //ms
-    int64_t task_timeout; //ms
-    int64_t start_time;
-    int64_t end_time;
-    AutoBuffer send_data; //send data; if not send file
-    AutoBuffer recv_data; //recv data; if not save to file 
-};
-
-static int task_table_callback(void*p,sqlite3_stmt *pStmt){
+/*
+ * task_id: primery key,md5 value of host+port+path+timestamp
+ * module_name:name of module use this function,for the callback
+ * host:server host name
+ * path:the server path to query 
+ * data:the data will upload
+ * port:server port
+ * task_state:the state of task
+ * percent:the process of task complete
+ * send_only:only send data,no response
+ * retry_times:retry times if fail
+ * save_path:the save path for download file 
+ * offset_start:the start point to download
+ * offset_length:the length should download
+ * start_time:the time when start this task
+ * conn_time:the time of connect to server
+ * conn_timeout:the timeout of connect
+ * task_timeout:the timeout of task complete
+ */
+static int xtask_table_callback(void*p,sqlite3_stmt *pStmt){
     std::vector<task_info> *ptr_dns = (std::vector<task_info>*)p;
     task_info entry; 
     int i = 0;
+
     //task id 
-    entry->task_id = std::string(sqlite_column_text(pStmt,i++));
+    entry->task_id = std::string(sqlite3_column_text(pStmt,i++));
+    //module name
+    entry->module_name = std::string(sqlite3_column_text(pStmt,i++));
     //host text
-    entry->host = std::string(sqlite_column_text(pStmt,i++));
+    entry->host = std::string(sqlite3_column_text(pStmt,i++));
     //access path text
-    entry->access_path = std::string(sqlite_column_text(pStmt,i++));
+    entry->access_path = std::string(sqlite3_column_text(pStmt,i++));
 
+    //need send data
+    int len = sqlite3_column_bytes(pStmt,i);
+    if(len > 0){
+        char *tmp_data = sqlite3_column_blob(pStmt,i++);
+        entry->send_data.update(tmp_data,len);
+    }else{
+        i++;
+    }
+
+    //recv data
+    int len = sqlite3_column_bytes(pStmt,i);
+    if(len > 0){
+        char *tmp_data = sqlite3_column_blob(pStmt,i++);
+        entry->recv_data.update(tmp_data,len);
+    }else{
+        i++;
+    }
+
+    //port
+    entry->port = short(sqlite3_column_int(pStmt,i++));
+    //task state
+    entry->task_state = sqlite3_column_int(pStmt,i++);
+    //task type
+    entry->task_type= sqlite3_column_int(pStmt,i++);
+    //percent 
+    entry->percent = sqlite3_column_int(pStmt,i++);
+    //send only
+    entry->send_only = sqlite3_column_int(pStmt,i++);
+    //retry time
+    entry->retry_time= sqlite3_column_int(pStmt,i++);
     //where recv file to save 
-    entry->save_path = std::string(sqlite_column_text(pStmt,i++));
+    entry->save_path = std::string(sqlite3_column_text(pStmt,i++));
     //the path of file will send
-    entry->src_path = std::string(sqlite_column_text(pStmt,i++));
+    entry->src_path = std::string(sqlite3_column_text(pStmt,i++));
 
-    entry->sends = sqlite_column_int64(pStmt,i++);
-    entry->send_count  = sqlite_column_int64(pStmt,i++);
+    //file offset start point
+    entry->offset_start= sqlite3_column_int64(pStmt,i++);
 
-
-    entry->recvs = sqlite_column_int64(pStmt,i++);
-    entry->recv_count  = sqlite_column_int64(pStmt,i++);
-
-    entry->port = short(sqlite_column_int(pStmt,i++));
-    entry->send_only = sqlite_column_int(pStmt,i++);
-
-    entry->task_state = sqlite_column_int(pStmt,i++);
-
-    entry->retry_time= sqlite_column_int(pStmt,i++);
-    entry->task_type= sqlite_column_int(pStmt,i++);
-
-    entry->conn_timeout = sqlite_column_int64(pStmt,i++);
-    entry->task_timeout = sqlite_column_int64(pStmt,i++);
-
-    entry->start_time= sqlite_column_int64(pStmt,i++);
-    entry->end_time= sqlite_column_int64(pStmt,i++);
-
-    int len = sqlite3_column_bytes(pStmt,i);
-    const char* pData= (const char *)sqlite3_column_blob(pState,i++);
-    if(pData != NULL && len > 0){
-        entry->send_data.Write(pData,len);
-    }
-
-    int len = sqlite3_column_bytes(pStmt,i);
-    const char* pData= (const char *)sqlite3_column_blob(pState,i++);
-    if(pData != NULL && len > 0){
-        entry->recv_data.Write(pData,len);
-    }
-
+    //file length from offset start point
+    entry->offset_length= sqlite3_column_int64(pStmt,i++);
+    //the time of start task
+    entry->start_time = sqlite3_column_int64(pStmt,i++);
+    //the time of connect to server 
+    entry->conn_time = sqlite3_column_int64(pStmt,i++);
+    //the timeout limit of connect to server 
+    entry->conn_timeout = sqlite3_column_int64(pStmt,i++);
+    //the timeout limit of connect to server 
+    entry->task_timeout = sqlite3_column_int64(pStmt,i++);
     //add to vector
     ptr_dns->push_back(entry);
 }
@@ -126,24 +87,26 @@ static int task_table_callback(void*p,sqlite3_stmt *pStmt){
 int insert_task(SQLite sqlite, task_info * entry){
     char sql_buff[4096*2]={0};
 
-    if(entry == NULL|| entry->task_id.empty() || entry->host.empty()){
+    if(entry == NULL|| 
+            entry->task_id.empty() || 
+            entry->host.empty() || 
+            entry->module_name.empty()){
         return -1;
     }
-
-    snprintf(sql_buff,sizeof(sql_buff),"insert into task(task_id,host,access_path,save_path, \
-        src_path,sends,send_count,recvs,recv_count,port,send_only,task_state, \
+    snprintf(sql_buff,sizeof(sql_buff),"insert into task(task_id,module_name,host,access_path,save_path, \
+        src_path,port,send_only,task_state, \
             retry_time,task_type,conn_timeout,task_timeout,start_time,end_time,\
             send_data,recv_data) values ('%s','%s','%s','%s', \
                 '%s',%lld,%lld,%lld,%lld,%d,%d,%d, \
                 %d,%d,%lld,%lld,%lld,%lld, \
                 ?,?);",
             entry->task_id.c_str(),
+            entry->module_name.c_str(),
             entry->host.c_str(),
             !entry->access_path.empty()?entry->access_path.c_str():"NULL",
             !entry->save_path.empty()?entry->save_path.c_str():"NULL",
             !entry->src_path.empty()?entry->src_path.c_str():"NULL",
-            entry->sends, entry->send_count, entry->recvs, entry->recv_count,entry->port,
-            entry->send_only,TASK_STATE_IDLE,
+            entry->port,entry->send_only,TASK_STATE_IDLE,
             entry->retry_time > 0 ?entry->retry_time:5,
             entry->task_type,
             entry->conn_timeout > 0 ?entry->conn_timeout:15000, //15s
