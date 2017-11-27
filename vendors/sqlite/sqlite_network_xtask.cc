@@ -71,6 +71,21 @@ static int xtask_table_callback(void*p,sqlite3_stmt *pStmt){
     return 1;
 }
 
+int xtask_get_todo_tasks(SQLite * sqlitedb,std::vector<task_info> &tasks){
+    char sql_buff[4096]={0};
+    snprintf(sql_buff,sizeof(sql_buff),"select task_id,module_name,host,path,save_file,send_file,"
+                                    "send_data,port,send_only,retry_times,task_type,conn_timeout,task_timeout"
+                                    " from xtask where process = 0;");
+    int rc = sqlitew_exec_sql(sqlitedb,sql_buff,&tasks,xtask_table_callback);
+
+    if(rc != SQLITE_OK){
+        skerror("query fail %s \n",sql_buff);
+        return -1;
+    }else{
+        return tasks.size();
+    }
+}
+
 int xtask_insert_task(SQLite *sqlitedb, task_info *entry){
     char sql_buff[4096*2]={0};
 
@@ -123,22 +138,6 @@ int xtask_todo_count(SQLite *sqlitedb){
     return count;
 }
 
-
-
-int xtask_get_todo_tasks(SQLite * sqlitedb,std::vector<task_info> &tasks){
-    char sql_buff[4096]={0};
-    snprintf(sql_buff,sizeof(sql_buff),"select task_id ,module_name ,"
-                                    "host,port,path,send_data,task_type,send_only,"
-                                    "save_file,send_file,retry_times,conn_timeout,task_timeout where process = 0 ;");
-    int rc = sqlitew_exec_sql(sqlitedb,sql_buff,&tasks,xtask_table_callback);
-
-    if(rc != SQLITE_OK){
-        skerror("query fail %s ",sql_buff);
-        return -1;
-    }else{
-        return tasks.size();
-    }
-}
 
 int xtask_delete_task(SQLite *sqlitedb,std::string task_id){
     char sql_buff[4096]={0};

@@ -273,10 +273,14 @@ int sqlitew_exec_sql(SQLite *sqlitedb,const char *sql,void *pArg,int (xCallback)
     sqlite3 *db = sqlitedb->db;
     pthread_mutex_lock(&sqlitedb->mutex);
     sqlite3_stmt* pStmt = sqlitew_prepare_sql(sqlitedb,sql);
+    if(pStmt == NULL){
+        skerror("sqlite sql %s error msg %s",sql,sqlite3_errmsg(sqlitedb->db));
+        return -1;
+    }
     sqlitew_exec_stmt(pArg,pStmt,xCallback);
     int rc = sqlite3_finalize(pStmt);
     if(rc != SQLITE_OK){
-        skerror("exec sql %s fail",sql);
+        skerror("sqlite sql %s error msg %s",sql,sqlite3_errmsg(sqlitedb->db));
     }
     pthread_mutex_unlock(&sqlitedb->mutex);
     return rc;

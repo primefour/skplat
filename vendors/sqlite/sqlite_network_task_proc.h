@@ -26,6 +26,7 @@ struct task_process{
     long int end_time;
 };
 
+int xprocess_get_task_profile(SQLite * sqlitedb,task_process &task_profile,std::string &task_id);
 int xprocess_insert_task(SQLite *sqlitedb,std::string task_id);
 int xprocess_delete_task(SQLite *sqlitedb,std::string &task_id);
 void xprocess_update_compete(SQLite *sqlitedb,std::string &task_id,int complete);

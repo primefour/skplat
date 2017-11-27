@@ -81,7 +81,7 @@ struct task_info{
         conn_timeout = 0; //ms
         task_timeout = 0; //ms
     }
-    void set_send_data(char *data,int len){
+    void set_send_data(const char *data,int len){
         send_data.update(data,len);
     }
 

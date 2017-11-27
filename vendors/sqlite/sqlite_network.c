@@ -21,7 +21,7 @@ static void create_networkdb_table(SQLite *sqlite){
                                     "host text,port int,path text,send_data blob,task_type int,send_only int,"
                                     "save_file text,send_file text,retry_times int,conn_timeout int64,task_timeout int64,process int default 0);";
 
-    const char *task_proc_sql = "create table if not exists xtask_proc(task_id text,task_state int default 0,"
+    const char *task_proc_sql = "create table if not exists xtask_proc(task_id text primary key,task_state int default 0,"
                                     "start_time int64 default 0,conn_time int64 default 0,complete int default 0,try_times int default 0)";
 
     char *zErr = NULL;
@@ -173,6 +173,7 @@ int xtask_update_process(SQLite * sqlitedb,std::string task_id,int process);
     task_info entry5("task5","module1","www.baidu.com","/");
     task_info entry6("task6","module1","www.baidu.com","/");
     task_info entry7("task17","module1","www.baidu.com","/");
+    entry2.set_send_data("helloworld",strlen("helloworld"));
 
     ret += xtask_insert_task(get_networkdb(),&entry);
     ret += xtask_insert_task(get_networkdb(),&entry2);
@@ -187,26 +188,31 @@ int xtask_update_process(SQLite * sqlitedb,std::string task_id,int process);
     ret = xtask_get_todo_tasks(get_networkdb(),xtasks);
     skinfo("ret = %d \n",ret);
 
+    std::vector<task_info>::iterator tbegin = xtasks.begin();
+    std::vector<task_info>::iterator tend = xtasks.end();
     /*
-struct task_info{
-    std::string task_id; //task name or id
-    std::string module_name;
-    std::string host; //server
-    std::string access_path; //client visit path
-    //file send or download
-    std::string save_file; //the path download data where to save
-    //send file 
-    std::string send_file; //send a file to server
-    blob_data send_data;
-    short port; //server port
-    bool send_only; 
-    int retry_time; //retry times
-    int task_type;
-    //profile and limit for network 
-    long int conn_timeout; //ms
-    long int task_timeout; //ms
-};
+     *
+int xprocess_get_task_profile(SQLite * sqlitedb,task_process &task_profile,std::string &task_id);
+int xprocess_insert_task(SQLite *sqlitedb,std::string task_id);
+int xprocess_delete_task(SQLite *sqlitedb,std::string &task_id);
+void xprocess_update_compete(SQLite *sqlitedb,std::string &task_id,int complete);
+void xprocess_update_status(SQLite *sqlitedb,std::string &task_id,int status);
+void xprocess_update_trytimes(SQLite *sqlitedb,std::string &task_id,int times);
+void xprocess_update_starttime(SQLite *sqlitedb,std::string &task_id,long int start_time);
+void xprocess_update_conntime(SQLite *sqlitedb,std::string &task_id,long int conn_time);
 */
+
+    while(tbegin < tend){
+        skinfo("task: %s %s %s %s\n",tbegin->task_id.c_str(),
+                    tbegin->module_name.c_str(),
+                    tbegin->host.c_str(),tbegin->access_path.c_str());
+        xprocess_insert_task(get_networkdb(),tbegin->task_id);
+        xprocess_update_compete(get_networkdb(),tbegin->task_id,100);
+        xprocess_update_conntime(get_networkdb(),tbegin->task_id,1000);
+        tbegin ++;
+    }
+
+
     return 0;
 }
 
