@@ -6,6 +6,8 @@
 #include"sqlite_wrapper.h"
 #include"sqlite_network_xhost.h"
 #include"sqlite_network_xdns.h"
+#include"sqlite_network_xtask.h"
+#include"sqlite_network_task_proc.h"
 
 //create network database
 static void create_networkdb_table(SQLite *sqlite){
@@ -13,12 +15,15 @@ static void create_networkdb_table(SQLite *sqlite){
     const char *host_sql = "create table if not exists xhost  (host text,port int,type int);";
     const char *dns_sql = "create table if not exists xdns (host text,ip text,dns_server text,ip_type int default 0,"
                                 "dns_type int default 0,fail_times int default 0,use_times int default 0,"
-                                "conn_profile int64 default 0x0fffffff);";
-    const char *task_sql = "create table if not exists xtask (task_id text,module_name text,"
-                                    "host text,path text,data blob,port int,task_state int"
-                                    "task_type int,percent int ,send_only int ,retry_times int, save_path text,"
-                                    "src_path text,offset_start int64, offset_length int64,"
-                                    "start_time int64,conn_time int64,conn_timeout int64,task_timeout int64);";
+                                "conn_profile int64 default -1);";
+
+    const char *task_info_sql = "create table if not exists xtask (task_id text,module_name text,"
+                                    "host text,port int,path text,send_data blob,task_type int,send_only int,"
+                                    "save_file text,send_file text,retry_times int,conn_timeout int64,task_timeout int64,process int default 0);";
+
+    const char *task_proc_sql = "create table if not exists xtask_proc(task_id text,task_state int default 0,"
+                                    "start_time int64 default 0,conn_time int64 default 0,complete int default 0,try_times int default 0)";
+
     char *zErr = NULL;
     int rc = sqlite3_exec(sqlite->db,host_sql,NULL,NULL, &zErr);
     if(rc != SQLITE_OK){
@@ -35,9 +40,17 @@ static void create_networkdb_table(SQLite *sqlite){
         zErr = NULL;
         sqlite->dbError = 1;
     }
-    rc = sqlite3_exec(sqlite->db,task_sql,NULL,NULL, &zErr);
+    rc = sqlite3_exec(sqlite->db,task_info_sql,NULL,NULL, &zErr);
     if(rc != SQLITE_OK){
-        skerror("create table %s %s \n",task_sql,zErr);
+        skerror("create table %s %s \n",task_info_sql,zErr);
+        sqlite3_free(zErr);
+        zErr = NULL;
+        sqlite->dbError = 1;
+    }
+
+    rc = sqlite3_exec(sqlite->db,task_proc_sql,NULL,NULL, &zErr);
+    if(rc != SQLITE_OK){
+        skerror("create table %s %s \n",task_proc_sql,zErr);
         sqlite3_free(zErr);
         zErr = NULL;
         sqlite->dbError = 1;
@@ -102,21 +115,6 @@ int main(int argc,char **argv){
         begin ++;
     }
 
-/*
-int insert_host_ip(SQLite *sqlite,network_dns *entry);
-int dns_host_exist(SQLite *sqlite,const char *host,const char *ip);
-int get_hosts_by_ip_type(SQLite *sqlite,const char *ip,std::vector<network_dns> &ips);
-int get_ips_by_host(SQLite *sqlite,const char *host,std::vector<network_dns> &ips);
-int get_all_hosts(SQLite *sqlite,std::vector<network_dns> &ips);
-int update_dns_usetimes(SQLite *sqlite,const char *host,const char *ip);
-int update_dns_connprofile(SQLite *sqlite,const char *host,const char *ip,int64_t conn_profile);
-int update_dns_failtimes(SQLite *sqlite,const char *host,const char *ip,int fail_times);
-int update_dns_ip(SQLite *sqlite,const char *host,const char *ip,const char *new_ip);
-int delete_dns_entries(SQLite *sqlite, network_dns *entries,const char *host,const char *ip);
-int delete_dns_by_success(SQLite *sqlite,float percent);
-int delete_dns_by_connprofile(SQLite *sqlite, int64_t limit);
-*/
-
     network_dns tmp_dns("baidu.com","192.168.1.1","localhost");
     network_dns tmp_dns2("6baidu.com","192.168.1.1","localhost",DNSTYPE_HTTP);
     network_dns tmp_dns3("4baidu.com","192.168.1.1",IPTYPE_V6,"localhost",DNSTYPE_HTTP);
@@ -149,6 +147,66 @@ int delete_dns_by_connprofile(SQLite *sqlite, int64_t limit);
         ibegin ++;
     }
 
+    skinfo("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXtask test \n");
+/*
+ *
+int xtask_insert_task(SQLite *sqlitedb, task_info *entry);
+int xtask_todo_count(SQLite *sqlitedb);
+int xtask_get_todo_tasks(SQLite * sqlitedb,std::vector<task_info> &tasks);
+int xtask_delete_task(SQLite *sqlitedb,std::string task_id);
+int xtask_update_process(SQLite * sqlitedb,std::string task_id,int process);
+*/
+    int count = xtask_todo_count(get_networkdb());
+    skinfo("xtask count = %d \n",count);
+    task_info entry("task1","module1","www.baidu.com","/");
+    int ret = xtask_insert_task(get_networkdb(),&entry);
+    skinfo("ret = %d \n",ret);
+    count = xtask_todo_count(get_networkdb());
+    skinfo("xtask count = %d \n",count);
+    ret = xtask_delete_task(get_networkdb(),entry.task_id);
+    count = xtask_todo_count(get_networkdb());
+    skinfo("xtask count = %d \n",count);
+
+    task_info entry2("task2","module1","www.baidu.com","/");
+    task_info entry3("task3","module1","www.baidu.com","/");
+    task_info entry4("task4","module1","www.baidu.com","/");
+    task_info entry5("task5","module1","www.baidu.com","/");
+    task_info entry6("task6","module1","www.baidu.com","/");
+    task_info entry7("task17","module1","www.baidu.com","/");
+
+    ret += xtask_insert_task(get_networkdb(),&entry);
+    ret += xtask_insert_task(get_networkdb(),&entry2);
+    ret += xtask_insert_task(get_networkdb(),&entry3);
+    ret += xtask_insert_task(get_networkdb(),&entry4);
+    ret += xtask_insert_task(get_networkdb(),&entry5);
+    ret += xtask_insert_task(get_networkdb(),&entry6);
+    ret += xtask_insert_task(get_networkdb(),&entry7);
+    count = xtask_todo_count(get_networkdb());
+    skinfo("xtask count = %d \n",count);
+    std::vector<task_info> xtasks;
+    ret = xtask_get_todo_tasks(get_networkdb(),xtasks);
+    skinfo("ret = %d \n",ret);
+
+    /*
+struct task_info{
+    std::string task_id; //task name or id
+    std::string module_name;
+    std::string host; //server
+    std::string access_path; //client visit path
+    //file send or download
+    std::string save_file; //the path download data where to save
+    //send file 
+    std::string send_file; //send a file to server
+    blob_data send_data;
+    short port; //server port
+    bool send_only; 
+    int retry_time; //retry times
+    int task_type;
+    //profile and limit for network 
+    long int conn_timeout; //ms
+    long int task_timeout; //ms
+};
+*/
     return 0;
 }
 

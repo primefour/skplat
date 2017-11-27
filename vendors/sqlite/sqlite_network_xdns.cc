@@ -67,6 +67,10 @@ int dns_host_exist(SQLite *sqlite,const char *host,const char *ip){
 
 
 static int dns_callback(void*p,sqlite3_stmt *pStmt){
+    if(p == NULL){
+        return -1;
+    }
+
     std::vector<network_dns> *ptr_dns = (std::vector<network_dns>*)p;
     network_dns entry; 
     int i = 0;
@@ -86,6 +90,7 @@ static int dns_callback(void*p,sqlite3_stmt *pStmt){
     entry.conn_profile = sqlite3_column_int64(pStmt,i++);
     //add to vector
     ptr_dns->push_back(entry);
+    return 1;
 }
 
 
