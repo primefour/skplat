@@ -16,13 +16,8 @@
 
 // #define LOG_NDEBUG 0
 #define LOG_TAG "WorkQueue"
+#include "WorkQueue.h"
 
-#include <utils/Log.h>
-#include <utils/WorkQueue.h>
-
-namespace android {
-
-// --- WorkQueue ---
 
 WorkQueue::WorkQueue(size_t maxThreads, bool canCallJava) :
         mMaxThreads(maxThreads), mCanCallJava(canCallJava),
@@ -44,7 +39,7 @@ status_t WorkQueue::schedule(WorkUnit* workUnit, size_t backlog) {
 
     if (mWorkThreads.size() < mMaxThreads
             && mIdleThreads < mWorkUnits.size() + 1) {
-        sp<WorkThread> workThread = new WorkThread(this, mCanCallJava);
+        WorkThread* workThread = new WorkThread(this, mCanCallJava);
         status_t status = workThread->run("WorkQueue::WorkThread");
         if (status) {
             return status;
@@ -167,5 +162,3 @@ WorkQueue::WorkThread::~WorkThread() {
 bool WorkQueue::WorkThread::threadLoop() {
     return mWorkQueue->threadLoop();
 }
-
-};  // namespace android

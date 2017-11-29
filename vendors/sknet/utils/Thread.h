@@ -30,11 +30,7 @@
 #include "Timers.h"
 #include "ThreadDefs.h"
 
-// ---------------------------------------------------------------------------
-namespace android {
-// ---------------------------------------------------------------------------
-
-class Thread : virtual public RefBase
+class Thread 
 {
 public:
     // Create a Thread object, but doesn't create or start the associated
@@ -95,7 +91,7 @@ private:
     // note that all accesses of mExitPending and mRunning need to hold mLock
     volatile bool           mExitPending;
     volatile bool           mRunning;
-            sp<Thread>      mHoldSelf;
+            Thread*         mHoldSelf;
 #ifdef HAVE_ANDROID_OS
     // legacy for debugging, not used by getTid() as it is set by the child thread
     // and so is not initialized until the child reaches that point
@@ -103,8 +99,6 @@ private:
 #endif
 };
 
-
-}; // namespace android
 
 // ---------------------------------------------------------------------------
 #endif // _LIBS_UTILS_THREAD_H

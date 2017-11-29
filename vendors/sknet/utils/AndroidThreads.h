@@ -23,8 +23,7 @@
 #if defined(HAVE_PTHREADS)
 # include <pthread.h>
 #endif
-
-#include <utils/ThreadDefs.h>
+#include "ThreadDefs.h"
 
 // ---------------------------------------------------------------------------
 // C API

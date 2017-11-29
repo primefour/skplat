@@ -17,12 +17,6 @@
 // #define LOG_NDEBUG 0
 #define LOG_TAG "libutils.threads"
 
-#include <utils/threads.h>
-#include <utils/Log.h>
-
-#include <cutils/sched_policy.h>
-#include <cutils/properties.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
@@ -34,27 +28,20 @@
 # include <pthread.h>
 # include <sched.h>
 # include <sys/resource.h>
-#ifdef HAVE_ANDROID_OS
-# include <bionic_pthread.h>
-#endif
-#elif defined(HAVE_WIN32_THREADS)
-# include <windows.h>
-# include <stdint.h>
-# include <process.h>
-# define HAVE_CREATETHREAD  // Cygwin, vs. HAVE__BEGINTHREADEX for MinGW
 #endif
 
 #if defined(HAVE_PRCTL)
 #include <sys/prctl.h>
 #endif
 
+#include "threads.h"
+#include "sched_policy.h"
+
 /*
  * ===========================================================================
  *      Thread wrappers
  * ===========================================================================
  */
-
-using namespace android;
 
 // ----------------------------------------------------------------------------
 #if defined(HAVE_PTHREADS)
@@ -66,21 +53,9 @@ using namespace android;
  * We create it "detached", so it cleans up after itself.
  */
 
-typedef void* (*android_pthread_entry)(void*);
+typedef void* (*pthread_entry)(void*);
 
-static pthread_once_t gDoSchedulingGroupOnce = PTHREAD_ONCE_INIT;
 static bool gDoSchedulingGroup = true;
-
-static void checkDoSchedulingGroup(void) {
-    char buf[PROPERTY_VALUE_MAX];
-    int len = property_get("debug.sys.noschedgroups", buf, "");
-    if (len > 0) {
-        int temp;
-        if (sscanf(buf, "%d", &temp) == 1) {
-            gDoSchedulingGroup = temp == 0;
-        }
-    }
-}
 
 struct thread_data_t {
     thread_func_t   entryFunction;
@@ -97,17 +72,6 @@ struct thread_data_t {
         char * name = t->threadName;
         delete t;
         setpriority(PRIO_PROCESS, 0, prio);
-        pthread_once(&gDoSchedulingGroupOnce, checkDoSchedulingGroup);
-        if (gDoSchedulingGroup) {
-            if (prio >= ANDROID_PRIORITY_BACKGROUND) {
-                set_sched_policy(androidGetTid(), SP_BACKGROUND);
-            } else if (prio > ANDROID_PRIORITY_AUDIO) {
-                set_sched_policy(androidGetTid(), SP_FOREGROUND);
-            } else {
-                // defaults to that of parent, or as set by requestPriority()
-            }
-        }
-        
         if (name) {
 #if defined(HAVE_PRCTL)
             // Mac OS doesn't have this, and we build libutil for the host too
@@ -133,7 +97,7 @@ struct thread_data_t {
     }
 };
 
-int androidCreateRawThreadEtc(android_thread_func_t entryFunction,
+int CreateRawThreadEtc(android_thread_func_t entryFunction,
                                void *userData,
                                const char* threadName,
                                int32_t threadPriority,
@@ -144,7 +108,6 @@ int androidCreateRawThreadEtc(android_thread_func_t entryFunction,
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-#ifdef HAVE_ANDROID_OS  /* valgrind is rejecting RT-priority create reqs */
     if (threadPriority != PRIORITY_DEFAULT || threadName != NULL) {
         // Now that the pthread_t has a method to find the associated
         // android_thread_id_t (pid) from pthread_t, it would be possible to avoid
@@ -161,7 +124,6 @@ int androidCreateRawThreadEtc(android_thread_func_t entryFunction,
         entryFunction = (android_thread_func_t)&thread_data_t::trampoline;
         userData = t;            
     }
-#endif
 
     if (threadStackSize) {
         pthread_attr_setstacksize(&attr, threadStackSize);
@@ -170,7 +132,7 @@ int androidCreateRawThreadEtc(android_thread_func_t entryFunction,
     errno = 0;
     pthread_t thread;
     int result = pthread_create(&thread, &attr,
-                    (android_pthread_entry)entryFunction, userData);
+                    (pthread_entry)entryFunction, userData);
     pthread_attr_destroy(&attr);
     if (result != 0) {
         ALOGE("androidCreateRawThreadEtc failed (entry=%p, res=%d, errno=%d)\n"
@@ -188,101 +150,11 @@ int androidCreateRawThreadEtc(android_thread_func_t entryFunction,
     return 1;
 }
 
-#ifdef HAVE_ANDROID_OS
-static pthread_t android_thread_id_t_to_pthread(android_thread_id_t thread)
-{
-    return (pthread_t) thread;
-}
-#endif
-
 android_thread_id_t androidGetThreadId()
 {
     return (android_thread_id_t)pthread_self();
 }
 
-// ----------------------------------------------------------------------------
-#elif defined(HAVE_WIN32_THREADS)
-// ----------------------------------------------------------------------------
-
-/*
- * Trampoline to make us __stdcall-compliant.
- *
- * We're expected to delete "vDetails" when we're done.
- */
-struct threadDetails {
-    int (*func)(void*);
-    void* arg;
-};
-static __stdcall unsigned int threadIntermediary(void* vDetails)
-{
-    struct threadDetails* pDetails = (struct threadDetails*) vDetails;
-    int result;
-
-    result = (*(pDetails->func))(pDetails->arg);
-
-    delete pDetails;
-
-    ALOG(LOG_VERBOSE, "thread", "thread exiting\n");
-    return (unsigned int) result;
-}
-
-/*
- * Create and run a new thread.
- */
-static bool doCreateThread(android_thread_func_t fn, void* arg, android_thread_id_t *id)
-{
-    HANDLE hThread;
-    struct threadDetails* pDetails = new threadDetails; // must be on heap
-    unsigned int thrdaddr;
-
-    pDetails->func = fn;
-    pDetails->arg = arg;
-
-#if defined(HAVE__BEGINTHREADEX)
-    hThread = (HANDLE) _beginthreadex(NULL, 0, threadIntermediary, pDetails, 0,
-                    &thrdaddr);
-    if (hThread == 0)
-#elif defined(HAVE_CREATETHREAD)
-    hThread = CreateThread(NULL, 0,
-                    (LPTHREAD_START_ROUTINE) threadIntermediary,
-                    (void*) pDetails, 0, (DWORD*) &thrdaddr);
-    if (hThread == NULL)
-#endif
-    {
-        ALOG(LOG_WARN, "thread", "WARNING: thread create failed\n");
-        return false;
-    }
-
-#if defined(HAVE_CREATETHREAD)
-    /* close the management handle */
-    CloseHandle(hThread);
-#endif
-
-    if (id != NULL) {
-      	*id = (android_thread_id_t)thrdaddr;
-    }
-
-    return true;
-}
-
-int androidCreateRawThreadEtc(android_thread_func_t fn,
-                               void *userData,
-                               const char* threadName,
-                               int32_t threadPriority,
-                               size_t threadStackSize,
-                               android_thread_id_t *threadId)
-{
-    return doCreateThread(  fn, userData, threadId);
-}
-
-android_thread_id_t androidGetThreadId()
-{
-    return (android_thread_id_t)GetCurrentThreadId();
-}
-
-// ----------------------------------------------------------------------------
-#else
-#error "Threads not supported"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -373,88 +245,7 @@ int androidGetThreadPriority(pid_t tid) {
 
 #endif
 
-namespace android {
 
-/*
- * ===========================================================================
- *      Mutex class
- * ===========================================================================
- */
-
-#if defined(HAVE_PTHREADS)
-// implemented as inlines in threads.h
-#elif defined(HAVE_WIN32_THREADS)
-
-Mutex::Mutex()
-{
-    HANDLE hMutex;
-
-    assert(sizeof(hMutex) == sizeof(mState));
-
-    hMutex = CreateMutex(NULL, FALSE, NULL);
-    mState = (void*) hMutex;
-}
-
-Mutex::Mutex(const char* name)
-{
-    // XXX: name not used for now
-    HANDLE hMutex;
-
-    assert(sizeof(hMutex) == sizeof(mState));
-
-    hMutex = CreateMutex(NULL, FALSE, NULL);
-    mState = (void*) hMutex;
-}
-
-Mutex::Mutex(int type, const char* name)
-{
-    // XXX: type and name not used for now
-    HANDLE hMutex;
-
-    assert(sizeof(hMutex) == sizeof(mState));
-
-    hMutex = CreateMutex(NULL, FALSE, NULL);
-    mState = (void*) hMutex;
-}
-
-Mutex::~Mutex()
-{
-    CloseHandle((HANDLE) mState);
-}
-
-status_t Mutex::lock()
-{
-    DWORD dwWaitResult;
-    dwWaitResult = WaitForSingleObject((HANDLE) mState, INFINITE);
-    return dwWaitResult != WAIT_OBJECT_0 ? -1 : NO_ERROR;
-}
-
-void Mutex::unlock()
-{
-    if (!ReleaseMutex((HANDLE) mState))
-        ALOG(LOG_WARN, "thread", "WARNING: bad result from unlocking mutex\n");
-}
-
-status_t Mutex::tryLock()
-{
-    DWORD dwWaitResult;
-
-    dwWaitResult = WaitForSingleObject((HANDLE) mState, 0);
-    if (dwWaitResult != WAIT_OBJECT_0 && dwWaitResult != WAIT_TIMEOUT)
-        ALOG(LOG_WARN, "thread", "WARNING: bad result from try-locking mutex\n");
-    return (dwWaitResult == WAIT_OBJECT_0) ? 0 : -1;
-}
-
-#else
-#error "Somebody forgot to implement threads for this platform."
-#endif
-
-
-/*
- * ===========================================================================
- *      Condition class
- * ===========================================================================
- */
 
 #if defined(HAVE_PTHREADS)
 // implemented as inlines in threads.h
@@ -894,6 +685,3 @@ bool Thread::exitPending() const
     return mExitPending;
 }
 
-
-
-};  // namespace android

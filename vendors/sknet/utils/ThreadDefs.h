@@ -86,7 +86,6 @@ enum {
 // ---------------------------------------------------------------------------
 // C++ API
 #ifdef __cplusplus
-namespace android {
 // ---------------------------------------------------------------------------
 
 typedef android_thread_id_t thread_id_t;
@@ -106,9 +105,6 @@ enum {
     PRIORITY_MORE_FAVORABLE = ANDROID_PRIORITY_MORE_FAVORABLE,
     PRIORITY_LESS_FAVORABLE = ANDROID_PRIORITY_LESS_FAVORABLE,
 };
-
-// ---------------------------------------------------------------------------
-}; // namespace android
 #endif  // __cplusplus
 // ---------------------------------------------------------------------------
 

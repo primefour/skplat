@@ -17,9 +17,6 @@
 //
 // Timer functions.
 //
-#include <utils/Timers.h>
-#include <utils/Log.h>
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -27,10 +24,7 @@
 #include <time.h>
 #include <errno.h>
 #include <limits.h>
-
-#ifdef HAVE_WIN32_THREADS
-#include <windows.h>
-#endif
+#include "Timers.h"
 
 nsecs_t systemTime(int clock)
 {
@@ -76,8 +70,6 @@ int toMillisecondTimeoutDelay(nsecs_t referenceTime, nsecs_t timeoutTime)
  *      DurationTimer
  * ===========================================================================
  */
-
-using namespace android;
 
 // Start the timer.
 void DurationTimer::start(void)

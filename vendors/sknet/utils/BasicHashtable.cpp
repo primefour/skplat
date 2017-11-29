@@ -22,8 +22,6 @@
 #include <utils/BasicHashtable.h>
 #include <utils/misc.h>
 
-namespace android {
-
 BasicHashtableImpl::BasicHashtableImpl(size_t entrySize, bool hasTrivialDestructor,
         size_t minimumInitialCapacity, float loadFactor) :
         mBucketSize(entrySize + sizeof(Bucket)), mHasTrivialDestructor(hasTrivialDestructor),
