@@ -17,9 +17,7 @@
 #ifndef _LIBS_UTILS_WORK_QUEUE_H
 #define _LIBS_UTILS_WORK_QUEUE_H
 
-#include <utils/Errors.h>
-#include <utils/Vector.h>
-#include <utils/threads.h>
+#include "Threads.h"
 
 /*
  * A threaded work queue.
@@ -108,7 +106,8 @@ private:
     bool mCanceled;
     bool mFinished;
     size_t mIdleThreads;
-    Vector<sp<WorkThread> > mWorkThreads;
-    Vector<WorkUnit*> mWorkUnits;
+
+    std::vector < WorkThread* > mWorkThreads;
+    std::vector <WorkUnit*> mWorkUnits;
 };
 #endif // _LIBS_UTILS_WORK_QUEUE_H

@@ -33,19 +33,19 @@
 #if defined(HAVE_PRCTL)
 #include <sys/prctl.h>
 #endif
-
-#include "threads.h"
-#include "sched_policy.h"
+#include "AndroidThreads.h"
+#ifdef __cplusplus
+#include "Condition.h"
+#include "Mutex.h"
+#include "RWLock.h"
+#include "Thread.h"
+#endif
 
 /*
  * ===========================================================================
  *      Thread wrappers
  * ===========================================================================
  */
-
-// ----------------------------------------------------------------------------
-#if defined(HAVE_PTHREADS)
-// ----------------------------------------------------------------------------
 
 /*
  * Create and run a new thread.
@@ -55,10 +55,9 @@
 
 typedef void* (*pthread_entry)(void*);
 
-static bool gDoSchedulingGroup = true;
 
 struct thread_data_t {
-    thread_func_t   entryFunction;
+    pthread_entry   entryFunction;
     void*           userData;
     int             priority;
     char *          threadName;
@@ -66,7 +65,7 @@ struct thread_data_t {
     // we use this trampoline when we need to set the priority with
     // nice/setpriority, and name with prctl.
     static int trampoline(const thread_data_t* t) {
-        thread_func_t f = t->entryFunction;
+        pthread_entry f = t->entryFunction;
         void* u = t->userData;
         int prio = t->priority;
         char * name = t->threadName;
@@ -93,16 +92,16 @@ struct thread_data_t {
 #endif
             free(name);
         }
-        return f(u);
+        return (int) f(u);
     }
 };
 
-int CreateRawThreadEtc(android_thread_func_t entryFunction,
+int createRawThreadEtc(pthread_entry entryFunction,
                                void *userData,
                                const char* threadName,
                                int32_t threadPriority,
                                size_t threadStackSize,
-                               android_thread_id_t *threadId)
+                               pthread_t  *threadId)
 {
     pthread_attr_t attr; 
     pthread_attr_init(&attr);
@@ -135,7 +134,7 @@ int CreateRawThreadEtc(android_thread_func_t entryFunction,
                     (pthread_entry)entryFunction, userData);
     pthread_attr_destroy(&attr);
     if (result != 0) {
-        ALOGE("androidCreateRawThreadEtc failed (entry=%p, res=%d, errno=%d)\n"
+        ALOGE("createRawThreadEtc failed (entry=%p, res=%d, errno=%d)\n"
              "(android threadPriority=%d)",
             entryFunction, result, errno, threadPriority);
         return 0;
@@ -145,51 +144,33 @@ int CreateRawThreadEtc(android_thread_func_t entryFunction,
     // assigned after the child starts.  Use memory barrier / lock if the child
     // or other threads also need access.
     if (threadId != NULL) {
-        *threadId = (android_thread_id_t)thread; // XXX: this is not portable
+        *threadId = thread; // XXX: this is not portable
     }
     return 1;
 }
 
-android_thread_id_t androidGetThreadId()
-{
-    return (android_thread_id_t)pthread_self();
+// Create thread with lots of parameters
+inline bool createThreadEtc(pthread_entry entryFunction,
+                            void *userData,
+                            const char* threadName = "android:unnamed_thread",
+                            int32_t threadPriority = PRIORITY_DEFAULT,
+                            size_t threadStackSize = 0,
+                            pthread_t *threadId = 0) {
+    return createRawThreadEtc(entryFunction, userData, threadName,
+        threadPriority, threadStackSize, threadId) ? true : false;
 }
 
-#endif
-
-// ----------------------------------------------------------------------------
-
-int androidCreateThread(android_thread_func_t fn, void* arg)
-{
-    return createThreadEtc(fn, arg);
+// Create and run a new thread.
+inline bool createThread(pthread_entry f, void *a) {
+    return createThreadEtc(f, a) ? true : false;
 }
 
-int androidCreateThreadGetID(android_thread_func_t fn, void *arg, android_thread_id_t *id)
-{
+int createThreadGetID(pthread_entry fn, void *arg, pthread_t *id) {
     return createThreadEtc(fn, arg, "android:unnamed_thread",
                            PRIORITY_DEFAULT, 0, id);
 }
 
-static android_create_thread_fn gCreateThreadFn = androidCreateRawThreadEtc;
-
-int androidCreateThreadEtc(android_thread_func_t entryFunction,
-                            void *userData,
-                            const char* threadName,
-                            int32_t threadPriority,
-                            size_t threadStackSize,
-                            android_thread_id_t *threadId)
-{
-    return gCreateThreadFn(entryFunction, userData, threadName,
-        threadPriority, threadStackSize, threadId);
-}
-
-void androidSetCreateThreadFunc(android_create_thread_fn func)
-{
-    gCreateThreadFn = func;
-}
-
-pid_t androidGetTid()
-{
+pid_t getTid() {
 #ifdef HAVE_GETTID
     return gettid();
 #else
@@ -197,283 +178,13 @@ pid_t androidGetTid()
 #endif
 }
 
-#ifdef HAVE_ANDROID_OS
-int androidSetThreadPriority(pid_t tid, int pri)
-{
-    int rc = 0;
-    
-#if defined(HAVE_PTHREADS)
-    int lasterr = 0;
-
-    pthread_once(&gDoSchedulingGroupOnce, checkDoSchedulingGroup);
-    if (gDoSchedulingGroup) {
-        // set_sched_policy does not support tid == 0
-        int policy_tid;
-        if (tid == 0) {
-            policy_tid = androidGetTid();
-        } else {
-            policy_tid = tid;
-        }
-        if (pri >= ANDROID_PRIORITY_BACKGROUND) {
-            rc = set_sched_policy(policy_tid, SP_BACKGROUND);
-        } else if (getpriority(PRIO_PROCESS, tid) >= ANDROID_PRIORITY_BACKGROUND) {
-            rc = set_sched_policy(policy_tid, SP_FOREGROUND);
-        }
-    }
-
-    if (rc) {
-        lasterr = errno;
-    }
-
-    if (setpriority(PRIO_PROCESS, tid, pri) < 0) {
-        rc = INVALID_OPERATION;
-    } else {
-        errno = lasterr;
-    }
-#endif
-    
-    return rc;
-}
-
-int androidGetThreadPriority(pid_t tid) {
+int getThreadPriority(pid_t tid) {
 #if defined(HAVE_PTHREADS)
     return getpriority(PRIO_PROCESS, tid);
 #else
     return ANDROID_PRIORITY_NORMAL;
 #endif
 }
-
-#endif
-
-
-
-#if defined(HAVE_PTHREADS)
-// implemented as inlines in threads.h
-#elif defined(HAVE_WIN32_THREADS)
-
-/*
- * Windows doesn't have a condition variable solution.  It's possible
- * to create one, but it's easy to get it wrong.  For a discussion, and
- * the origin of this implementation, see:
- *
- *  http://www.cs.wustl.edu/~schmidt/win32-cv-1.html
- *
- * The implementation shown on the page does NOT follow POSIX semantics.
- * As an optimization they require acquiring the external mutex before
- * calling signal() and broadcast(), whereas POSIX only requires grabbing
- * it before calling wait().  The implementation here has been un-optimized
- * to have the correct behavior.
- */
-typedef struct WinCondition {
-    // Number of waiting threads.
-    int                 waitersCount;
-
-    // Serialize access to waitersCount.
-    CRITICAL_SECTION    waitersCountLock;
-
-    // Semaphore used to queue up threads waiting for the condition to
-    // become signaled.
-    HANDLE              sema;
-
-    // An auto-reset event used by the broadcast/signal thread to wait
-    // for all the waiting thread(s) to wake up and be released from
-    // the semaphore.
-    HANDLE              waitersDone;
-
-    // This mutex wouldn't be necessary if we required that the caller
-    // lock the external mutex before calling signal() and broadcast().
-    // I'm trying to mimic pthread semantics though.
-    HANDLE              internalMutex;
-
-    // Keeps track of whether we were broadcasting or signaling.  This
-    // allows us to optimize the code if we're just signaling.
-    bool                wasBroadcast;
-
-    status_t wait(WinCondition* condState, HANDLE hMutex, nsecs_t* abstime)
-    {
-        // Increment the wait count, avoiding race conditions.
-        EnterCriticalSection(&condState->waitersCountLock);
-        condState->waitersCount++;
-        //printf("+++ wait: incr waitersCount to %d (tid=%ld)\n",
-        //    condState->waitersCount, getThreadId());
-        LeaveCriticalSection(&condState->waitersCountLock);
-    
-        DWORD timeout = INFINITE;
-        if (abstime) {
-            nsecs_t reltime = *abstime - systemTime();
-            if (reltime < 0)
-                reltime = 0;
-            timeout = reltime/1000000;
-        }
-        
-        // Atomically release the external mutex and wait on the semaphore.
-        DWORD res =
-            SignalObjectAndWait(hMutex, condState->sema, timeout, FALSE);
-    
-        //printf("+++ wait: awake (tid=%ld)\n", getThreadId());
-    
-        // Reacquire lock to avoid race conditions.
-        EnterCriticalSection(&condState->waitersCountLock);
-    
-        // No longer waiting.
-        condState->waitersCount--;
-    
-        // Check to see if we're the last waiter after a broadcast.
-        bool lastWaiter = (condState->wasBroadcast && condState->waitersCount == 0);
-    
-        //printf("+++ wait: lastWaiter=%d (wasBc=%d wc=%d)\n",
-        //    lastWaiter, condState->wasBroadcast, condState->waitersCount);
-    
-        LeaveCriticalSection(&condState->waitersCountLock);
-    
-        // If we're the last waiter thread during this particular broadcast
-        // then signal broadcast() that we're all awake.  It'll drop the
-        // internal mutex.
-        if (lastWaiter) {
-            // Atomically signal the "waitersDone" event and wait until we
-            // can acquire the internal mutex.  We want to do this in one step
-            // because it ensures that everybody is in the mutex FIFO before
-            // any thread has a chance to run.  Without it, another thread
-            // could wake up, do work, and hop back in ahead of us.
-            SignalObjectAndWait(condState->waitersDone, condState->internalMutex,
-                INFINITE, FALSE);
-        } else {
-            // Grab the internal mutex.
-            WaitForSingleObject(condState->internalMutex, INFINITE);
-        }
-    
-        // Release the internal and grab the external.
-        ReleaseMutex(condState->internalMutex);
-        WaitForSingleObject(hMutex, INFINITE);
-    
-        return res == WAIT_OBJECT_0 ? NO_ERROR : -1;
-    }
-} WinCondition;
-
-/*
- * Constructor.  Set up the WinCondition stuff.
- */
-Condition::Condition()
-{
-    WinCondition* condState = new WinCondition;
-
-    condState->waitersCount = 0;
-    condState->wasBroadcast = false;
-    // semaphore: no security, initial value of 0
-    condState->sema = CreateSemaphore(NULL, 0, 0x7fffffff, NULL);
-    InitializeCriticalSection(&condState->waitersCountLock);
-    // auto-reset event, not signaled initially
-    condState->waitersDone = CreateEvent(NULL, FALSE, FALSE, NULL);
-    // used so we don't have to lock external mutex on signal/broadcast
-    condState->internalMutex = CreateMutex(NULL, FALSE, NULL);
-
-    mState = condState;
-}
-
-/*
- * Destructor.  Free Windows resources as well as our allocated storage.
- */
-Condition::~Condition()
-{
-    WinCondition* condState = (WinCondition*) mState;
-    if (condState != NULL) {
-        CloseHandle(condState->sema);
-        CloseHandle(condState->waitersDone);
-        delete condState;
-    }
-}
-
-
-status_t Condition::wait(Mutex& mutex)
-{
-    WinCondition* condState = (WinCondition*) mState;
-    HANDLE hMutex = (HANDLE) mutex.mState;
-    
-    return ((WinCondition*)mState)->wait(condState, hMutex, NULL);
-}
-
-status_t Condition::waitRelative(Mutex& mutex, nsecs_t reltime)
-{
-    WinCondition* condState = (WinCondition*) mState;
-    HANDLE hMutex = (HANDLE) mutex.mState;
-    nsecs_t absTime = systemTime()+reltime;
-
-    return ((WinCondition*)mState)->wait(condState, hMutex, &absTime);
-}
-
-/*
- * Signal the condition variable, allowing one thread to continue.
- */
-void Condition::signal()
-{
-    WinCondition* condState = (WinCondition*) mState;
-
-    // Lock the internal mutex.  This ensures that we don't clash with
-    // broadcast().
-    WaitForSingleObject(condState->internalMutex, INFINITE);
-
-    EnterCriticalSection(&condState->waitersCountLock);
-    bool haveWaiters = (condState->waitersCount > 0);
-    LeaveCriticalSection(&condState->waitersCountLock);
-
-    // If no waiters, then this is a no-op.  Otherwise, knock the semaphore
-    // down a notch.
-    if (haveWaiters)
-        ReleaseSemaphore(condState->sema, 1, 0);
-
-    // Release internal mutex.
-    ReleaseMutex(condState->internalMutex);
-}
-
-/*
- * Signal the condition variable, allowing all threads to continue.
- *
- * First we have to wake up all threads waiting on the semaphore, then
- * we wait until all of the threads have actually been woken before
- * releasing the internal mutex.  This ensures that all threads are woken.
- */
-void Condition::broadcast()
-{
-    WinCondition* condState = (WinCondition*) mState;
-
-    // Lock the internal mutex.  This keeps the guys we're waking up
-    // from getting too far.
-    WaitForSingleObject(condState->internalMutex, INFINITE);
-
-    EnterCriticalSection(&condState->waitersCountLock);
-    bool haveWaiters = false;
-
-    if (condState->waitersCount > 0) {
-        haveWaiters = true;
-        condState->wasBroadcast = true;
-    }
-
-    if (haveWaiters) {
-        // Wake up all the waiters.
-        ReleaseSemaphore(condState->sema, condState->waitersCount, 0);
-
-        LeaveCriticalSection(&condState->waitersCountLock);
-
-        // Wait for all awakened threads to acquire the counting semaphore.
-        // The last guy who was waiting sets this.
-        WaitForSingleObject(condState->waitersDone, INFINITE);
-
-        // Reset wasBroadcast.  (No crit section needed because nobody
-        // else can wake up to poke at it.)
-        condState->wasBroadcast = 0;
-    } else {
-        // nothing to do
-        LeaveCriticalSection(&condState->waitersCountLock);
-    }
-
-    // Release internal mutex.
-    ReleaseMutex(condState->internalMutex);
-}
-
-#else
-#error "condition variables not supported on this platform"
-#endif
-
 // ----------------------------------------------------------------------------
 
 /*
@@ -482,13 +193,12 @@ void Condition::broadcast()
 
 Thread::Thread(bool canCallJava)
     :   mCanCallJava(canCallJava),
-        mThread(thread_id_t(-1)),
+        mThread((pthread_t)(-1)),
         mLock("Thread::mLock"),
         mStatus(NO_ERROR),
-        mExitPending(false), mRunning(false)
-#ifdef HAVE_ANDROID_OS
-        , mTid(-1)
-#endif
+        mExitPending(false), 
+        mRunning(false), 
+        mTid(-1)
 {
 }
 
@@ -514,7 +224,7 @@ status_t Thread::run(const char* name, int32_t priority, size_t stack)
     // try again after an error happened (either below, or in readyToRun())
     mStatus = NO_ERROR;
     mExitPending = false;
-    mThread = thread_id_t(-1);
+    mThread = (pthread_t)(-1);
     
     // hold a strong reference on ourself
     mHoldSelf = this;
@@ -522,20 +232,14 @@ status_t Thread::run(const char* name, int32_t priority, size_t stack)
     mRunning = true;
 
     bool res;
-    if (mCanCallJava) {
-        res = createThreadEtc(_threadLoop,
-                this, name, priority, stack, &mThread);
-    } else {
-        res = androidCreateRawThreadEtc(_threadLoop,
-                this, name, priority, stack, &mThread);
-    }
-    
+    res = createThreadEtc(_threadLoop,
+            this, name, priority, stack, &mThread);
+
     if (res == false) {
         mStatus = UNKNOWN_ERROR;   // something happened!
         mRunning = false;
         mThread = thread_id_t(-1);
-        mHoldSelf.clear();  // "this" may have gone away after this.
-
+        mHoldSelf = NULL;  // "this" may have gone away after this.
         return UNKNOWN_ERROR;
     }
     
@@ -551,18 +255,9 @@ status_t Thread::run(const char* name, int32_t priority, size_t stack)
 int Thread::_threadLoop(void* user)
 {
     Thread* const self = static_cast<Thread*>(user);
-
-    sp<Thread> strong(self->mHoldSelf);
-    wp<Thread> weak(strong);
-    self->mHoldSelf.clear();
-
-#ifdef HAVE_ANDROID_OS
     // this is very useful for debugging with gdb
-    self->mTid = gettid();
-#endif
-
+    self->mTid = getTid();
     bool first = true;
-
     do {
         bool result;
         if (first) {
@@ -589,26 +284,20 @@ int Thread::_threadLoop(void* user)
 
         // establish a scope for mLock
         {
-        Mutex::Autolock _l(self->mLock);
-        if (result == false || self->mExitPending) {
-            self->mExitPending = true;
-            self->mRunning = false;
-            // clear thread ID so that requestExitAndWait() does not exit if
-            // called by a new thread using the same thread ID as this one.
-            self->mThread = thread_id_t(-1);
-            // note that interested observers blocked in requestExitAndWait are
-            // awoken by broadcast, but blocked on mLock until break exits scope
-            self->mThreadExitedCondition.broadcast();
-            break;
+            Mutex::Autolock _l(self->mLock);
+            if (result == false || self->mExitPending) {
+                self->mExitPending = true;
+                self->mRunning = false;
+                // clear thread ID so that requestExitAndWait() does not exit if
+                // called by a new thread using the same thread ID as this one.
+                self->mThread = thread_id_t(-1);
+                // note that interested observers blocked in requestExitAndWait are
+                // awoken by broadcast, but blocked on mLock until break exits scope
+                self->mThreadExitedCondition.broadcast();
+                break;
+            }
         }
-        }
-        
-        // Release our strong reference, to let a chance to the thread
-        // to die a peaceful death.
-        strong.clear();
-        // And immediately, re-acquire a strong reference for the next loop
-        strong = weak.promote();
-    } while(strong != 0);
+    } while(!self->mExitPending);
     
     return 0;
 }
@@ -622,7 +311,7 @@ void Thread::requestExit()
 status_t Thread::requestExitAndWait()
 {
     Mutex::Autolock _l(mLock);
-    if (mThread == getThreadId()) {
+    if (mThread == pthread_self()) {
         ALOGW(
         "Thread (this=%p): don't call waitForExit() from this "
         "Thread object's thread. It's a guaranteed deadlock!",
@@ -646,7 +335,7 @@ status_t Thread::requestExitAndWait()
 status_t Thread::join()
 {
     Mutex::Autolock _l(mLock);
-    if (mThread == getThreadId()) {
+    if (mThread == pthread_self()) {
         ALOGW(
         "Thread (this=%p): don't call join() from this "
         "Thread object's thread. It's a guaranteed deadlock!",
@@ -662,25 +351,20 @@ status_t Thread::join()
     return mStatus;
 }
 
-#ifdef HAVE_ANDROID_OS
-pid_t Thread::getTid() const
-{
+pid_t Thread::getTid() const {
     // mTid is not defined until the child initializes it, and the caller may need it earlier
     Mutex::Autolock _l(mLock);
     pid_t tid;
     if (mRunning) {
-        pthread_t pthread = android_thread_id_t_to_pthread(mThread);
-        tid = __pthread_gettid(pthread);
+        self->mTid = ::getTid();
     } else {
         ALOGW("Thread (this=%p): getTid() is undefined before run()", this);
         tid = -1;
     }
     return tid;
 }
-#endif
 
-bool Thread::exitPending() const
-{
+bool Thread::exitPending() const {
     Mutex::Autolock _l(mLock);
     return mExitPending;
 }
