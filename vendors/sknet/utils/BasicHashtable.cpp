@@ -15,12 +15,10 @@
  */
 
 #define LOG_TAG "BasicHashtable"
-
 #include <math.h>
-
-#include <utils/Log.h>
-#include <utils/BasicHashtable.h>
-#include <utils/misc.h>
+#include "BasicHashtable.h"
+#include "Log.h"
+#define NELEM(x)                    (sizeof(x)/sizeof(*(x)))
 
 BasicHashtableImpl::BasicHashtableImpl(size_t entrySize, bool hasTrivialDestructor,
         size_t minimumInitialCapacity, float loadFactor) :
@@ -35,9 +33,6 @@ BasicHashtableImpl::BasicHashtableImpl(const BasicHashtableImpl& other) :
         mCapacity(other.mCapacity), mLoadFactor(other.mLoadFactor),
         mSize(other.mSize), mFilledBuckets(other.mFilledBuckets),
         mBucketCount(other.mBucketCount), mBuckets(other.mBuckets) {
-    if (mBuckets) {
-        SharedBuffer::bufferFromData(mBuckets)->acquire();
-    }
 }
 
 void BasicHashtableImpl::dispose() {
@@ -66,26 +61,11 @@ void BasicHashtableImpl::setTo(const BasicHashtableImpl& other) {
     mFilledBuckets = other.mFilledBuckets;
     mBucketCount = other.mBucketCount;
     mBuckets = other.mBuckets;
-
-    if (mBuckets) {
-        SharedBuffer::bufferFromData(mBuckets)->acquire();
-    }
 }
 
 void BasicHashtableImpl::clear() {
     if (mBuckets) {
         if (mFilledBuckets) {
-            SharedBuffer* sb = SharedBuffer::bufferFromData(mBuckets);
-            if (sb->onlyOwner()) {
-                destroyBuckets(mBuckets, mBucketCount);
-                for (size_t i = 0; i < mSize; i++) {
-                    Bucket& bucket = bucketAt(mBuckets, i);
-                    bucket.cookie = 0;
-                }
-            } else {
-                releaseBuckets(mBuckets, mBucketCount);
-                mBuckets = NULL;
-            }
             mFilledBuckets = 0;
         }
         mSize = 0;
@@ -237,24 +217,10 @@ void BasicHashtableImpl::rehash(size_t minimumCapacity, float loadFactor) {
 }
 
 void* BasicHashtableImpl::allocateBuckets(size_t count) const {
-    size_t bytes = count * mBucketSize;
-    SharedBuffer* sb = SharedBuffer::alloc(bytes);
-    LOG_ALWAYS_FATAL_IF(!sb, "Could not allocate %u bytes for hashtable with %u buckets.",
-            uint32_t(bytes), uint32_t(count));
-    void* buckets = sb->data();
-    for (size_t i = 0; i < count; i++) {
-        Bucket& bucket = bucketAt(buckets, i);
-        bucket.cookie = 0;
-    }
-    return buckets;
+    return NULL;
 }
 
 void BasicHashtableImpl::releaseBuckets(void* __restrict__ buckets, size_t count) const {
-    SharedBuffer* sb = SharedBuffer::bufferFromData(buckets);
-    if (sb->release(SharedBuffer::eKeepStorage) == 1) {
-        destroyBuckets(buckets, count);
-        SharedBuffer::dealloc(sb);
-    }
 }
 
 void BasicHashtableImpl::destroyBuckets(void* __restrict__ buckets, size_t count) const {
@@ -332,5 +298,3 @@ void BasicHashtableImpl::determineCapacity(size_t minimumCapacity, float loadFac
     *outBucketCount = count;
     *outCapacity = ceilf((count - 1) * loadFactor);
 }
-
-}; // namespace android

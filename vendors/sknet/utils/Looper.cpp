@@ -13,16 +13,13 @@
 // Debugs callback registration and invocation.
 #define DEBUG_CALLBACKS 0
 
-#include <cutils/log.h>
-#include <utils/Looper.h>
-#include <utils/Timers.h>
-
 #include <unistd.h>
 #include <fcntl.h>
 #include <limits.h>
+#include "Log.h"
+#include "Looper.h"
+#include "Timers.h"
 
-
-namespace android {
 
 // --- WeakMessageHandler ---
 
@@ -557,5 +554,3 @@ void Looper::removeMessages(const sp<MessageHandler>& handler, int what) {
         }
     } // release lock
 }
-
-} // namespace android
