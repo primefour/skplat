@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <limits.h>
 #include "Timers.h"
+#include "Log.h"
 
 nsecs_t systemTime(int clock)
 {

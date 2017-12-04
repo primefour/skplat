@@ -19,26 +19,20 @@
  * System clock functions.
  */
 
-#ifdef HAVE_ANDROID_OS
 #include <linux/ioctl.h>
 #include <linux/rtc.h>
-#include <utils/Atomic.h>
-#include <linux/android_alarm.h>
-#endif
-
+#include "Atomic.h"
 #include <sys/time.h>
 #include <limits.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
 
-#include <utils/SystemClock.h>
-#include <utils/Timers.h>
+#include "SystemClock.h"
+#include "Timers.h"
 
 #define LOG_TAG "SystemClock"
-#include "utils/Log.h"
-
-namespace android {
+#include "Log.h"
 
 /*
  * Set the current time.  This only works when running as root.
@@ -135,5 +129,3 @@ int64_t elapsedRealtime()
     return (int64_t) nanoseconds_to_milliseconds(when);
 #endif
 }
-
-}; // namespace android

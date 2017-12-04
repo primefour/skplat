@@ -16,17 +16,39 @@
 
 #ifndef ANDROID_UTILS_ATOMIC_H
 #define ANDROID_UTILS_ATOMIC_H
+#include<stdio.h>
+#include<stdlib.h>
+#include <stdint.h>
+//#include<sys/types.h>
 
-int android_atomic_inc(int *count){
+inline int android_atomic_inc(volatile int32_t *count){
     int ref = *count;
     (*count) ++;
     return ref;
 }
 
-int android_atomic_dec(int *Count){
+inline int android_atomic_dec(volatile int32_t *count){
     int ref = *count;
     (*count) --;
     return ref;
+}
+
+inline int android_atomic_add(int value,volatile int32_t *result){
+    return *result += value ;
+}
+
+
+inline int android_atomic_cmpxchg(int oldvalue ,int newvalue,volatile int32_t *op2){
+    if(oldvalue == *op2){
+        *op2 = newvalue;
+        return 0;
+    }else{
+        return 1;
+    }
+}
+
+inline void android_atomic_or(int mode, volatile int32_t *op2){
+    *op2 |= mode;
 }
 
 

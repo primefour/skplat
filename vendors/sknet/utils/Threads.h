@@ -28,8 +28,6 @@
 #include "Condition.h"
 #include "Mutex.h"
 #include "Timers.h"
-#include "ThreadDefs.h"
-
 #include <stdint.h>
 #include <sys/types.h>
 
@@ -70,7 +68,7 @@ enum {
     ANDROID_PRIORITY_DISPLAY        =  -4,
     
     /* ui service treads might want to run at a urgent display (uncommon) */
-    ANDROID_PRIORITY_URGENT_DISPLAY =  HAL_PRIORITY_URGENT_DISPLAY,
+    ANDROID_PRIORITY_URGENT_DISPLAY =  -13,
     
     /* all normal audio threads */
     ANDROID_PRIORITY_AUDIO          = -16,

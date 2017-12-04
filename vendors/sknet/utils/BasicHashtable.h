@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include "TypeHelpers.h"
+#include "SharedBuffer.h"
 
 /* Implementation type.  Nothing to see here. */
 class BasicHashtableImpl {
@@ -53,7 +54,7 @@ protected:
     void dispose();
 
     inline void edit() {
-        if (mBuckets) {
+        if (mBuckets && !SharedBuffer::bufferFromData(mBuckets)->onlyOwner()) {
             clone();
         }
     }

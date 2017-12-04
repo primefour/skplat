@@ -23,11 +23,7 @@
 #if defined(HAVE_PTHREADS)
 # include <pthread.h>
 #endif
-
-#include "ThreadDefs.h"
-
 #if defined(HAVE_PTHREADS)
-
 /*
  * Simple mutex class.  The implementation is system-dependent.
  *

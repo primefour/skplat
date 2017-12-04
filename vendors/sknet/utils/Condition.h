@@ -24,9 +24,9 @@
 #if defined(HAVE_PTHREADS)
 # include <pthread.h>
 #endif
-
 #include "Mutex.h"
 #include "Timers.h"
+#include "Log.h"
 
 /*
  * Condition variable class.  The implementation is system-dependent.

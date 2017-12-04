@@ -22,9 +22,7 @@
 #include <string.h>
 #include "StrongPointer.h"
 #include "TypeHelpers.h"
-
-// ---------------------------------------------------------------------------
-namespace android {
+#include "Atomic.h"
 
 class TextOutput;
 TextOutput& printWeakPointer(TextOutput& to, const void* val);
@@ -514,10 +512,5 @@ template<typename TYPE> inline
 void move_backward_type(wp<TYPE>* d, wp<TYPE> const* s, size_t n) {
     ReferenceMover::move_references(d, s, n);
 }
-
-
-}; // namespace android
-
-// ---------------------------------------------------------------------------
 
 #endif // ANDROID_REF_BASE_H

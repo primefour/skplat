@@ -16,14 +16,10 @@
 
 #define LOG_TAG "RefBase"
 
-#include <utils/RefBase.h>
+#include "RefBase.h"
 
-#include <utils/Atomic.h>
-#include <utils/CallStack.h>
-#include <utils/Log.h>
-#include <utils/threads.h>
-#include <utils/TextOutput.h>
-
+#include "Atomic.h"
+#include "Log.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <typeinfo>
@@ -42,8 +38,6 @@
 #define PRINT_REFS                      0
 
 // ---------------------------------------------------------------------------
-
-namespace android {
 
 #define INITIAL_STRONG_VALUE (1<<28)
 
@@ -610,19 +604,3 @@ void RefBase::moveReferences(void* dst, void const* src, size_t n,
 #endif
 }
 
-// ---------------------------------------------------------------------------
-
-TextOutput& printStrongPointer(TextOutput& to, const void* val)
-{
-    to << "sp<>(" << val << ")";
-    return to;
-}
-
-TextOutput& printWeakPointer(TextOutput& to, const void* val)
-{
-    to << "wp<>(" << val << ")";
-    return to;
-}
-
-
-}; // namespace android
