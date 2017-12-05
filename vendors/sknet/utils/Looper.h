@@ -301,7 +301,7 @@ public:
      *
      * The opts may be ALOOPER_PREPARE_ALLOW_NON_CALLBACKS or 0.
      */
-    static sp<Looper> prepare(int opts);
+    static sp<Looper> prepare(int opts = 0);
 
     /**
      * Sets the given looper to be associated with the calling thread.
