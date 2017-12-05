@@ -6,10 +6,13 @@ TARGET     := test
 ## get all source files  
 SRCS         += $(wildcard *.cpp)  
 SRCS_HEADER  += $(wildcard *.h)  
-OBJS        := $(SRCS:.cpp=.o)  
+SOURCES := $(filter-out %Test.cpp,$(SRCS))
+OBJS        := $(SOURCES:.cpp=.o)  
 
-build:$(SRCS) $(SRCS_HEADER)
-	g++ -c $(CFLAGS) $(SRCS)  
+LDFLAGS += -lpthread
+
+build:$(SOURCES) $(SRCS_HEADER)
+	g++ -c $(CXXFLAGS) $(SOURCES)  
 	g++ -o $(TARGET) $(OBJS) $(LDFLAGS)  
 
 log_test:LogTest.cpp
@@ -24,3 +27,5 @@ list_test:ListTest.cpp
 	g++ ListTest.cpp -o ListTest
 share_buffer:SharedBuffer.cpp SharedBufferTest.cpp
 	g++ SharedBuffer.cpp SharedBufferTest.cpp -o SharedBufferTest
+thread_test:Threads.cpp ThreadsTest.cpp RefBase.cpp
+	g++ Threads.cpp ThreadsTest.cpp RefBase.cpp -o ThreadsTest -lpthread

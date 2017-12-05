@@ -16,6 +16,7 @@
 
 #ifndef _LIBS_UTILS_THREAD_H
 #define _LIBS_UTILS_THREAD_H
+#define HAVE_PTHREADS
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -30,6 +31,7 @@
 #include "Timers.h"
 #include <stdint.h>
 #include <sys/types.h>
+#include "RefBase.h"
 
 // ---------------------------------------------------------------------------
 // C API
@@ -110,8 +112,7 @@ enum {
 #endif  // __cplusplus
 // ---------------------------------------------------------------------------
 
-
-class Thread 
+class Thread : virtual public RefBase
 {
 public:
     // Create a Thread object, but doesn't create or start the associated
@@ -172,7 +173,7 @@ private:
     // note that all accesses of mExitPending and mRunning need to hold mLock
     volatile bool           mExitPending;
     volatile bool           mRunning;
-            Thread*         mHoldSelf;
+            sp<Thread>      mHoldSelf;
     // legacy for debugging, not used by getTid() as it is set by the child thread
     // and so is not initialized until the child reaches that point
             pid_t           mTid;
