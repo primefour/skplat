@@ -9,7 +9,7 @@ SRCS_HEADER  += $(wildcard *.h)
 SOURCES := $(filter-out %Test.cpp,$(SRCS))
 OBJS        := $(SOURCES:.cpp=.o)  
 
-LDFLAGS += -lpthread
+LDFLAGS += -lpthread -lsqlite3
 
 build:$(SOURCES) $(SRCS_HEADER)
 	g++ -c $(CXXFLAGS) $(SOURCES)  
