@@ -118,6 +118,142 @@ sqlite3_stmt* SqliteWrapper::compileSQL(const char *sql){
     return statement;
 }
 
+void SqliteWrapper::getRowData(sqlite3_stmte *pStmt,int nCol){
+    ColumnEntry *colEntries = new ColumnEntry[nCol]; 
+    for (int i = 0; i < nCol; i++) {
+        int type = sqlite3_column_type(pStmt, i);
+        if (type == SQLITE_TEXT) {
+            // TEXT data
+            const char* text = reinterpret_cast<const char*>(
+                    sqlite3_column_text(statement, i));
+            colEntries[i].Value.charValue = text; 
+            colEntries[i].Type = SQLITE_TEXT;
+            colEntries[i].Length = sqlite3_column_bytes(statement, i) +1;
+        } else if (type == SQLITE_INTEGER) {
+            // INTEGER data
+            int64_t value = sqlite3_column_int64(statement, i);
+            colEntries[i].Value.longValue = value;
+            colEntries[i].Type = SQLITE_INTEGER;
+        } else if (type == SQLITE_FLOAT) {
+            // FLOAT data
+            double value = sqlite3_column_double(statement, i);
+            colEntries[i].Value.floatValue = value;
+            colEntries[i].Type = SQLITE_FLOAT;
+        } else if (type == SQLITE_BLOB) {
+            // BLOB data
+            colEntries[i].Value.charValue = (const char *)sqlite3_column_blob(statement, i);
+            colEntries[i].Length = sqlite3_column_bytes(statement, i);
+            colEntries[i].Type = SQLITE_BLOB;
+        } else if (type == SQLITE_NULL) {
+            colEntries[i].Value.charValue = NULL; 
+            colEntries[i].Type = SQLITE_NULL;
+        } else {
+            break;
+        }
+    }
+}
+
+int SqliteWrapper::execStmt(void *arg,sqlite3_stmt *pStmt,dCallback cb){
+    int nCol = sqlite3_column_count(pStmt);
+    std::string*colsName = NULL;
+    while( 1 ){
+        int i;
+        rc = sqlite3_step(pStmt);
+        if(rc == SQLITE_ROW){
+            //get a row data and now get column name
+            if(colsName != NULL && nCol > 0){
+                colsName = new std::string[mCol];
+                if(colsName == NULL){
+                    ALOGW("execute statement fail  %p no memory ",pStmt);
+                    return NO_MEMORY;
+                }
+
+                for(i=0; i<nCol; i++){
+                    azCols[i] += (const char *)sqlite3_column_name(pStmt, i);
+                    assert(!azCols[i].empty())
+                }
+            }
+
+        }else if(rc == SQLITE_DONE){
+            //sql execute done
+
+        }
+
+        /* Invoke the callback function if required */
+        if( xCallback && (SQLITE_ROW==rc || 
+                    (SQLITE_DONE==rc && !callbackIsInit
+                     && db->flags&SQLITE_NullCallback)) ){
+            if( !callbackIsInit ){
+                azCols = sqlite3DbMallocZero(db, 2*nCol*sizeof(const char*) + 1);
+                if( azCols==0 ){
+                    goto exec_out;
+                }
+                for(i=0; i<nCol; i++){
+                    azCols[i] = (char *)sqlite3_column_name(pStmt, i);
+                    /* sqlite3VdbeSetColName() installs column names as UTF8
+                     ** strings so there is no way for sqlite3_column_name() to fail. */
+                    assert( azCols[i]!=0 );
+                }
+                callbackIsInit = 1;
+            }
+            if( rc==SQLITE_ROW ){
+                azVals = &azCols[nCol];
+                for(i=0; i<nCol; i++){
+                    azVals[i] = (char *)sqlite3_column_text(pStmt, i);
+                    if( !azVals[i] && sqlite3_column_type(pStmt, i)!=SQLITE_NULL ){
+                        sqlite3OomFault(db);
+                        goto exec_out;
+                    }
+                }
+            }
+            if( xCallback(pArg, nCol, azVals, azCols) ){
+                /* EVIDENCE-OF: R-38229-40159 If the callback function to
+                 ** sqlite3_exec() returns non-zero, then sqlite3_exec() will
+                 ** return SQLITE_ABORT. */
+                rc = SQLITE_ABORT;
+                sqlite3VdbeFinalize((Vdbe *)pStmt);
+                pStmt = 0;
+                sqlite3Error(db, SQLITE_ABORT);
+                goto exec_out;
+            }
+        }
+
+        if( rc!=SQLITE_ROW ){
+            rc = sqlite3VdbeFinalize((Vdbe *)pStmt);
+            pStmt = 0;
+            zSql = zLeftover;
+            while( sqlite3Isspace(zSql[0]) ) zSql++;
+            break;
+        }
+    }
+
+    sqlite3DbFree(db, azCols);
+    azCols = 0;
+  }
+
+exec_out:
+  if( pStmt ) sqlite3VdbeFinalize((Vdbe *)pStmt);
+  sqlite3DbFree(db, azCols);
+
+  rc = sqlite3ApiExit(db, rc);
+  if( rc!=SQLITE_OK && pzErrMsg ){
+    int nErrMsg = 1 + sqlite3Strlen30(sqlite3_errmsg(db));
+    *pzErrMsg = sqlite3Malloc(nErrMsg);
+    if( *pzErrMsg ){
+      memcpy(*pzErrMsg, sqlite3_errmsg(db), nErrMsg);
+    }else{
+      rc = SQLITE_NOMEM_BKPT;
+      sqlite3Error(db, SQLITE_NOMEM);
+    }
+  }else if( pzErrMsg ){
+    *pzErrMsg = 0;
+  }
+
+  assert( (rc&db->errMask)==rc );
+  sqlite3_mutex_leave(db->mutex);
+
+}
+
 /*
 ** Run a prepared statement
 */

@@ -3,7 +3,6 @@
 #include"RefBase.h"
 #include<string>
 
-typedef int(*dCallback)(void *columnName,void *columnValues,void *pArgs);
 class SqliteTable:RefBase{
     public:
         SqliteTable(const char *sql);
@@ -14,6 +13,7 @@ class SqliteTable:RefBase{
         int deleteOp(const char *sql);
         int queryOp(const char *sql,xCallback cb,void *pArgs);
         int queryDirectOp(const char *sql,dCallback cb,void *pArgs);
+        static int tCallback(sqlite3_stmt *pStmt,void *pArg);
     protected:
         SqliteTable(const SqliteTable &st);
         std::string mTableSql;

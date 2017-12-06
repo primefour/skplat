@@ -9,6 +9,19 @@ extern "C" {
 
 typedef int (*xCallback)(sqlite3_stmt *tStmt,void *pArg);
 
+typedef int (*dCallback)(void *columnName,void *columnValues,void *pArgs);
+
+struct ColumnEntry{
+    const char *Name;
+    union{
+        const char *charValue;
+        double floatValue;
+        long longValue;
+    }Value;
+    int Type;
+    int Length;
+}
+
 class SqliteWrapper:public RefBase{
     public:
         //construct
@@ -23,6 +36,7 @@ class SqliteWrapper:public RefBase{
         //if xcallback return < 0 this function will abort or 
         //run until get SQLITE_DONE
         int execSql(const char *sql,xCallback cb,void *arg); 
+        int execSql(const char *sql,dCallback cb,void *arg); 
 
         //called each time a statement begin to execution.when traceing is enable 
         static void traceCallback(void *data,const char *sql);
@@ -43,6 +57,7 @@ class SqliteWrapper:public RefBase{
         //if xcallback return < 0 this function will abort or 
         //run until get SQLITE_DONE
         int execStmt(void *arg,sqlite3_stmt *stmt,xCallback cb);
+        int execStmt(void *arg,sqlite3_stmt *stmt,dCallback cb);
         //compile sql and generate sqlite_stmt
         sqlite3_stmt* compileSQL(const char *sql);
 

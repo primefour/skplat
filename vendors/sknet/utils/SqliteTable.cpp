@@ -2,7 +2,8 @@
 #include<SqliteTable.h>
 
 //refer to db and the sql to create table
-SqliteTable::SqliteTable(sp<SqliteDatabase> db,const char *sql):mTableSql(sql),mDB(db){
+SqliteTable::SqliteTable(sp<SqliteDatabase> db,const char *sql)
+                                    :mTableSql(sql),mDB(db){
 }
 
 SqliteTable::~SqliteTable(){
@@ -47,4 +48,8 @@ int SqliteTable::queryOp(const char *sql,xCallback cb,void *pArgs){
         ALOGW("delete value fail %s ",sql);
     }
     return rc;
+}
+
+int SqliteTable::queryDirectOp(const char *sql,dCallback cb,void *pArgs){
+
 }
