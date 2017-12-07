@@ -7,12 +7,8 @@ extern "C" {
 #include"sqlite3.h"
 }
 
-typedef int (*xCallback)(sqlite3_stmt *tStmt,void *pArg);
-
-typedef int (*dCallback)(void *columnName,void *columnValues,void *pArgs);
-
 struct ColumnEntry{
-    const char *Name;
+    std::string Name;
     union{
         const char *charValue;
         double floatValue;
@@ -20,7 +16,22 @@ struct ColumnEntry{
     }Value;
     int Type;
     int Length;
-}
+
+    inline long getLongValue(){
+        return Value.longValue;
+    }
+    inline double getFloatValue(){
+        return Value.floatValue;
+    }
+    inline const char *getCharValue(){
+        return Value.charValue;
+    }
+};
+
+typedef int (*xCallback)(sqlite3_stmt *tStmt,void *pArg);
+
+typedef int (*vCallback)(ColumnEntry *colEntries,int count ,void *pArgs);
+
 
 class SqliteWrapper:public RefBase{
     public:
@@ -36,7 +47,7 @@ class SqliteWrapper:public RefBase{
         //if xcallback return < 0 this function will abort or 
         //run until get SQLITE_DONE
         int execSql(const char *sql,xCallback cb,void *arg); 
-        int execSql(const char *sql,dCallback cb,void *arg); 
+        int execSql(const char *sql,vCallback cb,void *arg); 
 
         //called each time a statement begin to execution.when traceing is enable 
         static void traceCallback(void *data,const char *sql);
@@ -53,11 +64,13 @@ class SqliteWrapper:public RefBase{
         static bool mVerboseLog;
         inline void errorInc(){ mDatabaseError ++; }
     private:
+        //parse data from sqlite query 
+        void getRowData(sqlite3_stmt *pStmt,int nCol,ColumnEntry *colEntries);
         //run stmt and call xcallback with the result 
         //if xcallback return < 0 this function will abort or 
         //run until get SQLITE_DONE
         int execStmt(void *arg,sqlite3_stmt *stmt,xCallback cb);
-        int execStmt(void *arg,sqlite3_stmt *stmt,dCallback cb);
+        int execStmt(void *arg,sqlite3_stmt *stmt,vCallback cb);
         //compile sql and generate sqlite_stmt
         sqlite3_stmt* compileSQL(const char *sql);
 
