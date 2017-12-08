@@ -289,6 +289,8 @@ template <typename T> inline hash_t hash_type(const T*& value) {
     return hash_type(uintptr_t(value));
 }
 
+
+
 // ---------------------------------------------------------------------------
 
 #endif // ANDROID_TYPE_HELPERS_H

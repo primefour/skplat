@@ -31,3 +31,5 @@ thread_test:Threads.cpp ThreadsTest.cpp RefBase.cpp
 	g++ Threads.cpp ThreadsTest.cpp RefBase.cpp -o ThreadsTest -lpthread
 looper_test:Looper.cpp LooperTest.cpp RefBase.cpp VectorImpl.cpp SharedBuffer.cpp SystemClock.cpp Timers.cpp Threads.cpp
 	g++ Looper.cpp LooperTest.cpp RefBase.cpp VectorImpl.cpp SharedBuffer.cpp SystemClock.cpp Timers.cpp Threads.cpp -o LooperTest -lpthread
+lru_cache:LruCacheTest.cpp BasicHashtable.cpp RefBase.cpp SharedBuffer.cpp Timers.cpp
+	g++ LruCacheTest.cpp BasicHashtable.cpp RefBase.cpp SharedBuffer.cpp Timers.cpp -o LruCacheTest

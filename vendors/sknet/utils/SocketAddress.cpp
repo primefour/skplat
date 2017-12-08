@@ -7,17 +7,17 @@ SocketAddress::SocketAddress(){
 }
 
 SocketAddress::SocketAddress(const char *host,const char *ip,sockaddr *addr):mHost(host),mCharIpv4(ip){
-    memcpy(&mAddr.mSaAddr,addr,sizeof(sockaddr));
+    memcpy(&mAddr,addr,sizeof(sockaddr));
     mType = SOCKADDR_TYPE_V4;
 }
 
 SocketAddress::SocketAddress(const char *host,const char *ip,sockaddr_in *addr):mHost(host),mCharIpv4(ip){
-    memcpy(&mAddr.mInAddr,addr,sizeof(sockaddr_in));
+    memcpy(&mAddr,addr,sizeof(sockaddr_in));
     mType = SOCKADDR_TYPE_V4;
 }
 
 SocketAddress::SocketAddress(const char *host,const char *ip,sockaddr_in6 *addr):mHost(host),mCharIpv6(ip){
-    memcpy(&mAddr.mIn6Addr,addr,sizeof(sockaddr_in6));
+    memcpy(&mAddr,addr,sizeof(sockaddr_in6));
     mType = SOCKADDR_TYPE_V6;
 }
 

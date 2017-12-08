@@ -236,6 +236,7 @@ void BasicHashtableImpl::rehash(size_t minimumCapacity, float loadFactor) {
 }
 
 void* BasicHashtableImpl::allocateBuckets(size_t count) const {
+    ALOGD("hash table count %zd ",count);
     size_t bytes = count * mBucketSize;
     SharedBuffer* sb = SharedBuffer::alloc(bytes);
     LOG_ALWAYS_FATAL_IF(!sb, "Could not allocate %u bytes for hashtable with %u buckets.",
