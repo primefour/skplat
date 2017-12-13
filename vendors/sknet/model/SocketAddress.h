@@ -62,11 +62,26 @@
 
 class SocketAddress{
   public:
+
+      enum ADDRESS_TYPE{
+          SOCKADDR_TYPE_IV = 0,//invalidate
+          SOCKADDR_TYPE_V4,//ipv4
+          SOCKADDR_TYPE_V6,//ipv6
+      };
+
+      enum FETCH_TYPE{
+          FETCH_BY_DNS,
+          FETCH_BY_HTTP,
+          FETCH_BY_HTTPS,
+      };
+
     //construct function
     SocketAddress();
+    SocketAddress(const char *host,const char *ip);
     SocketAddress(const char *host,const char *ip,sockaddr *addr);
     SocketAddress(const char *host,const char *ip,sockaddr_in *addr);
     SocketAddress(const char *host,const char *ip,sockaddr_in6 *addr);
+    SocketAddrees(const SocketAddress &sa);
     //get host
     const std::string& getHostName();
     //get Ip string
@@ -74,7 +89,7 @@ class SocketAddress{
     //get server host port
     inline uint16_t getPort(){ return mPort;}
     //set port
-    inline void setPort(uint16_t port){ mPort = port; }
+    void setPort(uint16_t port);
     //get address type
     inline int getType(){ returm mType; }
     //set fetch type

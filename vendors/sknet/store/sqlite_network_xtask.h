@@ -7,7 +7,6 @@
 #include<stdlib.h>
 #include"sqlite_wrapper.h"
 
-
 #define RETRY_DEFAULT_TIMES 5
 #define CONNECT_DEFAULT_TIMEOUT 15000 //ms
 #define TASK_DEFAULT_TIMEOUT 60000 //ms
