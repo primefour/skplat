@@ -1,5 +1,7 @@
 #include"SocketAddress.h"
+#include"XDnsDef.h"
 #include <string>
+
 
 SocketAddress::SocketAddress(){
     mPort = -1; 

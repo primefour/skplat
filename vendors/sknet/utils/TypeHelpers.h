@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <sys/types.h>
+#include <string>
 /*
  * Types traits
  */
@@ -289,8 +290,17 @@ template <typename T> inline hash_t hash_type(const T*& value) {
     return hash_type(uintptr_t(value));
 }
 
-
-
+inline hash_t getStringHash(const std::string& key){
+    const char *str = key.c_str();
+    if(str != NULL){
+        int h = 0;
+        for (int i = 0;str[i] != '\0'; i++) {
+            h = 31 * h + str[i];
+        }
+        return (hash_t )h;
+    }
+    return (hash_t)-1;
+}
 // ---------------------------------------------------------------------------
 
 #endif // ANDROID_TYPE_HELPERS_H

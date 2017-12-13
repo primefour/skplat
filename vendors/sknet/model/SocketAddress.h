@@ -12,6 +12,7 @@
 #include <net/if.h>
 #include <unistd.h>
 #include <string>
+#include "XDnsDef.h"
 
 /*
  *In memory, the struct sockaddr_in and struct sockaddr_in6 share the same beginning structure as struct sockaddr, 
@@ -61,13 +62,6 @@
 
 class SocketAddress{
   public:
-    //ip type of address
-    enum {
-        SOCKADDR_TYPE_IV = 0,//invalidate
-        SOCKADDR_TYPE_V4,//ipv4
-        SOCKADDR_TYPE_V6,//ipv6
-    };
-
     //construct function
     SocketAddress();
     SocketAddress(const char *host,const char *ip,sockaddr *addr);
@@ -81,6 +75,16 @@ class SocketAddress{
     inline uint16_t getPort(){ return mPort;}
     //set port
     inline void setPort(uint16_t port){ mPort = port; }
+    //get address type
+    inline int getType(){ returm mType; }
+    //set fetch type
+    inline void setFetchType(int fetch){ mFetchType = fetch; }
+    //get fetch type
+    inline int getFetchType(){ return mFetchType; }
+    //set connect time
+    inline void setConnProf(long time){ mConnProf = time; }
+    //get connect time
+    inline long getConnProf(long time){ return mConnProf; }
   private:
     struct sockaddr_storage mAddr;
     std::string mCharIpv4;
@@ -88,5 +92,7 @@ class SocketAddress{
     std::string mHost;
     uint16_t  mPort;
     uint16_t  mType;
+    uint16_t  mFetchType;
+    long mConnProf;
 };
 #endif //__SOCKET_ADDRESS_H__
