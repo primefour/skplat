@@ -14,6 +14,11 @@ struct ColumnEntry{
         double floatValue;
         long longValue;
     }Value;
+    ColumnEntry(){
+        memset(&Value,0,sizeof(Value));
+        Type = 0;
+        Length = 0;
+    }
     int Type;
     int Length;
     inline const std::string& getKey(){
@@ -27,6 +32,9 @@ struct ColumnEntry{
     }
     inline const char *getString(){
         return Value.charValue;
+    }
+    inline int size(){
+        return Length;
     }
 };
 
@@ -50,7 +58,18 @@ class SqliteWrapper:public RefBase{
         //run until get SQLITE_DONE
         int execSql(const char *sql,xCallback cb,void *arg); 
         int execSql(const char *sql,vCallback cb,void *arg); 
-
+        //run stmt and call xcallback with the result 
+        //if xcallback return < 0 this function will abort or 
+        //run until get SQLITE_DONE
+        int execStmt(void *arg,sqlite3_stmt *stmt,xCallback cb);
+        int execStmt(void *arg,sqlite3_stmt *stmt,vCallback cb);
+        //compile sql and generate sqlite_stmt
+        sqlite3_stmt* compileSQL(const char *sql);
+        inline sqlite3_stmt* bindValue(sqlite3_stmt* pStmt,int idx,void*data,size_t size){
+            sqlite3_bind_blob(pStmt,idx,data,size,SQLITE_TRANSIENT);
+            return pStmt;
+        }
+        
         //called each time a statement begin to execution.when traceing is enable 
         static void traceCallback(void *data,const char *sql);
         //called each time a statement finishes execution.when profiling is enable
@@ -94,14 +113,6 @@ class SqliteWrapper:public RefBase{
     private:
         //parse data from sqlite query 
         void getRowData(sqlite3_stmt *pStmt,int nCol,ColumnEntry *colEntries);
-        //run stmt and call xcallback with the result 
-        //if xcallback return < 0 this function will abort or 
-        //run until get SQLITE_DONE
-        int execStmt(void *arg,sqlite3_stmt *stmt,xCallback cb);
-        int execStmt(void *arg,sqlite3_stmt *stmt,vCallback cb);
-        //compile sql and generate sqlite_stmt
-        sqlite3_stmt* compileSQL(const char *sql);
-
         SqliteWrapper(const SqliteWrapper &sw);
         sqlite3 *mDatabase; //instance of database
         std::string mDatabasePath; //database path

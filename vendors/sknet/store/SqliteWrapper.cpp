@@ -84,6 +84,7 @@ int SqliteWrapper::count(const char *sql){
     int rc = execSql(sql,cb,&tmpCount);
     if(rc != OK){
         ALOGW("count execute fail %s ",sql);
+        return UNKNOWN_ERROR;
     }
     return tmpCount;
 }
