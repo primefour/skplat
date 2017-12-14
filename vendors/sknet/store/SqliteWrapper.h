@@ -3,6 +3,7 @@
 #include<string>
 #include"Mutex.h"
 #include"RefBase.h"
+#include"KeyedHash.h"
 extern "C" {
 #include"sqlite3.h"
 }
@@ -21,19 +22,19 @@ struct ColumnEntry{
     }
     int Type;
     int Length;
-    inline const std::string& getKey(){
+    inline const std::string& getKey() const{
         return Name;
     }
-    inline long getLong(){
+    inline long getLong() const{
         return Value.longValue;
     }
-    inline double getFloat(){
+    inline double getFloat() const{
         return Value.floatValue;
     }
-    inline const char *getString(){
+    inline const char *getString() const{
         return Value.charValue;
     }
-    inline int size(){
+    inline int size()const{
         return Length;
     }
 };
@@ -90,26 +91,10 @@ class SqliteWrapper:public RefBase{
         int createTable(const char *sql);
         int insert(const char *sql);
         int update(const char *sql);
-        int delete(const char *sql);
+        int xdelete(const char *sql);
         int query(const char *sql,vCallback cb,void *pArgs);
         int query(const char *sql,xCallback cb,void *pArgs);
-        int count(const char *sql){
-            int rc = sqlite3_prepare_v2(sqlite->db,sql_buff, -1, &pStmt,NULL);
-            if(rc!=SQLITE_OK || pStmt == NULL){
-                skerror("prepare sql %s  fail ",sql_buff);
-                return -1;
-            }
-            rc = sqlite3_step(pStmt);
-            int count = 0;
-
-            if(rc != SQLITE_ROW){
-                skerror("execute sql  %s fail ",sql_buff);
-            }else{
-                count = sqlite3_column_int(pStmt,0);
-            }
-            sqlite3_finalize(pStmt);
-            return count;
-        }
+        int count(const char *sql);
     private:
         //parse data from sqlite query 
         void getRowData(sqlite3_stmt *pStmt,int nCol,ColumnEntry *colEntries);

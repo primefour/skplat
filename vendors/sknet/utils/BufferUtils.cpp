@@ -1,4 +1,7 @@
+#include"BufferUtils.h"
 #include"SharedBuffer.h"
+#include"Log.h"
+
 
 void BufferUtils::release(){
     if (mBuffer) {
@@ -52,7 +55,7 @@ int BufferUtils::write(char *buff,size_t size){
     if(mOffset + size > mCapacity){
         //enlarge the size of buffer
         size_t resize = mCapacity + mCapacity/2;
-        if(resize =< mOffset + size ){
+        if(resize <= mOffset + size ){
             resize = mCapacity + mCapacity/2 + size ;
         }
         int ret = setCapacity(resize);
@@ -64,7 +67,7 @@ int BufferUtils::write(char *buff,size_t size){
         }
     }
     //copy data
-    memcpy(mBuffer+mOffset,buff,size);
+    memcpy((char*)mBuffer+mOffset,buff,size);
     if(mSize < mOffset + size){
         mSize = mOffset + size;
         mOffset = mSize;
@@ -94,17 +97,17 @@ size_t BufferUtils::offset(int offset,int seekWhere){
 size_t BufferUtils::read(char *buff,size_t size){
     ASSERT(buff != NULL || size > 0,"invalidate parameters");
     int cpySize = mSize - mOffset > size ? size:mSize - mOffset;
-    memcpy(buff,mBuffer + mOffset,cpySize);
+    memcpy(buff,(char *)mBuffer + mOffset,cpySize);
     mOffset += cpySize;
     return cpySize;
 }
 
-int BufferUtils::append(char *data,size_t size){
-    ASSERT(buff != NULL || size > 0,"buff is NULL");
+size_t BufferUtils::append(const char *data,size_t size){
+    ASSERT(data != NULL || size > 0,"data is NULL");
     if(mSize + size > mCapacity){
         //enlarge the size of buffer
         size_t resize = mCapacity + mCapacity/2;
-        if(resize =< mSize + size ){
+        if(resize <= mSize + size ){
             resize = mCapacity + mCapacity/2 + size ;
         }
         int ret = setCapacity(resize);
@@ -116,12 +119,12 @@ int BufferUtils::append(char *data,size_t size){
         }
     }
     //copy data
-    memcpy(mBuffer+mSize,buff,size);
+    memcpy((char *)mBuffer+mSize,data,size);
     mSize += size;
     return size;
 }
 
-int BufferUtils::append(const BufferUtils& buffer){
+size_t BufferUtils::append(BufferUtils& buffer){
     return append(buffer.data(),buffer.size());
 }
 
@@ -137,7 +140,7 @@ size_t BufferUtils::capacity(){
     return mCapacity;
 }
 
-void BufferUtils::setTo(const SharedBuffer& buffer){
+void BufferUtils::setTo(BufferUtils& buffer){
     release();
     mSize = buffer.size();
     mCapacity = buffer.capacity();

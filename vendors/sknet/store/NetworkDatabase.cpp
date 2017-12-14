@@ -1,5 +1,16 @@
 #include"NetworkDatabase.h"
+#include"SocketAddress.h"
+#include"SqliteWrapper.h"
+#include"Vector.h"
+#include"KeyedHash.h"
 #include"RefBase.h"
+#include"Mutex.h"
+#include<stdlib.h>
+#include<stdio.h>
+#include<fcntl.h>
+#include<string.h>
+#include<string>
+
 
 //mutex for single instance
 static Mutex gDatabaseMutex;
@@ -19,9 +30,9 @@ sp<NetworkDatabase>& NetworkDatabase::getInstance(){
 
 sp<SqliteWrapper>& getDBWrapper(){
     if(mNetworkDatabase == NULL){
-        getInstance();
+        NetworkDatabase::getInstance();
     }
-    return getInstance()->mDBWrapper;
+    return NetworkDatabase::getInstance()->getDB();
 }
 
 
@@ -51,29 +62,30 @@ NetworkDatabase::~NetworkDatabase(){
 }
 
 //insert socket address to database
-int NetworkDatabase::xDnsInsert(const SocketAddress &sa){
+int NetworkDatabase::xDnsInsert(SocketAddress &sa){
     char sql_buff[1024]={0};
     snprintf(sql_buff,sizeof(sql_buff),
-            "insert into xdns(host,ip,ip_type,fetch_type,conn_profile) values (\'%s\',\'%s\',%d,%d,%d,%ld);",
-            sa.getHostName(),sa.getIp(),sa.getType(),sa.getFetchType(),sa.getConnProf());
+            "insert into xdns(host,ip,ip_type,fetch_type,conn_profile) values (\'%s\',\'%s\',%d,%d,%ld);",
+            sa.getHostName().c_str(),sa.getIp().c_str(),sa.getType(),sa.getFetchType(),sa.getConnProf());
     int ret = mDBWrapper->insert(sql_buff);
     return ret;
 }
 
 //check host and ip whether is exist or not
-int NetworkDatabase::xDnsExist(const SocketAddress &sa){
+int NetworkDatabase::xDnsExist(SocketAddress &sa){
     char sql_buff[1024]={0};
     snprintf(sql_buff,sizeof(sql_buff),
-            "select count(*) from xdns where host = '%s' AND ip = '%s' ;",sa.getHostName(),sa.getIp());
+            "select count(*) from xdns where host = '%s' AND ip = '%s' ;",
+            sa.getHostName().c_str(),sa.getIp().c_str());
     int count = mDBWrapper->count(sql_buff);
-    return count > 0?count,0;
+    return count > 0?count:0;
 }
 
 /*
  *(host text,ip text,ip_type int default 0,"
  *"fetch_type int default 0,conn_profile int64 default -1);";
  */
-static int NetworkDatabase::xDnsVCallback(KeyedHash<std::string,ColumnEntry> *colEntries,void *pArgs){
+int NetworkDatabase::xDnsVCallback(KeyedHash<std::string,ColumnEntry> *colEntries,void *pArgs){
     static std::string hostKey("host");
     static std::string ipKey("ip");
     static std::string ipTypeKey("ip_type");
@@ -86,9 +98,9 @@ static int NetworkDatabase::xDnsVCallback(KeyedHash<std::string,ColumnEntry> *co
     //get array of socket address
     Vector<SocketAddress> *saArray  = (Vector<SocketAddress> *)pArgs ;
     //create socket address entry
-    SocketAddress sa(colEntries.get(hostKey).getString(),colEntries.get(ipKey).getString());
-    sa.setFetchType(colEntries.get(fetchTypeKey).getLong());
-    sa.setConnProf(colEntries.get(profKey).getLong());
+    SocketAddress sa(colEntries->get(hostKey).getString(),colEntries->get(ipKey).getString());
+    sa.setFetchType(colEntries->get(fetchTypeKey).getLong());
+    sa.setConnProf(colEntries->get(profKey).getLong());
     //insert to vector
     saArray->push(sa);
     return 1;
@@ -100,7 +112,7 @@ int NetworkDatabase::getAddrByHost(const char *host,Vector<SocketAddress> &ips){
                                     "conn_profile from xdns where host = '%s' order by conn_profile;",host);
     int rc = mDBWrapper->execSql(sql_buff,xDnsVCallback,&ips);
     if(rc != OK){
-        skerror("query fail %s ",sql_buff);
+        ALOGE("query fail %s ",sql_buff);
         return UNKNOWN_ERROR;
     }else{
         return ips.size();
@@ -124,7 +136,7 @@ int NetworkDatabase::xDnsUpdateProf(const char *host,const char *ip,int64_t conn
     return rc;
 }
 
-int NetworkDatabase::xDnsUpdateHostIp(SQLite *sqlite,const char *host,const char *ip,const char *new_ip){
+int NetworkDatabase::xDnsUpdateHostIp(const char *host,const char *ip,const char *new_ip){
     char sql_buff[1024] ={0};
     if(host == NULL || ip == NULL || new_ip == NULL){
         return UNKNOWN_ERROR;
@@ -149,7 +161,7 @@ int NetworkDatabase::xDnsDelete(const char *host,const char *ip){
     return rc;
 }
 
-static int xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colEntries,void *pArgs){
+int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colEntries,void *pArgs){
 
     static std::string taskIdKey ="task_id";
     static std::string moduleKey = "module_name";
@@ -173,28 +185,28 @@ static int xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colEntries,voi
     ASSERT(pArgs != NULL,"Invalidate paramerter pArgs is NULL");
     Vector<TaskInfo> *pTaskArray = (Vector<TaskInfo>*)pArgs;
     TaskInfo ti;
-    ti.mTaskId = colEntries.get(taskIdKey).getString();
-    ti.mModuleName = colEntries.get(moduleKey).getString();
-    ti.mUrl = colEntries.get(urlKey).getString();
-    ti.mMethod = colEntries.get(mothedKey).getLong();
-    const char *data = colEntries.get(sendDataKey).getString();
+    ti.mTaskId = colEntries->get(taskIdKey).getString();
+    ti.mModuleName = colEntries->get(moduleKey).getString();
+    ti.mUrl = colEntries->get(urlKey).getString();
+    ti.mMethod = colEntries->get(methodKey).getLong();
+    const char *data = colEntries->get(sendDataKey).getString();
     if(data != NULL){
-        int size = colEntries.get(sendDataKey).size();
+        int size = colEntries->get(sendDataKey).size();
         //use append,will not change offset
         ti.mSendData.append(data,size);
     }
-    t.mTaskType = colEntries.get(taskTypeKey).getLong();
-    t.mSendOnly = colEntries.get(sendOnlyKey).getLong();
-    t.mRecvFile = colEntries.get(recvFileKey).getString();
-    t.mSendFile = colEntries.get(sendFileKey).getString();
-    t.mRetryTimes = colEntries.get(retryTimesKey).getLong();
-    t.mConnTimeout = colEntries.get(connTimeoutKey).getLong();
-    t.mTaskTimeout = colEntries.get(taskTimeoutKey).getLong();
-    t.mTaskState = colEntries.get(taskStateKey).getLong();
-    t.mStartTime = colEntries.get(startTimeKey).getLong();
-    t.mStartConnTime = colEntries.get(connTimeKey).getLong();
-    t.mTryTimes = conEntries.get(tryTimesKey).getLong();
-    pTaskArray->push(t);
+    ti.mTaskType = colEntries->get(taskTypeKey).getLong();
+    ti.mSendOnly = colEntries->get(sendOnlyKey).getLong();
+    ti.mRecvFile = colEntries->get(recvFileKey).getString();
+    ti.mSendFile = colEntries->get(sendFileKey).getString();
+    ti.mRetryTimes = colEntries->get(retryTimesKey).getLong();
+    ti.mConnTimeout = colEntries->get(connTimeoutKey).getLong();
+    ti.mTaskTimeout = colEntries->get(taskTimeoutKey).getLong();
+    ti.mTaskState = colEntries->get(taskStateKey).getLong();
+    ti.mStartTime = colEntries->get(startTimeKey).getLong();
+    ti.mStartConnTime = colEntries->get(connTimeKey).getLong();
+    ti.mTryTimes = colEntries->get(tryTimesKey).getLong();
+    pTaskArray->push(ti);
     return 1;
 }
 
@@ -202,7 +214,6 @@ int NetworkDatabase::xTaskGetTodoTasks(Vector<TaskInfo> &tasks){
     char sql_buff[512]={0};
     snprintf(sql_buff,sizeof(sql_buff),"select * from xtask where task_state = %d;",TASK_STATE_IDLE);
     int rc = mDBWrapper->execSql(sql_buff,xTaskInfoVCallback,&tasks);
-    int rc = sqlitew_exec_sql(sqlitedb,sql_buff,&tasks,xtask_table_callback);
     if(rc == OK){
         return tasks.size();
     }else{

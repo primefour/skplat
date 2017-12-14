@@ -28,7 +28,7 @@ class KeyedHash:RefBase{
         //invalidate value for get
         VALUE mInvalidate;
     private:
-        KeyedHash(const LruCache &);
+        KeyedHash(const KeyedHash &);
         BasicHashtable<KEY,VALUE> mContain;
         int mSize;
         GetHashCodeFpn mFpnhashCode;

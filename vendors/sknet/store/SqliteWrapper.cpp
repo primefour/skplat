@@ -45,7 +45,7 @@ int SqliteWrapper::update(const char *sql){
     return rc;
 }
 
-int SqliteWrapper::delete(const char *sql){
+int SqliteWrapper::xdelete(const char *sql){
     int rc = execSql(sql,(vCallback)NULL,NULL);
     if(rc != OK){
         ALOGW("delete value fail %s ",sql);
@@ -56,7 +56,7 @@ int SqliteWrapper::delete(const char *sql){
 int SqliteWrapper::query(const char *sql,vCallback cb,void *pArgs){
     int rc = execSql(sql,cb,pArgs);
     if(rc != OK){
-        ALOGW("delete value fail %s ",sql);
+        ALOGW("query value fail %s ",sql);
     }
     return rc;
 }
@@ -64,7 +64,7 @@ int SqliteWrapper::query(const char *sql,vCallback cb,void *pArgs){
 int SqliteWrapper::query(const char *sql,xCallback cb,void *pArgs){
     int rc = execSql(sql,cb,pArgs);
     if(rc != OK){
-        ALOGW("delete value fail %s ",sql);
+        ALOGW("query value fail %s ",sql);
     }
     return rc;
 }

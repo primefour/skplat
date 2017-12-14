@@ -12,8 +12,6 @@
 #include <net/if.h>
 #include <unistd.h>
 #include <string>
-#include "XDnsDef.h"
-
 /*
  *In memory, the struct sockaddr_in and struct sockaddr_in6 share the same beginning structure as struct sockaddr, 
  *and you can freely cast the pointer of one type to the other without any harm, except the possible end of the universe.
@@ -81,7 +79,7 @@ class SocketAddress{
     SocketAddress(const char *host,const char *ip,sockaddr *addr);
     SocketAddress(const char *host,const char *ip,sockaddr_in *addr);
     SocketAddress(const char *host,const char *ip,sockaddr_in6 *addr);
-    SocketAddrees(const SocketAddress &sa);
+    SocketAddress(const SocketAddress &sa);
     //get host
     const std::string& getHostName();
     //get Ip string
@@ -91,7 +89,7 @@ class SocketAddress{
     //set port
     void setPort(uint16_t port);
     //get address type
-    inline int getType(){ returm mType; }
+    inline int getType(){ return mType; }
     //set fetch type
     inline void setFetchType(int fetch){ mFetchType = fetch; }
     //get fetch type
@@ -99,7 +97,7 @@ class SocketAddress{
     //set connect time
     inline void setConnProf(long time){ mConnProf = time; }
     //get connect time
-    inline long getConnProf(long time){ return mConnProf; }
+    inline long getConnProf(){ return mConnProf; }
   private:
     struct sockaddr_storage mAddr;
     std::string mCharIpv4;

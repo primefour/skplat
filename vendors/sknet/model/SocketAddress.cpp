@@ -1,5 +1,5 @@
 #include"SocketAddress.h"
-#include"XDnsDef.h"
+#include"Log.h"
 #include <string>
 
 
@@ -25,25 +25,25 @@ SocketAddress::SocketAddress(const char *host,const char *ip,sockaddr_in6 *addr)
 
 SocketAddress::SocketAddress(const char *host,const char *ip):mHost(host){
     //check ip type
-    char*tmp =  strstr(ip,":");
+    const char*tmp =  strstr(ip,":");
     if(tmp != NULL){
         //ipv6
         sockaddr_in6 *ipv6 =(sockaddr_in6 *)&mAddr;
         ipv6->sin6_family = AF_INET6;
         mCharIpv6 = ip;
         mType = SOCKADDR_TYPE_V4; 
-        inet_pton(AF_INET6,&(ipv6->sin6_addr),sizeof(struct in6_addr));
+        inet_pton(AF_INET6,ip,&(ipv6->sin6_addr));
     }else{
         //ipv4
         sockaddr_in *ipv4 = (sockaddr_in *)&mAddr;
         mCharIpv4 = ip;
         mType = SOCKADDR_TYPE_V6; 
         ipv4->sin_family = AF_INET; 
-        inet_pton(AF_INET,ip,&(ipv4->sin_addr),sizeof(struct in_addr));
+        inet_pton(AF_INET,ip,&(ipv4->sin_addr));
     }
 }
 
-SocketAddrees::SocketAddrees(const SocketAddress &sa){
+SocketAddress::SocketAddress(const SocketAddress &sa){
     memcpy(&mAddr,&(sa.mAddr),sizeof(struct sockaddr_storage));
     mCharIpv4 = sa.mCharIpv4;
     mCharIpv6 = sa.mCharIpv6 ;
@@ -69,7 +69,7 @@ const std::string& SocketAddress::getIp(){
 
 //set port
 void SocketAddress::setPort(uint16_t port){ 
-    ASSERT(mType == SOCKADDR_TYPE_V4||mType == SOCKADDR_TYPE_V6);
+    ASSERT(mType == SOCKADDR_TYPE_V4||mType == SOCKADDR_TYPE_V6,"please set ip address first");
     mPort = port; 
     if(mType = SOCKADDR_TYPE_V6){
         sockaddr_in6 *ipv6 =(sockaddr_in6 *)&mAddr;

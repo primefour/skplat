@@ -4,11 +4,6 @@
 const int BUFFER_UTILS_DEFAULT_SIZE = 1024;
 class BufferUtils :public RefBase{
     public:
-        enum{
-            SEEK_SET,
-            SEEK_CUR,
-            SEEK_END,
-        }
         BufferUtils(int capacity = BUFFER_UTILS_DEFAULT_SIZE);
         virtual ~BufferUtils();
 
@@ -16,11 +11,11 @@ class BufferUtils :public RefBase{
         int write(char *buff,size_t size);
         size_t offset(int offset,int seekWhere);
         size_t read(char *buff,size_t size);
-        size_t append(char *data,size_t size);
-        size_t append(const BufferUtils& buffer);
-        void setTo(SharedBuffer& buffer);
+        size_t append(const char *data,size_t size);
+        size_t append(BufferUtils& buffer);
+        void setTo(BufferUtils& buffer);
         void setTo(char *data,size_t size);
-        const char* BufferUtils::data();
+        const char* data();
         size_t size();
         size_t capacity();
         void release();
