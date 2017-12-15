@@ -45,17 +45,17 @@ LDFLAGS += -lpthread -lsqlite3 -ldl
 #
 #
 
-networkdb_test: $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS)
-	g++ -o $@ $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(LDFLAGS) -L ../sqlite/
+networkdb_test:NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS)
+	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/
 
-$(UTILS_OBJS):$(UTILS_SRC) 
-	g++ -c $(CXXFLAGS) $(UTILS_SRC) -I ../sqlite/  -I ./utils/
+$(UTILS_OBJS):%.o : %.cpp
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/
 
-$(MODEL_OBJS):$(MODEL_SRC) 
-	g++ -c $(CXXFLAGS) $(MODEL_SRC) -I ./utils/
+$(MODEL_OBJS):%.o : %.cpp
+	g++ -c $< -o $@ $(CXXFLAGS) -I ./utils/
 
-$(STORE_OBJS):$(STORE_SRC) 
-	g++ -c $(CXXFLAGS) $(STORE_SRC) -I ../sqlite/ -I ./utils/ -I ./model/
+$(STORE_OBJS):%.o : %.cpp
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/
 
 
 

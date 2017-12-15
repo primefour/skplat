@@ -69,19 +69,19 @@ int SqliteWrapper::query(const char *sql,xCallback cb,void *pArgs){
     return rc;
 }
 
-int SqliteWrapper::countCallback(sqlite3_stmt *tStmt,void *pArg){
-    if(tStmt == NULL || pArg == NULL){
+int SqliteWrapper::countCallback(sqlite3_stmt *pStmt,void *pArg){
+    if(pStmt == NULL || pArg == NULL){
         ALOGW("countCallback parameter is NULL");
         return 0;
     }
-    int *count = (int *)aArg;
+    int *count = (int *)pArg;
     *count = sqlite3_column_int(pStmt,0);
     return *count;
 }
 
 int SqliteWrapper::count(const char *sql){
     int tmpCount= 0;
-    int rc = execSql(sql,cb,&tmpCount);
+    int rc = execSql(sql,countCallback,&tmpCount);
     if(rc != OK){
         ALOGW("count execute fail %s ",sql);
         return UNKNOWN_ERROR;
@@ -190,8 +190,8 @@ sqlite3_stmt* SqliteWrapper::compileSQL(const char *sql){
 void SqliteWrapper::getRowData(sqlite3_stmt *pStmt,int nCol,KeyedHash<std::string,ColumnEntry> *colEntries){
     ColumnEntry value;
     for (int i = 0; i < nCol; i++) {
-        value.mName = (const char *)sqlite3_column_name(pStmt, i);
-        ASSERT(!value.mName.empty(),"KEY IS EMPTY");
+        value.Name = (const char *)sqlite3_column_name(pStmt, i);
+        ASSERT(!value.Name.empty(),"KEY IS EMPTY");
         int type = sqlite3_column_type(pStmt, i);
         if (type == SQLITE_TEXT) {
             // TEXT data
@@ -219,7 +219,7 @@ void SqliteWrapper::getRowData(sqlite3_stmt *pStmt,int nCol,KeyedHash<std::strin
             break;
         }
     }
-    colEntries->add(value.getKey(),value);
+    colEntries->add(value.Name,value);
 }
 
 int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,vCallback cb){
@@ -231,25 +231,25 @@ int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,vCallback cb){
         if(rc == SQLITE_ROW){
             //get a row data and now get column name
             if(colEntries != NULL && nCol > 0){
-                colEntries = new KeyedHash<std::string,ColumnEntry>(mCol,getStringHash);
+                colEntries = new KeyedHash<std::string,ColumnEntry>(nCol,getStringHash);
                 if(colEntries == NULL){
                     ALOGW("execute statement fail  %p no memory ",pStmt);
                     return NO_MEMORY;
                 }
             }
             getRowData(pStmt,nCol,colEntries);
-            if(cb(colEntries,nCol,pArg) >= 0|| mCanceled ){
+            if(cb(colEntries,pArg) >= 0|| mCanceled ){
                 rc = SQLITE_ABORT;
                 ALOGW("statement %p abort by user",pStmt);
                 mCanceled = false;
-                if(colEntries != NUL){
+                if(colEntries != NULL){
                     delete colEntries;
                     colEntries = NULL;
                 }
                 return rc;
             }
         }else if(rc == SQLITE_DONE){
-            if(colEntries != NUL){
+            if(colEntries != NULL){
                 delete colEntries;
                 colEntries = NULL;
             }
@@ -257,7 +257,7 @@ int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,vCallback cb){
             return OK;
         }
     }
-    if(colEntries != NUL){
+    if(colEntries != NULL){
         delete colEntries;
         colEntries = NULL;
     }

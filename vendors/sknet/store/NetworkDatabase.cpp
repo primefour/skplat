@@ -17,7 +17,7 @@ static Mutex gDatabaseMutex;
 //database store path
 static const char *gNetDBPath = "./NetworkDB.db";
 //init static member of network database
-sp<NetworkDatabase> mNetworkDatabase = NULL;
+sp<NetworkDatabase> NetworkDatabase::mNetworkDatabase = NULL;
 
 
 sp<NetworkDatabase>& NetworkDatabase::getInstance(){
@@ -28,11 +28,11 @@ sp<NetworkDatabase>& NetworkDatabase::getInstance(){
     return mNetworkDatabase;
 }
 
-sp<SqliteWrapper>& getDBWrapper(){
+sp<SqliteWrapper>&NetworkDatabase:: getDBWrapper(){
     if(mNetworkDatabase == NULL){
-        NetworkDatabase::getInstance();
+        getInstance();
     }
-    return NetworkDatabase::getInstance()->getDB();
+    return getInstance()->getDB();
 }
 
 
@@ -224,15 +224,15 @@ int NetworkDatabase::xTaskGetTodoTasks(Vector<TaskInfo> &tasks){
 int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
     char sql_buff[4096]={0};
     if(task.mTaskId.empty() ||task.mModuleName.empty()){
-        skerror("invalidate task,please check host module name and task id ");
+        ALOGE("invalidate task,please check host module name and task id ");
         return BAD_VALUE;
     }
     sqlite3_stmt* pStmt = NULL;
     if(task.mSendData.size() > 0){
         snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,mothed,recv_file,"
                 "send_file,send_data,send_only,retry_times,task_type,conn_timeout,task_timeout)"
-                "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%d,%ld,%ld);",
-                task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl,task.mMethod,
+                "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%ld,%ld);",
+                task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl.c_str(),task.mMethod,
                 task.mRecvFile.empty() ?"NULL":task.mRecvFile.c_str(),
                 task.mSendFile.empty() ?"NULL":task.mSendFile.c_str(),
                 task.mSendOnly ?1:0,
@@ -240,17 +240,15 @@ int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
                 task.mTaskType,
                 task.mConnTimeout,
                 task.mTaskTimeout);
-
         pStmt = mDBWrapper->compileSQL(sql_buff);
-        if(pStmp != NULL){
-            pStmp = mDBWrapper->bindValue(pStmt,1,task.mSendData.data(),task.mSendData.size());
+        if(pStmt != NULL){
+            pStmt = mDBWrapper->bindValue(pStmt,1,task.mSendData.data(),task.mSendData.size());
         }
-        sqlite3_bind_blob(pStmt,1,entry->send_data.xdata,entry->send_data.xlength,SQLITE_TRANSIENT);
     }else{
         snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,mothed,recv_file,"
                 "send_file,send_only,retry_times,task_type,conn_timeout,task_timeout)"
-                "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',%d,%d,%d,%d,%ld,%ld);",
-                task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl,task.mMethod,
+                "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',%d,%d,%d,%ld,%ld);",
+                task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl.c_str(),task.mMethod,
                 task.mRecvFile.empty() ?"NULL":task.mRecvFile.c_str(),
                 task.mSendFile.empty() ?"NULL":task.mSendFile.c_str(),
                 task.mSendOnly ?1:0,
@@ -260,7 +258,7 @@ int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
                 task.mTaskTimeout);
         pStmt = mDBWrapper->compileSQL(sql_buff);
     }
-    int ret = mDBWrapper->exeStmt(pStmt,(xCallback)NULL,NULL);
+    int ret = mDBWrapper->execStmt(NULL,pStmt,(xCallback)NULL);
     if(ret < 0){
         return UNKNOWN_ERROR;
     }
@@ -268,7 +266,7 @@ int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
 }
 
 
-int int NetworkDatabase::xTaskCount(int taskState){
+int NetworkDatabase::xTaskCount(int taskState){
     char sql_buff[512]={0};
     int count = 0;
     snprintf(sql_buff,sizeof(sql_buff),"select count(*) from xtask where task_state = %d ;",taskState);
@@ -282,18 +280,18 @@ int NetworkDatabase::xTaskDelete(std::string taskId){
     if(taskId.empty()){
         return BAD_VALUE;
     }
-    snprintf(sql_buff,sizeof(sql_buff),"delete from xtask where task_id = \'%s\';",task_id.c_str());
-    return mDBWrapper->exeSql(sql_buff);
+    snprintf(sql_buff,sizeof(sql_buff),"delete from xtask where task_id = \'%s\';",taskId.c_str());
+    return mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
 }
 
 
 int NetworkDatabase::xTaskUpdateState(std::string taskId,int state){
     char sql_buff[1024]={0};
-    if(task_id.empty()){
+    if(taskId.empty()){
         return BAD_VALUE;
     }
     snprintf(sql_buff,sizeof(sql_buff),"update xtask set task_state = %d where task_id = \'%s\';",state,taskId.c_str());
-    return mDBWrapper->execSql(sql_buff);
+    return mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
 }
 
 int NetworkDatabase::xTaskUpdateTrytimes(std::string &taskId,int times){
@@ -302,8 +300,8 @@ int NetworkDatabase::xTaskUpdateTrytimes(std::string &taskId,int times){
         ALOGE("invalidate task,please check task id");
         return BAD_VALUE;
     }
-    snprintf(sql_buff,sizeof(sql_buff),"update xtask set try_times = %d where task_id = \'%s\';",times,task_id.c_str());
-    return mDBWrapper->execSql(sql_buff);
+    snprintf(sql_buff,sizeof(sql_buff),"update xtask set try_times = %d where task_id = \'%s\';",times,taskId.c_str());
+    return mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
 }
 
 int NetworkDatabase::xTaskUpdateStartTime(std::string &taskId,long startTime){
@@ -312,8 +310,8 @@ int NetworkDatabase::xTaskUpdateStartTime(std::string &taskId,long startTime){
         ALOGE("invalidate task,please check task id ");
         return BAD_VALUE;
     }
-    snprintf(sql_buff,sizeof(sql_buff),"update xtask  set start_time= %ld where task_id = \'%s\';",start_time,task_id.c_str());
-    return mDBWrapper->execSql(sql_buff);
+    snprintf(sql_buff,sizeof(sql_buff),"update xtask  set start_time= %ld where task_id = \'%s\';",startTime,taskId.c_str());
+    return mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
 }
 
 int NetworkDatabase::xTaskUpdateConnTime(std::string &taskId,long connTime){
@@ -322,7 +320,7 @@ int NetworkDatabase::xTaskUpdateConnTime(std::string &taskId,long connTime){
         ALOGE("invalidate task,please check task id ");
         return BAD_VALUE;
     }
-    snprintf(sql_buff,sizeof(sql_buff),"update xtask set conn_time = %ld where task_id = \'%s\';",conn_time,task_id.c_str());
-    return mDBWrapper->execSql(sql_buff);
+    snprintf(sql_buff,sizeof(sql_buff),"update xtask set conn_time = %ld where task_id = \'%s\';",connTime,taskId.c_str());
+    return mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
 }
 

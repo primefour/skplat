@@ -66,7 +66,7 @@ class SqliteWrapper:public RefBase{
         int execStmt(void *arg,sqlite3_stmt *stmt,vCallback cb);
         //compile sql and generate sqlite_stmt
         sqlite3_stmt* compileSQL(const char *sql);
-        inline sqlite3_stmt* bindValue(sqlite3_stmt* pStmt,int idx,void*data,size_t size){
+        inline sqlite3_stmt* bindValue(sqlite3_stmt* pStmt,int idx,const void*data,size_t size){
             sqlite3_bind_blob(pStmt,idx,data,size,SQLITE_TRANSIENT);
             return pStmt;
         }
@@ -97,7 +97,8 @@ class SqliteWrapper:public RefBase{
         int count(const char *sql);
     private:
         //parse data from sqlite query 
-        void getRowData(sqlite3_stmt *pStmt,int nCol,ColumnEntry *colEntries);
+        void getRowData(sqlite3_stmt *pStmt,int nCol,KeyedHash<std::string,ColumnEntry> *colEntries);
+        //void getRowData(sqlite3_stmt *pStmt,int nCol,ColumnEntry *colEntries);
         SqliteWrapper(const SqliteWrapper &sw);
         sqlite3 *mDatabase; //instance of database
         std::string mDatabasePath; //database path

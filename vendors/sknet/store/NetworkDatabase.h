@@ -9,7 +9,7 @@
 #include<string>
 
 
-class NetworkDatabase:RefBase{
+class NetworkDatabase:public RefBase{
     public:
         virtual ~NetworkDatabase();
         static sp<NetworkDatabase>& getInstance();
