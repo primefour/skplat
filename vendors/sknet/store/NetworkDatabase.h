@@ -40,7 +40,7 @@ class NetworkDatabase:public RefBase{
         NetworkDatabase();
         NetworkDatabase(const NetworkDatabase &);
         void createTables();
-        static sp<NetworkDatabase> mNetworkDatabase;
+        //static sp<NetworkDatabase> mNetworkDatabase;
         sp<SqliteWrapper> mDBWrapper;
 };
 #endif

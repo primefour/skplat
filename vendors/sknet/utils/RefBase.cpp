@@ -35,7 +35,7 @@
 #define DEBUG_REFS_CALLSTACK_ENABLED    1
 
 // log all reference counting operations
-#define PRINT_REFS                      0
+#define PRINT_REFS                      1
 
 // ---------------------------------------------------------------------------
 
@@ -52,13 +52,13 @@ public:
     volatile int32_t    mFlags;
 
 #if !DEBUG_REFS
-
     weakref_impl(RefBase* base)
         : mStrong(INITIAL_STRONG_VALUE)
         , mWeak(0)
         , mBase(base)
         , mFlags(0)
     {
+        ALOGE("%d %s mStrong = %d obj = %p",__LINE__,__func__,mStrong,this);
     }
 
     void addStrongRef(const void* /*id*/) { }
@@ -318,13 +318,14 @@ private:
 };
 
 // ---------------------------------------------------------------------------
-
 void RefBase::incStrong(const void* id) const
 {
     weakref_impl* const refs = mRefs;
     refs->incWeak(id);
     
     refs->addStrongRef(id);
+
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     const int32_t c = android_atomic_inc(&refs->mStrong);
     ALOG_ASSERT(c > 0, "incStrong() called on %p after last strong ref", refs);
 #if PRINT_REFS
@@ -334,7 +335,9 @@ void RefBase::incStrong(const void* id) const
         return;
     }
 
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     android_atomic_add(-INITIAL_STRONG_VALUE, &refs->mStrong);
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     refs->mBase->onFirstRef();
 }
 
@@ -342,6 +345,8 @@ void RefBase::decStrong(const void* id) const
 {
     weakref_impl* const refs = mRefs;
     refs->removeStrongRef(id);
+
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     const int32_t c = android_atomic_dec(&refs->mStrong);
 #if PRINT_REFS
     ALOGD("decStrong of %p from %p: cnt=%d\n", this, id, c);
@@ -362,6 +367,8 @@ void RefBase::forceIncStrong(const void* id) const
     refs->incWeak(id);
     
     refs->addStrongRef(id);
+
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     const int32_t c = android_atomic_inc(&refs->mStrong);
     ALOG_ASSERT(c >= 0, "forceIncStrong called on %p after ref count underflow",
                refs);
@@ -435,6 +442,7 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
     
     weakref_impl* const impl = static_cast<weakref_impl*>(this);
     
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,impl->mStrong);
     int32_t curCount = impl->mStrong;
     ALOG_ASSERT(curCount >= 0, "attemptIncStrong called on %p after underflow",
                this);
@@ -484,6 +492,7 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
     ALOGD("attemptIncStrong of %p from %p: cnt=%d\n", this, id, curCount);
 #endif
 
+    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,impl->mStrong);
     if (curCount == INITIAL_STRONG_VALUE) {
         android_atomic_add(-INITIAL_STRONG_VALUE, &impl->mStrong);
         impl->mBase->onFirstRef();
@@ -542,6 +551,7 @@ RefBase::weakref_type* RefBase::getWeakRefs() const
 RefBase::RefBase()
     : mRefs(new weakref_impl(this))
 {
+    ALOGE("%d %s RefBase %p mRefs %p",__LINE__,__func__,this,mRefs);
 }
 
 RefBase::~RefBase()

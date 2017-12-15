@@ -57,5 +57,5 @@ $(MODEL_OBJS):%.o : %.cpp
 $(STORE_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/
 
-
-
+clean:
+	rm -r utils/*.o model/*.o store/*.o

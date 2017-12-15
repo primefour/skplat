@@ -10,6 +10,7 @@
 #include<fcntl.h>
 #include<string.h>
 #include<string>
+#include"Log.h"
 
 
 //mutex for single instance
@@ -17,22 +18,38 @@ static Mutex gDatabaseMutex;
 //database store path
 static const char *gNetDBPath = "./NetworkDB.db";
 //init static member of network database
-sp<NetworkDatabase> NetworkDatabase::mNetworkDatabase = NULL;
+//sp<NetworkDatabase> NetworkDatabase::mNetworkDatabase = NULL;
 
 
 sp<NetworkDatabase>& NetworkDatabase::getInstance(){
     AutoMutex _l(gDatabaseMutex);
+
+        ALOGE("%s  %d ",__func__,__LINE__);
+        new NetworkDatabase();
+        ALOGE("%s  %d ",__func__,__LINE__);
+    /*
     if(mNetworkDatabase == NULL){
-        mNetworkDatabase = new NetworkDatabase();
+        ALOGE("%s  %d ",__func__,__LINE__);
+        //NetworkDatabase *tmp = ;
+        new NetworkDatabase();
+        ALOGE("%s  %d ",__func__,__LINE__);
+        //tmp->incStrong(NULL);
+        ALOGE("%s  %d ",__func__,__LINE__);
+        //mNetworkDatabase  = tmp;
     }
-    return mNetworkDatabase;
+    */
+    //return mNetworkDatabase;
+    //return NULL;
 }
 
 sp<SqliteWrapper>&NetworkDatabase:: getDBWrapper(){
+    //return NULL;
+    /*
     if(mNetworkDatabase == NULL){
         getInstance();
     }
     return getInstance()->getDB();
+    */
 }
 
 
@@ -49,7 +66,9 @@ void NetworkDatabase::createTables(){
 }
 
 NetworkDatabase::NetworkDatabase(){
+    ALOGE("xxxx mDBWrapper  %s %d ",__func__,__LINE__);
     mDBWrapper = new SqliteWrapper(gNetDBPath);
+    ALOGE("eeee mDBWrapper  %s %d ",__func__,__LINE__);
     //open database
     mDBWrapper->open();
     //create table

@@ -33,8 +33,12 @@ class TestClass2:public RefBase{
         }
 };
 
+sp<TestClass> Hello = new TestClass();
+
 int main(){
+    /*
     ALOGD("#######################################################");
+    Hello  = new TestClass();
     {
         //test sp
         sp<TestClass> tc = new TestClass();
@@ -75,6 +79,7 @@ int main(){
     }
 
     ALOGD("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    */
     return 0;
 
 }

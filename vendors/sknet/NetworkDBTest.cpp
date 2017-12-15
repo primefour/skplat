@@ -1,6 +1,11 @@
-#include <stdio.h>
+#include "NetworkDatabase.h"
+#include "Log.h"
 
 int main(){
-    printf("Hello world");
+    ALOGD("Hello world");
+    //sp<NetworkDatabase> netDb = NULL;
+    NetworkDatabase::getInstance();
+    //ASSERT(netDb == NULL,"net database create fail");
+    //netDb->incStrong(NULL);
     return 0;
 }
