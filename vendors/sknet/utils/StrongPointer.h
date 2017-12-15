@@ -115,28 +115,21 @@ template<typename T>
 sp<T>::sp(T* other)
 : m_ptr(other)
   {
-    ALOGE("%d %s other = %p sp obj = %p ",__LINE__,__func__,other,this);
+    //ALOGE("%d %s other = %p sp obj = %p ",__LINE__,__func__,other,this);
     if (other) other->incStrong(this);
-    ALOGE("%d %s ",__LINE__,__func__);
   }
 
 template<typename T>
 sp<T>::sp(const sp<T>& other)
 : m_ptr(other.m_ptr)
   {
-    ALOGE("%d %s ",__LINE__,__func__);
     if (m_ptr) m_ptr->incStrong(this);
-    ALOGE("%d %s ",__LINE__,__func__);
   }
 
 template<typename T> template<typename U>
 sp<T>::sp(U* other) : m_ptr(other)
 {
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (other) ((T*)other)->incStrong(this);
-
-    ALOGE("%d %s ",__LINE__,__func__);
 }
 
 template<typename T> template<typename U>
@@ -144,10 +137,7 @@ sp<T>::sp(const sp<U>& other)
 : m_ptr(other.m_ptr)
   {
 
-    ALOGE("%d %s ",__LINE__,__func__);
     if (m_ptr) m_ptr->incStrong(this);
-
-    ALOGE("%d %s ",__LINE__,__func__);
   }
 
 template<typename T>
@@ -159,11 +149,7 @@ sp<T>::~sp()
 template<typename T>
 sp<T>& sp<T>::operator = (const sp<T>& other) {
     T* otherPtr(other.m_ptr);
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (otherPtr) otherPtr->incStrong(this);
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (m_ptr) m_ptr->decStrong(this);
     m_ptr = otherPtr;
     return *this;
@@ -172,12 +158,8 @@ sp<T>& sp<T>::operator = (const sp<T>& other) {
 template<typename T>
 sp<T>& sp<T>::operator = (T* other)
 {
-    ALOGE("%d %s other = %p sp object %p",__LINE__,__func__,other,this);
     if (other) other->incStrong(this);
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (m_ptr) m_ptr->decStrong(this);
-    ALOGE("%d %s ",__LINE__,__func__);
 
     m_ptr = other;
     return *this;
@@ -187,11 +169,7 @@ template<typename T> template<typename U>
 sp<T>& sp<T>::operator = (const sp<U>& other)
 {
     T* otherPtr(other.m_ptr);
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (otherPtr) otherPtr->incStrong(this);
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (m_ptr) m_ptr->decStrong(this);
     m_ptr = otherPtr;
     return *this;
@@ -201,10 +179,7 @@ template<typename T> template<typename U>
 sp<T>& sp<T>::operator = (U* other)
 {
 
-    ALOGE("%d %s ",__LINE__,__func__);
     if (other) ((T*)other)->incStrong(this);
-
-    ALOGE("%d %s ",__LINE__,__func__);
     if (m_ptr) m_ptr->decStrong(this);
     m_ptr = other;
     return *this;

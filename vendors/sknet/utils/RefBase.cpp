@@ -35,7 +35,7 @@
 #define DEBUG_REFS_CALLSTACK_ENABLED    1
 
 // log all reference counting operations
-#define PRINT_REFS                      1
+#define PRINT_REFS                      0
 
 // ---------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public:
         , mBase(base)
         , mFlags(0)
     {
-        ALOGE("%d %s mStrong = %d obj = %p",__LINE__,__func__,mStrong,this);
+        //ALOGE("%d %s mStrong = %d obj = %p",__LINE__,__func__,mStrong,this);
     }
 
     void addStrongRef(const void* /*id*/) { }
@@ -82,14 +82,10 @@ public:
         , mTrackEnabled(!!DEBUG_REFS_ENABLED_BY_DEFAULT)
         , mRetain(false)
     {
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     }
     
     ~weakref_impl()
     {
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
         bool dumpStack = false;
         if (!mRetain && mStrongRefs != NULL) {
             dumpStack = true;
@@ -137,8 +133,6 @@ public:
     void addStrongRef(const void* id) {
         //ALOGD_IF(mTrackEnabled,
         //        "addStrongRef: RefBase=%p, id=%p", mBase, id);
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
         addRef(&mStrongRefs, id, mStrong);
     }
 
@@ -146,7 +140,6 @@ public:
         //ALOGD_IF(mTrackEnabled,
         //        "removeStrongRef: RefBase=%p, id=%p", mBase, id);
 
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
         if (!mRetain) {
             removeRef(&mStrongRefs, id);
         } else {
@@ -159,8 +152,6 @@ public:
         //        "renameStrongRefId: RefBase=%p, oid=%p, nid=%p",
         //        mBase, old_id, new_id);
         renameRefsId(mStrongRefs, old_id, new_id);
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     }
 
     void addWeakRef(const void* id) {
@@ -332,14 +323,8 @@ void RefBase::incStrong(const void* id) const
 {
 
     weakref_impl* const refs = mRefs;
-
-    ALOGE("%d %s mStrong = %d %p",__LINE__,__func__,refs->mStrong,&(refs->mStrong));
     refs->incWeak(id);
-    
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     refs->addStrongRef(id);
-
-    ALOGE("%d %s this %p mRefs %p mStrong = %d ",__LINE__,__func__,this,refs,refs->mStrong);
     const int32_t c = android_atomic_inc(&refs->mStrong);
     ALOG_ASSERT(c > 0, "incStrong() called on %p after last strong ref", refs);
 #if PRINT_REFS
@@ -348,21 +333,14 @@ void RefBase::incStrong(const void* id) const
     if (c != INITIAL_STRONG_VALUE)  {
         return;
     }
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     android_atomic_add(-INITIAL_STRONG_VALUE, &refs->mStrong);
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     refs->mBase->onFirstRef();
 }
 
 void RefBase::decStrong(const void* id) const
 {
     weakref_impl* const refs = mRefs;
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     refs->removeStrongRef(id);
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     const int32_t c = android_atomic_dec(&refs->mStrong);
 #if PRINT_REFS
     ALOGD("decStrong of %p from %p: cnt=%d\n", this, id, c);
@@ -380,14 +358,8 @@ void RefBase::decStrong(const void* id) const
 void RefBase::forceIncStrong(const void* id) const
 {
     weakref_impl* const refs = mRefs;
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     refs->incWeak(id);
-    
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     refs->addStrongRef(id);
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,refs->mStrong);
     const int32_t c = android_atomic_inc(&refs->mStrong);
     ALOG_ASSERT(c >= 0, "forceIncStrong called on %p after ref count underflow",
                refs);
@@ -430,8 +402,6 @@ void RefBase::weakref_type::decWeak(const void* id)
     const int32_t c = android_atomic_dec(&impl->mWeak);
     ALOG_ASSERT(c >= 1, "decWeak called on %p too many times", this);
     if (c != 1) return;
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,impl->mStrong);
     if ((impl->mFlags&OBJECT_LIFETIME_WEAK) == OBJECT_LIFETIME_STRONG) {
         // This is the regular lifetime case. The object is destroyed
         // when the last strong reference goes away. Since weakref_impl
@@ -461,8 +431,6 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
     incWeak(id);
     
     weakref_impl* const impl = static_cast<weakref_impl*>(this);
-    
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,impl->mStrong);
     int32_t curCount = impl->mStrong;
     ALOG_ASSERT(curCount >= 0, "attemptIncStrong called on %p after underflow",
                this);
@@ -511,8 +479,6 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
 #if PRINT_REFS
     ALOGD("attemptIncStrong of %p from %p: cnt=%d\n", this, id, curCount);
 #endif
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,impl->mStrong);
     if (curCount == INITIAL_STRONG_VALUE) {
         android_atomic_add(-INITIAL_STRONG_VALUE, &impl->mStrong);
         impl->mBase->onFirstRef();
@@ -571,13 +537,11 @@ RefBase::weakref_type* RefBase::getWeakRefs() const
 RefBase::RefBase()
     : mRefs(new weakref_impl(this))
 {
-    ALOGE("%d %s RefBase %p mRefs %p mStrong = %d  %p",__LINE__,__func__,this,mRefs,mRefs->mStrong,&(mRefs->mStrong));
+    //ALOGE("%d %s RefBase %p mRefs %p mStrong = %d  %p",__LINE__,__func__,this,mRefs,mRefs->mStrong,&(mRefs->mStrong));
 }
 
 RefBase::~RefBase()
 {
-
-    ALOGE("%d %s mStrong = %d ",__LINE__,__func__,mRefs->mStrong);
     if (mRefs->mStrong == INITIAL_STRONG_VALUE) {
         // we never acquired a strong (and/or weak) reference on this object.
         delete mRefs;

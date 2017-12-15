@@ -38,6 +38,7 @@ MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)
 STORE_OBJS        := $(STORE_SRC:.cpp=.o)  
 
 LDFLAGS += -lpthread -lsqlite3 -ldl
+CXXFLAGS += -DHAVE_PTHREADS
 
 #build:$(SOURCES) $(SRCS_HEADER)
 #	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/ 
@@ -46,7 +47,7 @@ LDFLAGS += -lpthread -lsqlite3 -ldl
 #
 
 networkdb_test:NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS)
-	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/
+	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/ -I ../sqlite/
 
 $(UTILS_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/
