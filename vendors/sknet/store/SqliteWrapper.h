@@ -32,7 +32,11 @@ struct ColumnEntry{
         return Value.floatValue;
     }
     inline const char *getString() const{
-        return Value.charValue;
+        if(strcmp(Value.charValue,"NULL")== 0){
+            return NULL;
+        }else{
+            return Value.charValue;
+        }
     }
     inline int size()const{
         return Length;

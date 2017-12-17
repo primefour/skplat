@@ -75,11 +75,17 @@ class SocketAddress{
 
     //construct function
     SocketAddress();
+    SocketAddress(const char *ip);
     SocketAddress(const char *host,const char *ip);
     SocketAddress(const char *host,const char *ip,sockaddr *addr);
     SocketAddress(const char *host,const char *ip,sockaddr_in *addr);
     SocketAddress(const char *host,const char *ip,sockaddr_in6 *addr);
     SocketAddress(const SocketAddress &sa);
+    //get server host port
+    //get host
+    const char* getHostString();
+    //get Ip string
+    const char* getIpString();
     //get host
     const std::string& getHostName();
     //get Ip string
@@ -98,6 +104,7 @@ class SocketAddress{
     inline void setConnProf(long time){ mConnProf = time; }
     //get connect time
     inline long getConnProf(){ return mConnProf; }
+    void* getSockAddr();
   private:
     struct sockaddr_storage mAddr;
     std::string mCharIpv4;

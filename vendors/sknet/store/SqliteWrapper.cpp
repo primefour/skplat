@@ -11,12 +11,14 @@ static const int SQLITE_ENABLE_PROFILE = 1;
 bool SqliteWrapper::mVerboseLog = false;
 
 SqliteWrapper::SqliteWrapper(std::string path):mDatabasePath(path){
+    ALOGD("database create");
     mCanceled = 0;
     mDatabaseError = 0;
     mOpenFlags |= SQLITE_OPEN_READWRITE;
 }
 
 SqliteWrapper::~SqliteWrapper(){
+    ALOGD("database destory ");
     dispose();
 }
 

@@ -18,38 +18,22 @@ static Mutex gDatabaseMutex;
 //database store path
 static const char *gNetDBPath = "./NetworkDB.db";
 //init static member of network database
-//sp<NetworkDatabase> NetworkDatabase::mNetworkDatabase = NULL;
+sp<NetworkDatabase> NetworkDatabase::mNetworkDatabase = NULL;
 
 
 sp<NetworkDatabase>& NetworkDatabase::getInstance(){
     AutoMutex _l(gDatabaseMutex);
-
-        ALOGE("%s  %d ",__func__,__LINE__);
-        new NetworkDatabase();
-        ALOGE("%s  %d ",__func__,__LINE__);
-    /*
     if(mNetworkDatabase == NULL){
-        ALOGE("%s  %d ",__func__,__LINE__);
-        //NetworkDatabase *tmp = ;
-        new NetworkDatabase();
-        ALOGE("%s  %d ",__func__,__LINE__);
-        //tmp->incStrong(NULL);
-        ALOGE("%s  %d ",__func__,__LINE__);
-        //mNetworkDatabase  = tmp;
+        mNetworkDatabase = new NetworkDatabase();
     }
-    */
-    //return mNetworkDatabase;
-    //return NULL;
+    return mNetworkDatabase;
 }
 
 sp<SqliteWrapper>&NetworkDatabase:: getDBWrapper(){
-    //return NULL;
-    /*
     if(mNetworkDatabase == NULL){
         getInstance();
     }
     return getInstance()->getDB();
-    */
 }
 
 
@@ -66,9 +50,7 @@ void NetworkDatabase::createTables(){
 }
 
 NetworkDatabase::NetworkDatabase(){
-    ALOGE("xxxx mDBWrapper  %s %d ",__func__,__LINE__);
     mDBWrapper = new SqliteWrapper(gNetDBPath);
-    ALOGE("eeee mDBWrapper  %s %d ",__func__,__LINE__);
     //open database
     mDBWrapper->open();
     //create table
@@ -83,6 +65,10 @@ NetworkDatabase::~NetworkDatabase(){
 //insert socket address to database
 int NetworkDatabase::xDnsInsert(SocketAddress &sa){
     char sql_buff[1024]={0};
+    if(xDnsExist(sa)){
+        //delete it and then insert
+        xDnsDelete(sa);
+    }
     snprintf(sql_buff,sizeof(sql_buff),
             "insert into xdns(host,ip,ip_type,fetch_type,conn_profile) values (\'%s\',\'%s\',%d,%d,%ld);",
             sa.getHostName().c_str(),sa.getIp().c_str(),sa.getType(),sa.getFetchType(),sa.getConnProf());
@@ -94,7 +80,7 @@ int NetworkDatabase::xDnsInsert(SocketAddress &sa){
 int NetworkDatabase::xDnsExist(SocketAddress &sa){
     char sql_buff[1024]={0};
     snprintf(sql_buff,sizeof(sql_buff),
-            "select count(*) from xdns where host = '%s' AND ip = '%s' ;",
+            "select count(*) from xdns where host = \'%s\' AND ip = \'%s\' ;",
             sa.getHostName().c_str(),sa.getIp().c_str());
     int count = mDBWrapper->count(sql_buff);
     return count > 0?count:0;
@@ -128,7 +114,7 @@ int NetworkDatabase::xDnsVCallback(KeyedHash<std::string,ColumnEntry> *colEntrie
 int NetworkDatabase::getAddrByHost(const char *host,Vector<SocketAddress> &ips){
     char sql_buff[1024]={0};
     snprintf(sql_buff,sizeof(sql_buff),"select host,ip,ip_type,fetch_type,"
-                                    "conn_profile from xdns where host = '%s' order by conn_profile;",host);
+                                    "conn_profile from xdns where host = \'%s\' order by conn_profile;",host);
     int rc = mDBWrapper->execSql(sql_buff,xDnsVCallback,&ips);
     if(rc != OK){
         ALOGE("query fail %s ",sql_buff);
@@ -150,7 +136,7 @@ int NetworkDatabase::xDnsUpdateProf(const char *host,const char *ip,int64_t conn
     }
 
     snprintf(sql_buff,sizeof(sql_buff),
-            "update xdns set conn_profile = %ld where host = '%s' and ip = '%s' ;",conn_profile,host,ip);
+            "update xdns set conn_profile = %ld where host = \'%s\' and ip = \'%s\' ;",conn_profile,host,ip);
     int rc = mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
     return rc;
 }
@@ -161,10 +147,16 @@ int NetworkDatabase::xDnsUpdateHostIp(const char *host,const char *ip,const char
         return UNKNOWN_ERROR;
     }
     snprintf(sql_buff,sizeof(sql_buff),
-            "update xdns set ip = '%s',conn_profile = -1 where host = '%s' and ip = '%s' ;",new_ip,host,ip);
+            "update xdns set ip = \'%s\',conn_profile = -1 where host = \'%s\' and ip = \'%s\' ;",new_ip,host,ip);
     int rc = mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
     return rc;
 
+}
+
+int NetworkDatabase::xDnsDelete(SocketAddress &sa){
+    const std::string& host = sa.getHostName();
+    const std::string& ip = sa.getIp();
+    return xDnsDelete(host.c_str(),ip.c_str());
 }
 
 int NetworkDatabase::xDnsDelete(const char *host,const char *ip){
@@ -175,7 +167,7 @@ int NetworkDatabase::xDnsDelete(const char *host,const char *ip){
     if(host == NULL){
         host = ip;
     }
-    snprintf(sql_buff,sizeof(sql_buff),"delete from xdns where host = %s and ip = %s ;", host, ip);
+    snprintf(sql_buff,sizeof(sql_buff),"delete from xdns where host = \'%s\' and ip = \'%s\' ;", host, ip);
     int rc = mDBWrapper->execSql(sql_buff,(xCallback)NULL,NULL);
     return rc;
 }
@@ -240,7 +232,7 @@ int NetworkDatabase::xTaskGetTodoTasks(Vector<TaskInfo> &tasks){
     }
 }
 
-int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
+int NetworkDatabase::xTaskInsert(TaskInfo& task,int taskState){
     char sql_buff[4096]={0};
     if(task.mTaskId.empty() ||task.mModuleName.empty()){
         ALOGE("invalidate task,please check host module name and task id ");
@@ -248,7 +240,7 @@ int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
     }
     sqlite3_stmt* pStmt = NULL;
     if(task.mSendData.size() > 0){
-        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,mothed,recv_file,"
+        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
                 "send_file,send_data,send_only,retry_times,task_type,conn_timeout,task_timeout)"
                 "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%ld,%ld);",
                 task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl.c_str(),task.mMethod,
@@ -264,7 +256,7 @@ int NetworkDatabase::xTaskInsertTask(TaskInfo& task,int taskState){
             pStmt = mDBWrapper->bindValue(pStmt,1,task.mSendData.data(),task.mSendData.size());
         }
     }else{
-        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,mothed,recv_file,"
+        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
                 "send_file,send_only,retry_times,task_type,conn_timeout,task_timeout)"
                 "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',%d,%d,%d,%ld,%ld);",
                 task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl.c_str(),task.mMethod,

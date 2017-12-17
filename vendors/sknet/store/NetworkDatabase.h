@@ -27,8 +27,9 @@ class NetworkDatabase:public RefBase{
         int xDnsUpdateProf(const char *host,const char *ip,int64_t conn_profile);
         int xDnsUpdateHostIp(const char *host,const char *ip,const char *new_ip);
         int xDnsDelete(const char *host,const char *ip);
+        int xDnsDelete(SocketAddress &sa);
         int xTaskGetTodoTasks(Vector<TaskInfo> &tasks);
-        int xTaskInsertTask(TaskInfo& task,int taskState);
+        int xTaskInsert(TaskInfo& task,int taskState = TASK_STATE_IDLE);
         int xTaskCount(int taskState);
         int xTaskDelete(std::string taskId);
         int xTaskUpdateState(std::string taskId,int state);
@@ -40,7 +41,7 @@ class NetworkDatabase:public RefBase{
         NetworkDatabase();
         NetworkDatabase(const NetworkDatabase &);
         void createTables();
-        //static sp<NetworkDatabase> mNetworkDatabase;
+        static sp<NetworkDatabase> mNetworkDatabase;
         sp<SqliteWrapper> mDBWrapper;
 };
 #endif

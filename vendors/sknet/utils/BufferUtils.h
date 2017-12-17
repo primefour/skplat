@@ -8,7 +8,7 @@ class BufferUtils :public RefBase{
         virtual ~BufferUtils();
 
         ssize_t setCapacity(size_t new_capacity) ;
-        int write(char *buff,size_t size);
+        int write(const char *buff,size_t size);
         size_t offset(int offset,int seekWhere);
         size_t read(char *buff,size_t size);
         size_t append(const char *data,size_t size);

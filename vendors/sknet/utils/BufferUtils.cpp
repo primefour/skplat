@@ -49,7 +49,7 @@ BufferUtils::~BufferUtils(){
     release();
 }
 
-int BufferUtils::write(char *buff,size_t size){
+int BufferUtils::write(const char *buff,size_t size){
     ASSERT(buff != NULL || size > 0,"buff is NULL");
 
     if(mOffset + size > mCapacity){
