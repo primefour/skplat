@@ -32,14 +32,26 @@ struct ColumnEntry{
         return Value.floatValue;
     }
     inline const char *getString() const{
-        if(strcmp(Value.charValue,"NULL")== 0){
+        if(Value.charValue == NULL){
+            ALOGW("key %s value is %s",Name.c_str(),Value.charValue);
             return NULL;
         }else{
-            return Value.charValue;
+            if(strcmp(Value.charValue,"NULL")== 0){
+                ALOGW("key %s value is %s",Name.c_str(),Value.charValue);
+                return NULL;
+            }else{
+                return Value.charValue;
+            }
         }
     }
     inline int size()const{
         return Length;
+    }
+    bool operator==(const ColumnEntry& ce) const{
+        if(this->Type != ce.Type){
+            return false;
+        }
+        return memcmp(&Value,&ce.Value,sizeof(Value));
     }
 };
 
@@ -99,6 +111,8 @@ class SqliteWrapper:public RefBase{
         int query(const char *sql,vCallback cb,void *pArgs);
         int query(const char *sql,xCallback cb,void *pArgs);
         int count(const char *sql);
+        void ErrorMsg();
+        int finalize(sqlite3_stmt* pStmt);
     private:
         //parse data from sqlite query 
         void getRowData(sqlite3_stmt *pStmt,int nCol,KeyedHash<std::string,ColumnEntry> *colEntries);

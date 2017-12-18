@@ -36,9 +36,11 @@ SocketAddress::SocketAddress(const char *host,const char *ip,sockaddr_in6 *addr)
     mConnProf = 0;
 }
 
-SocketAddress::SocketAddress(const char *ip):mHost(ip){
+SocketAddress::SocketAddress(const char *ip){
+    ASSERT(ip != NULL,"Ip is NULL");
     //check ip type
     const char*tmp =  strstr(ip,":");
+    mHost = ip;
     if(tmp != NULL){
         //ipv6
         sockaddr_in6 *ipv6 =(sockaddr_in6 *)&mAddr;
@@ -59,9 +61,14 @@ SocketAddress::SocketAddress(const char *ip):mHost(ip){
     mPort = -1;
 }
 
-SocketAddress::SocketAddress(const char *host,const char *ip):mHost(host){
+SocketAddress::SocketAddress(const char *host,const char *ip){
+    ASSERT(ip != NULL,"IP SHOULD GIVE A VALUE BEFORE CREATE SOCKETADDRESS");
     //check ip type
     const char*tmp =  strstr(ip,":");
+    if(host == NULL){
+        host = ip ;
+    }
+    mHost = host;
     if(tmp != NULL){
         //ipv6
         sockaddr_in6 *ipv6 =(sockaddr_in6 *)&mAddr;
@@ -122,7 +129,7 @@ const std::string& SocketAddress::getIp(){
 void SocketAddress::setPort(uint16_t port){ 
     ASSERT(mType == SOCKADDR_TYPE_V4||mType == SOCKADDR_TYPE_V6,"please set ip address first");
     mPort = port; 
-    if(mType = SOCKADDR_TYPE_V6){
+    if(mType == SOCKADDR_TYPE_V6){
         sockaddr_in6 *ipv6 =(sockaddr_in6 *)&mAddr;
         ipv6->sin6_port = htons(port);
     }else{

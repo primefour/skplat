@@ -48,9 +48,9 @@ struct TaskInfo{
     //send file 
     std::string mSendFile; //send a file to server
     //send data
-    BufferUtils mSendData; //data will send to server
+    sp<BufferUtils> mSendData; //data will send to server
     //write buffer
-    BufferUtils mRecvData;
+    sp<BufferUtils> mRecvData;
     bool mSendOnly; 
     int  mMethod;
     int  mRetryTimes; //retry times
@@ -74,6 +74,18 @@ struct TaskInfo{
         mTryTimes = 0;
         mStartTime = 0;
         mStartConnTime = 0;
+        mRecvData = new BufferUtils();
+        mSendData = new BufferUtils();
     }
+
+    /*
+    TaskInfo(const TaskInfo& task){
+        mRecvData = task.mRecvData;
+    }
+
+    void operator=(const TaskInfo &task){
+
+    }
+    */
 };
 #endif//

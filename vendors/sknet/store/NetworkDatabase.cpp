@@ -12,7 +12,6 @@
 #include<string>
 #include"Log.h"
 
-
 //mutex for single instance
 static Mutex gDatabaseMutex;
 //database store path
@@ -103,6 +102,14 @@ int NetworkDatabase::xDnsVCallback(KeyedHash<std::string,ColumnEntry> *colEntrie
     //get array of socket address
     Vector<SocketAddress> *saArray  = (Vector<SocketAddress> *)pArgs ;
     //create socket address entry
+    if(colEntries->get(hostKey) == KeyedHash<std::string ,ColumnEntry >::mInvalidate){
+        ALOGD("get invalidate key %s ",hostKey.c_str());
+    }
+
+    if(colEntries->get(ipKey) == KeyedHash<std::string ,ColumnEntry >::mInvalidate){
+        ALOGD("get invalidate key %s ",ipKey.c_str());
+    }
+
     SocketAddress sa(colEntries->get(hostKey).getString(),colEntries->get(ipKey).getString());
     sa.setFetchType(colEntries->get(fetchTypeKey).getLong());
     sa.setConnProf(colEntries->get(profKey).getLong());
@@ -204,12 +211,12 @@ int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colE
     if(data != NULL){
         int size = colEntries->get(sendDataKey).size();
         //use append,will not change offset
-        ti.mSendData.append(data,size);
+        ti.mSendData->append(data,size);
     }
     ti.mTaskType = colEntries->get(taskTypeKey).getLong();
     ti.mSendOnly = colEntries->get(sendOnlyKey).getLong();
-    ti.mRecvFile = colEntries->get(recvFileKey).getString();
-    ti.mSendFile = colEntries->get(sendFileKey).getString();
+    ti.mRecvFile = colEntries->get(recvFileKey).getString() == NULL ?"":colEntries->get(recvFileKey).getString();
+    ti.mSendFile = colEntries->get(sendFileKey).getString() == NULL ?"":colEntries->get(sendFileKey).getString();
     ti.mRetryTimes = colEntries->get(retryTimesKey).getLong();
     ti.mConnTimeout = colEntries->get(connTimeoutKey).getLong();
     ti.mTaskTimeout = colEntries->get(taskTimeoutKey).getLong();
@@ -221,9 +228,9 @@ int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colE
     return 1;
 }
 
-int NetworkDatabase::xTaskGetTodoTasks(Vector<TaskInfo> &tasks){
+int NetworkDatabase::xTaskGetTasks(Vector<TaskInfo> &tasks,int taskState){
     char sql_buff[512]={0};
-    snprintf(sql_buff,sizeof(sql_buff),"select * from xtask where task_state = %d;",TASK_STATE_IDLE);
+    snprintf(sql_buff,sizeof(sql_buff),"select * from xtask where task_state = %d;",taskState);
     int rc = mDBWrapper->execSql(sql_buff,xTaskInfoVCallback,&tasks);
     if(rc == OK){
         return tasks.size();
@@ -239,7 +246,7 @@ int NetworkDatabase::xTaskInsert(TaskInfo& task,int taskState){
         return BAD_VALUE;
     }
     sqlite3_stmt* pStmt = NULL;
-    if(task.mSendData.size() > 0){
+    if(task.mSendData->size() > 0){
         snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
                 "send_file,send_data,send_only,retry_times,task_type,conn_timeout,task_timeout)"
                 "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%ld,%ld);",
@@ -253,7 +260,7 @@ int NetworkDatabase::xTaskInsert(TaskInfo& task,int taskState){
                 task.mTaskTimeout);
         pStmt = mDBWrapper->compileSQL(sql_buff);
         if(pStmt != NULL){
-            pStmt = mDBWrapper->bindValue(pStmt,1,task.mSendData.data(),task.mSendData.size());
+            pStmt = mDBWrapper->bindValue(pStmt,1,task.mSendData->data(),task.mSendData->size());
         }
     }else{
         snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
@@ -269,9 +276,13 @@ int NetworkDatabase::xTaskInsert(TaskInfo& task,int taskState){
                 task.mTaskTimeout);
         pStmt = mDBWrapper->compileSQL(sql_buff);
     }
-    int ret = mDBWrapper->execStmt(NULL,pStmt,(xCallback)NULL);
-    if(ret < 0){
-        return UNKNOWN_ERROR;
+    int ret = UNKNOWN_ERROR;
+    if(pStmt != NULL){
+         ret = mDBWrapper->execStmt(NULL,pStmt,(xCallback)NULL);
+        if(ret < 0){
+            return UNKNOWN_ERROR;
+        }
+        ret = mDBWrapper->finalize(pStmt);
     }
     return ret;
 }

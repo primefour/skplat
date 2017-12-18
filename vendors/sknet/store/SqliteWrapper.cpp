@@ -2,13 +2,16 @@
 #include"SqliteWrapper.h"
 #include"Mutex.h"
 #include<stdio.h>
+#include"KeyedHash.h"
 
 static const int SQLITE_SOFT_HEAP_LIMIT = 8 * 1024 * 1024;
 static const int SQLITE_BUSY_TIMEOUT_MS = 2500;
 static const int SQLITE_ENABLE_TRACE = 1;
 static const int SQLITE_ENABLE_PROFILE = 1;
 
-bool SqliteWrapper::mVerboseLog = false;
+bool SqliteWrapper::mVerboseLog = true;
+
+template<> ColumnEntry KeyedHash<std::string ,ColumnEntry >::mInvalidate  = ColumnEntry();
 
 SqliteWrapper::SqliteWrapper(std::string path):mDatabasePath(path){
     ALOGD("database create");
@@ -78,6 +81,7 @@ int SqliteWrapper::countCallback(sqlite3_stmt *pStmt,void *pArg){
     }
     int *count = (int *)pArg;
     *count = sqlite3_column_int(pStmt,0);
+    ALOGD("%s ==> %d ",__func__,*count);
     return *count;
 }
 
@@ -163,6 +167,7 @@ void SqliteWrapper::dispose(){
     if(mDatabase != NULL){
         int ret = sqlite3_close(mDatabase);
         if (ret != SQLITE_OK) {
+            ErrorMsg();
             // This can happen if sub-objects aren't closed first.  Make sure the caller knows.
             ALOGD("close database fail db  %p object %p with dbname %s ",mDatabase,this,mDatabasePath.c_str());
         }else{
@@ -186,7 +191,20 @@ sqlite3_stmt* SqliteWrapper::compileSQL(const char *sql){
         ALOGE("sqlite prepare fail (%s) failed: %d",sql,err);
         return NULL;
     }
+    ALOGD("create a statment %p ",statement);
     return statement;
+}
+
+int SqliteWrapper::finalize(sqlite3_stmt* statement){
+    //release statement
+    int rc = sqlite3_finalize(statement);
+    if(rc != SQLITE_OK){
+        ALOGE("statment :%p failed finalize error msg:%s",statement,sqlite3_errmsg(mDatabase));
+        errorInc();
+        return UNKNOWN_ERROR;
+    }
+    ALOGD("finalize a statment %p rc =%d ",statement,rc);
+    return OK;
 }
 
 void SqliteWrapper::getRowData(sqlite3_stmt *pStmt,int nCol,KeyedHash<std::string,ColumnEntry> *colEntries){
@@ -200,28 +218,33 @@ void SqliteWrapper::getRowData(sqlite3_stmt *pStmt,int nCol,KeyedHash<std::strin
             value.Value.charValue = reinterpret_cast<const char*>(sqlite3_column_text(pStmt, i)); 
             value.Type = SQLITE_TEXT;
             value.Length = sqlite3_column_bytes(pStmt, i) +1;
+            ALOGD("key:%s ==> %s ",value.Name.c_str(),value.Value.charValue);
         } else if (type == SQLITE_INTEGER) {
             // INTEGER data
             value.Value.longValue = sqlite3_column_int64(pStmt, i);
             value.Type = SQLITE_INTEGER;
+            ALOGD("key:%s ==> %ld ",value.Name.c_str(),value.Value.longValue);
         } else if (type == SQLITE_FLOAT) {
             // FLOAT data
             value.Value.floatValue = sqlite3_column_double(pStmt, i);
             value.Type = SQLITE_FLOAT;
+            ALOGD("key:%s ==> %f ",value.Name.c_str(),value.Value.floatValue);
         } else if (type == SQLITE_BLOB) {
             // BLOB data
             value.Value.charValue = (const char *)sqlite3_column_blob(pStmt, i);
             value.Length = sqlite3_column_bytes(pStmt, i);
             value.Type = SQLITE_BLOB;
+            ALOGD("key:%s ==> %s ",value.Name.c_str(),value.Value.charValue);
         } else if (type == SQLITE_NULL) {
             value.Value.charValue = NULL; 
             value.Type = SQLITE_NULL;
+            ALOGD("key:%s ==> %s ",value.Name.c_str(),value.Value.charValue);
         } else {
-            ALOGW("get a invalidate data type of sqlite type %d ",type);
-            break;
+            ALOGW("get a invalidate data type of sqlite type %d",type);
+            continue;
         }
+        colEntries->add(value.Name,value);
     }
-    colEntries->add(value.Name,value);
 }
 
 int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,vCallback cb){
@@ -232,7 +255,7 @@ int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,vCallback cb){
         int rc = sqlite3_step(pStmt);
         if(rc == SQLITE_ROW){
             //get a row data and now get column name
-            if(colEntries != NULL && nCol > 0){
+            if(colEntries == NULL && nCol > 0){
                 colEntries = new KeyedHash<std::string,ColumnEntry>(nCol,getStringHash);
                 if(colEntries == NULL){
                     ALOGW("execute statement fail  %p no memory ",pStmt);
@@ -240,7 +263,7 @@ int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,vCallback cb){
                 }
             }
             getRowData(pStmt,nCol,colEntries);
-            if(cb(colEntries,pArg) >= 0|| mCanceled ){
+            if(cb(colEntries,pArg) <= 0|| mCanceled ){
                 rc = SQLITE_ABORT;
                 ALOGW("statement %p abort by user",pStmt);
                 mCanceled = false;
@@ -280,7 +303,7 @@ int SqliteWrapper::execStmt(void *pArg,sqlite3_stmt *pStmt,xCallback cb){
             /* if data and types extracted successfully... */
             do{
                 /* call the supplied callback with the result row data */
-                if(cb(pStmt,pArg) < 0 || mCanceled){
+                if(cb(pStmt,pArg) <= 0 || mCanceled){
                     ALOGW("statement %p abort by user",pStmt);
                     rc = SQLITE_ABORT;
                     mCanceled = false;
@@ -318,15 +341,8 @@ int SqliteWrapper::execSql(const char *sql,vCallback cb,void *arg){
     }
     //execute statement
     execStmt(arg,pStmt,cb);
-
     //release statement
-    int rc = sqlite3_finalize(pStmt);
-    if(rc != SQLITE_OK){
-        ALOGE("sql fail %s error msg:%s",sql,sqlite3_errmsg(mDatabase));
-        errorInc();
-        return UNKNOWN_ERROR;
-    }
-    return OK;
+    return finalize(pStmt);
 }
 
 int SqliteWrapper::execSql(const char *sql,xCallback cb,void *arg){
@@ -342,15 +358,8 @@ int SqliteWrapper::execSql(const char *sql,xCallback cb,void *arg){
     }
     //execute statement
     execStmt(arg,pStmt,cb);
-
     //release statement
-    int rc = sqlite3_finalize(pStmt);
-    if(rc != SQLITE_OK){
-        ALOGE("sql fail %s error msg:%s",sql,sqlite3_errmsg(mDatabase));
-        errorInc();
-        return UNKNOWN_ERROR;
-    }
-    return OK;
+    return finalize(pStmt);
 }
 
 void SqliteWrapper::traceCallback(void *data,const char *sql){
@@ -444,5 +453,9 @@ int SqliteWrapper::collLocalized(void *not_used, int nKey1,//length of key1
         rc = nKey1 - nKey2;
     }
     return rc;
+}
+
+void SqliteWrapper::ErrorMsg(){
+    ALOGD("error string %s ",sqlite3_errmsg(mDatabase));
 }
 

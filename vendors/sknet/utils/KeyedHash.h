@@ -24,9 +24,8 @@ class KeyedHash:RefBase{
         void remove(KEY& key);
         //add item
         int add(KEY& key,VALUE& Value);
-
         //invalidate value for get
-        VALUE mInvalidate;
+        static VALUE mInvalidate;
     private:
         KeyedHash(const KeyedHash &);
         BasicHashtable<KEY,VALUE> mContain;
@@ -77,7 +76,7 @@ int KeyedHash<KEY,VALUE>::add(KEY& key,VALUE& Value){
         mSize --;
     }
     idx = mContain.add(mFpnhashCode(key),Value);
-    ALOGD("lrc add  idx = %d ",idx);
+    //ALOGD("hash add  idx = %d ",idx);
     mSize ++;
     return idx; 
 }

@@ -128,23 +128,35 @@ size_t BufferUtils::append(BufferUtils& buffer){
     return append(buffer.data(),buffer.size());
 }
 
-const char* BufferUtils::data(){
+const char* BufferUtils::data()const{
     return (char *)mBuffer;
 }
 
-size_t BufferUtils::size(){
+size_t BufferUtils::size() const{
     return mSize;
 }
 
-size_t BufferUtils::capacity(){
+size_t BufferUtils::capacity()const{
     return mCapacity;
 }
 
-void BufferUtils::setTo(BufferUtils& buffer){
+BufferUtils::BufferUtils(const BufferUtils &a){
+    setTo(a);
+}
+
+void BufferUtils::operator=(const BufferUtils &a){
+    setTo(a);
+}
+
+size_t BufferUtils::curPostion()const{
+    return mOffset;
+}
+
+void BufferUtils::setTo(const BufferUtils& buffer){
     release();
     mSize = buffer.size();
     mCapacity = buffer.capacity();
-    mOffset = buffer.offset(0,SEEK_CUR);
+    mOffset = buffer.curPostion();
     SharedBuffer* sb = SharedBuffer::alloc(mCapacity);
     if (sb) {
         void* array = sb->data();
