@@ -138,13 +138,23 @@ void SocketAddress::setPort(uint16_t port){
     }
 }
 
-void* SocketAddress::getSockAddr(){
+void* SocketAddress::getSockAddr() const{
     //check ip type
     if(mPort == -1){
         ALOGW("port is invalidate please set it first");
         return NULL;
     }
     return (void *)&mAddr;
+}
+
+int SocketAddress::getAddrLen()const{
+    if(mType == SOCKADDR_TYPE_V4){
+        return sizeof(struct sockaddr_in);
+    }else if(mType == SOCKADDR_TYPE_V6){
+        return sizeof(struct sockaddr_in6);
+    }else{
+        return sizeof(struct sockaddr_storage);
+    }
 }
 
 

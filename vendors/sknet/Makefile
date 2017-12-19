@@ -27,6 +27,7 @@ UTILS_SRC := utils/BasicHashtable.cpp \
 	utils/Timers.cpp \
 	utils/VectorImpl.cpp \
 	utils/WorkQueue.cpp \
+	utils/SocksConnect.cpp
 
 MODEL_SRC := model/SocketAddress.cpp
 
@@ -50,7 +51,7 @@ networkdb_test:NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS)
 	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/ -I ../sqlite/
 
 $(UTILS_OBJS):%.o : %.cpp
-	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/ -I ./model/
 
 $(MODEL_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ./utils/

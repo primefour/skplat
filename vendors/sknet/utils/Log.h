@@ -13,6 +13,7 @@ typedef int status_t;
 #define NO_MEMORY (-5)
 #define BAD_VALUE (-6)
 #define NAME_NOT_FOUND (-7)
+#define TIMEOUT_ERROR (-8)
 
 #define LOG_WARN "warning"
 

@@ -4,6 +4,10 @@
 #include <arpa/inet.h>
 #include "BufferUtils.h"
 #include "Vector.h"
+#include "SocksConnect.h"
+/*
+ *localhost:10443
+ */
 
 int main(){
     ALOGD("Hello world");
@@ -43,6 +47,12 @@ int main(){
 
     count = tasks[0].mSendData->read(ipAddr,sizeof(ipAddr));
     ALOGD("task 0 count = %d ipAddr = %s ",count,ipAddr);
-
+    SocketAddress sockAddrx("115.239.210.27");
+    sockAddrx.setPort(80);
+    SocksConnect connect(sockAddrx);
+    int ret = connect.connect(5000);
+    if(ret != OK){
+        ALOGD("connect fail ");
+    }
     return 0;
 }

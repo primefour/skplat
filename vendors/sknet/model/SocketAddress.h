@@ -91,20 +91,21 @@ class SocketAddress{
     //get Ip string
     const std::string& getIp();
     //get server host port
-    inline uint16_t getPort(){ return mPort;}
+    inline uint16_t getPort()const{ return mPort;}
     //set port
     void setPort(uint16_t port);
     //get address type
-    inline int getType(){ return mType; }
+    inline int getType() const{ return mType; }
     //set fetch type
     inline void setFetchType(int fetch){ mFetchType = fetch; }
     //get fetch type
-    inline int getFetchType(){ return mFetchType; }
+    inline int getFetchType() const{ return mFetchType; }
     //set connect time
     inline void setConnProf(long time){ mConnProf = time; }
     //get connect time
     inline long getConnProf(){ return mConnProf; }
-    void* getSockAddr();
+    void* getSockAddr()const;
+    int getAddrLen()const;
   private:
     struct sockaddr_storage mAddr;
     std::string mCharIpv4;
