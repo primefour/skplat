@@ -9,22 +9,27 @@
 #include <unistd.h>
 #include <string.h>
 #include <string>
+#include "DNSCache.h"
+#include "NetworkDatabase.h"
+#include "Log.h"
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include "BufferUtils.h"
+#include "Vector.h"
+#include "SocksConnect.h"
 
-DnsCache::DnsCache(){
-    mHostCache = new LruCache<std::string, HostAddress>(10,getStringHash);
+template<> HostAddress LruCache<std::string, HostAddress>::mNullItem = HostAddress();
+DnsCache::DnsCache(int count):mHostCache(count,getStringHash){
 }
 /*
  * get host address by host name and service type
  * eg:www.baidu.com,http/8080
  */
-DnsCache::getAddrInfo(const char *host,const char *service){
+int DnsCache::getAddrInfo(const char *host,const char *service){
     HostAddress hostAddrs;
     struct addrinfo hints;
     struct addrinfo *result, *rp;
-    int sfd, ret, j;
-    size_t len;
-    ssize_t nread;
-    char buf[BUF_SIZE];
+    int ret;
 
     /* Obtain address(es) matching host/port */
     memset(&hints, 0, sizeof(struct addrinfo));
@@ -32,7 +37,7 @@ DnsCache::getAddrInfo(const char *host,const char *service){
     hints.ai_socktype = 0; /* Any socket connect type*/
     hints.ai_flags = 0;
     hints.ai_protocol = 0;          /* Any protocol */
-    ret = getaddrinfo(host, argv[2], &hints, &result);
+    ret = getaddrinfo(host,service, &hints, &result);
     if (ret != 0) {
         ALOGE("getaddrinfo: %s\n", gai_strerror(ret));
         return UNKNOWN_ERROR;
@@ -50,7 +55,7 @@ DnsCache::getAddrInfo(const char *host,const char *service){
             ALOGD("address %s  \n",xbuff);
             SocketAddress sa(host,xbuff,xaddr);
             //add to cache
-            hostAddrs.Addrs.push(sa);
+            hostAddrs.mAddrs.push(sa);
             //insert to database
             db->xDnsInsert(sa);
         }else if(rp->ai_family == AF_INET6){
@@ -59,32 +64,59 @@ DnsCache::getAddrInfo(const char *host,const char *service){
             ALOGD("address %s  \n",xbuff);
             SocketAddress sa6(host,xbuff,xaddr6);
             //add to cache
-            hostAddrs.Addrs.push(sa6);
+            hostAddrs.mAddrs.push(sa6);
             //insert to database
             db->xDnsInsert(sa6);
         }
     }
     /* No longer needed */
     freeaddrinfo(result); 
-    hostAddrs->mHost = host;
+
+    //add key for cache hash
+    hostAddrs.mHost = host;
     //update cache item
-    mHostCache->add(hostAddrs->mHost,hostAddrs);
+    mHostCache.add(hostAddrs.mHost,hostAddrs);
 }
 
-Vector<SocketAddress> getHostByDB(const char *host){
+void DnsCache::getHostByDB(const char *host,Vector<SocketAddress> &addrs){
     sp<NetworkDatabase>& db = NetworkDatabase::getInstance();
-    Vector<SocketAddress> addrs ;
     int ss = db->getAddrByHost(host,addrs);
     ALOGD("ss = %d size addrs = %zd ",ss,addrs.size());
-    return addrs;
 }
 
-const Vector<SocketAddress>& getHostByCache(const char *host){
+void DnsCache::addToCache(const char *host,Vector<SocketAddress> &addrs){
+    HostAddress hostAddrs;
+    hostAddrs.mHost = host;
+    hostAddrs.mAddrs = addrs;
+    mHostCache.add(hostAddrs.mHost,hostAddrs);
+}
+
+const Vector<SocketAddress>& DnsCache::getHostByCache(const char *host){
     std::string xhost = host;
-    const HostAddress& tmpHost =  mHostCache->get(host);
-    return tmpHost->Addrs;
+    const HostAddress& tmpHost = mHostCache.get(xhost);
+    return tmpHost.mAddrs;
 }
 
-const Vector<SocketAddress>& getAddrs(const char *host,const char *service){
+const Vector<SocketAddress>& DnsCache::getAddrs(const char *host,const char *service){
+    const Vector<SocketAddress>& addrs = getHostByCache(host);
+    if(addrs.size() != 0){
+        //return cache address
+        return addrs;
+    }else {
+        Vector<SocketAddress> dbAddrs; 
+        if(dbAddrs.size() == 0){
+            getAddrInfo(host,service);
+        }else{
+            getHostByDB(host,dbAddrs);
+            addToCache(host,dbAddrs);
+        }
+    }
+    //return cache address
+    const Vector<SocketAddress>& lastaddrs =  getHostByCache(host);
+    return lastaddrs;
+}
 
+void DnsCache::onConnectFailed(std::string &host){
+    HostAddress& hostAddrs = mHostCache.editGet(host);
+    hostAddrs.mFailedTimes ++;
 }

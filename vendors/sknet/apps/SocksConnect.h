@@ -14,7 +14,7 @@ class SocksConnect{
     };
     public:
         /* create mutil-address connect*/
-        SocksConnect(Vector<SocketAddress>& Addrs);
+        SocksConnect(const Vector<SocketAddress>& Addrs);
         /*create one address connect*/
         SocksConnect(SocketAddress &Addrs);
         virtual ~SocksConnect();

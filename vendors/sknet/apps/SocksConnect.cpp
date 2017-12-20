@@ -22,7 +22,7 @@
 #include"SocksConnect.h"
 
 /* create mutil-address connect*/
-SocksConnect::SocksConnect(Vector<SocketAddress>& Addrs){
+SocksConnect::SocksConnect(const Vector<SocketAddress>& Addrs){
     mAddrs = Addrs;
     //non-block
     pipe2(mPipe,0);
@@ -45,7 +45,8 @@ SocksConnect::~SocksConnect(){
 //interrupt select wait
 int SocksConnect::interrupt(){
     if(mMutex.tryLock() != 0){
-        return write(mPipe[1],"1",1);
+        char aa ;
+        return read(mPipe[0],&aa,1);
     }else{
         mMutex.unlock();
     }
@@ -172,10 +173,14 @@ int SocksConnect::connect(long timeout){ //millisecond
         return UNKNOWN_ERROR;
     }
 
+    FD_SET(mPipe[1],&wrSet);
+    if(maxFd < mPipe[1]) {
+        maxFd = mPipe[1];
+    }
     //select wait for connect
     maxFd += 1;
     ALOGD("call select start maxFd =%d ",maxFd);
-    ret = select(maxFd,NULL,&wrSet,&wrSet,timeout == -1 ?NULL:&tv); 
+    ret = select(maxFd,NULL,&wrSet,NULL,timeout == -1 ?NULL:&tv); 
     ALOGD("call select end ");
 
     if (ret < 0){//select exception

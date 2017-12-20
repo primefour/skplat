@@ -25,7 +25,7 @@ class KeyedHash:RefBase{
         //add item
         int add(KEY& key,VALUE& Value);
         //invalidate value for get
-        static VALUE mInvalidate;
+        static VALUE mNullItem;
     private:
         KeyedHash(const KeyedHash &);
         BasicHashtable<KEY,VALUE> mContain;
@@ -48,7 +48,7 @@ template<typename KEY,typename VALUE>
 const VALUE& KeyedHash<KEY,VALUE>::get(KEY& key){
     int idx = mContain.find(-1,mFpnhashCode(key),key);
     if(idx == -1 ){
-        return mInvalidate;
+        return mNullItem;
     }
     return mContain.entryAt(idx);
 }

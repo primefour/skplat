@@ -27,16 +27,20 @@ UTILS_SRC := utils/BasicHashtable.cpp \
 	utils/Timers.cpp \
 	utils/VectorImpl.cpp \
 	utils/WorkQueue.cpp \
-	utils/SocksConnect.cpp
+
 
 MODEL_SRC := model/SocketAddress.cpp
 
 STORE_SRC :=store/NetworkDatabase.cpp \
 	store/SqliteWrapper.cpp
 
+APPS_SRC := apps/SocksConnect.cpp \
+	apps/DNSCache.cpp
+
 UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)  
 MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)  
 STORE_OBJS        := $(STORE_SRC:.cpp=.o)  
+APPS_OBJS         := $(APPS_SRC:.cpp=.o)  
 
 LDFLAGS += -lpthread -lsqlite3 -ldl
 CXXFLAGS += -DHAVE_PTHREADS
@@ -47,11 +51,11 @@ CXXFLAGS += -DHAVE_PTHREADS
 #
 #
 
-networkdb_test:NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS)
-	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/ -I ../sqlite/
+networkdb_test:NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(APPS_OBJS)
+	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(APPS_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/ -I ../sqlite/ -I ./apps/
 
 $(UTILS_OBJS):%.o : %.cpp
-	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/ -I ./model/
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/
 
 $(MODEL_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ./utils/
@@ -59,5 +63,8 @@ $(MODEL_OBJS):%.o : %.cpp
 $(STORE_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/
 
+$(APPS_OBJS):%.o : %.cpp
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./store
+
 clean:
-	rm -r utils/*.o model/*.o store/*.o
+	rm -r utils/*.o model/*.o store/*.o apps/*.o

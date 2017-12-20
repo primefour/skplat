@@ -102,12 +102,12 @@ int NetworkDatabase::xDnsVCallback(KeyedHash<std::string,ColumnEntry> *colEntrie
     //get array of socket address
     Vector<SocketAddress> *saArray  = (Vector<SocketAddress> *)pArgs ;
     //create socket address entry
-    if(colEntries->get(hostKey) == KeyedHash<std::string ,ColumnEntry >::mInvalidate){
-        ALOGD("get invalidate key %s ",hostKey.c_str());
+    if(colEntries->get(hostKey) == KeyedHash<std::string ,ColumnEntry >::mNullItem){
+        ASSERT(false,"get invalidate key %s ",hostKey.c_str());
     }
 
-    if(colEntries->get(ipKey) == KeyedHash<std::string ,ColumnEntry >::mInvalidate){
-        ALOGD("get invalidate key %s ",ipKey.c_str());
+    if(colEntries->get(ipKey) == KeyedHash<std::string ,ColumnEntry >::mNullItem){
+        ASSERT(false,"get invalidate key %s ",ipKey.c_str());
     }
 
     SocketAddress sa(colEntries->get(hostKey).getString(),colEntries->get(ipKey).getString());
@@ -201,6 +201,11 @@ int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colE
         return UNKNOWN_ERROR;
     }
     ASSERT(pArgs != NULL,"Invalidate paramerter pArgs is NULL");
+
+    if(colEntries->get(taskIdKey) == KeyedHash<std::string ,ColumnEntry>::mNullItem){
+        ASSERT(false,"get task id invalidate key %s ",taskIdKey.c_str());
+    }
+
     Vector<TaskInfo> *pTaskArray = (Vector<TaskInfo>*)pArgs;
     TaskInfo ti;
     ti.mTaskId = colEntries->get(taskIdKey).getString();

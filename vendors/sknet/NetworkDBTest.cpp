@@ -5,6 +5,7 @@
 #include "BufferUtils.h"
 #include "Vector.h"
 #include "SocksConnect.h"
+#include "DNSCache.h"
 /*
  *localhost:10443
  */
@@ -54,5 +55,17 @@ int main(){
     if(ret != OK){
         ALOGD("connect fail ");
     }
+    DnsCache Cache;
+    const Vector<SocketAddress> &jdAddrs = Cache.getAddrs("www.jd.com","http");
+    if(jdAddrs.size() != 0){
+        SocksConnect jdConnect(jdAddrs);
+        ret = jdConnect.connect(5000);
+        if(ret != OK){
+            ALOGD("jdconnect fail ");
+        }
+    }else{
+        ALOGD("failed to get address");
+    }
+
     return 0;
 }

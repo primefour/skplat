@@ -21,13 +21,15 @@ class LruCache :RefBase{
         virtual ~LruCache();
         //get value by key
         const VALUE& get(KEY& key);
+        //get for edit
+        VALUE& editGet(KEY& key);
         //remove item by key 
         void remove(KEY& key);
         //add item
         int add(KEY& key,VALUE& Value);
 
         //invalidate value for get
-        VALUE mInvalidate;
+        static VALUE mNullItem;
     private:
         //when contain is full,shrink count size for new items
         void shrinkCache();
@@ -100,11 +102,26 @@ template<typename KEY,typename VALUE>
 const VALUE& LruCache<KEY,VALUE>::get(KEY& key){
     int idx = mContain.find(-1,mFpnhashCode(key),key);
     if(idx == -1 ){
-        return mInvalidate;
+        return mNullItem;
     }
     //update time
     mElapses[idx]= nowTime();
     return mContain.entryAt(idx);
+}
+
+
+/*
+ * don't change the key using this function
+ */
+template<typename KEY,typename VALUE>
+VALUE& LruCache<KEY,VALUE>::editGet(KEY& key){
+    int idx = mContain.find(-1,mFpnhashCode(key),key);
+    if(idx == -1 ){
+        return mNullItem;
+    }
+    //update time
+    mElapses[idx]= nowTime();
+    return mContain.editEntryAt(idx);
 }
 
 

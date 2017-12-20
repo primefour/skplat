@@ -11,7 +11,7 @@ static const int SQLITE_ENABLE_PROFILE = 1;
 
 bool SqliteWrapper::mVerboseLog = true;
 
-template<> ColumnEntry KeyedHash<std::string ,ColumnEntry >::mInvalidate  = ColumnEntry();
+template<> ColumnEntry KeyedHash<std::string ,ColumnEntry >::mNullItem= ColumnEntry();
 
 SqliteWrapper::SqliteWrapper(std::string path):mDatabasePath(path){
     ALOGD("database create");
