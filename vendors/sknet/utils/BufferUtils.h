@@ -16,6 +16,7 @@ class BufferUtils :public RefBase{
         void setTo(const BufferUtils& buffer);
         void setTo(char *data,size_t size);
         const char* data() const;
+        char* data() ;
         size_t size() const;
         size_t capacity() const;
         void release();

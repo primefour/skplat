@@ -129,7 +129,11 @@ size_t BufferUtils::append(BufferUtils& buffer){
 }
 
 const char* BufferUtils::data()const{
-    return (char *)mBuffer;
+    return (char *)(mBuffer + mOffset);
+}
+
+char* BufferUtils::data()const{
+    return (char *)(mBuffer + mOffset);
 }
 
 size_t BufferUtils::size() const{
