@@ -87,6 +87,6 @@ int main(){
     ALOGD("header to string is \n%s ",xTmpbuff.data());
 
     HttpTransfer transfer;
-    transfer.doGet("http://www.baidu.com");
+    transfer.doGet("http://www.163.com");
     return 0;
 }

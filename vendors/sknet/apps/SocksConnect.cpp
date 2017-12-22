@@ -223,6 +223,7 @@ int SocksConnect::connect(long timeout){ //millisecond
  *return fd should close by user
  */
 int SocksConnect::getSocket(){
+    ALOGD("mError %d  mConnFdIdx  = %d ",mError,mConnFdIdx);
     if(!mError && mConnFdIdx != -1){
         return dup(mFds[mConnFdIdx]);
     }else{

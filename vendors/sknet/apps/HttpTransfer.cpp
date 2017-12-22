@@ -34,7 +34,7 @@ int HttpTransfer::doPost(const char *url,BufferUtils &buff){
 int HttpTransfer::HttpGet(HttpRequest *req){
     //get Address
     sp<DnsCache>& Cache = DnsCache::getInstance() ;
-    Vector<SocketAddress> addrs = Cache->getAddrs(req->mUrl.mHost.c_str(),req->mUrl.mPort.empty()?NULL:req->mUrl.mPort.c_str());
+    Vector<SocketAddress> addrs = Cache->getAddrs(req->mUrl.mHost.c_str(),req->mUrl.mPort.empty()?"http":req->mUrl.mPort.c_str());
     //connect to server
     SocksConnect connect(addrs);
     int ret = connect.connect(5000);

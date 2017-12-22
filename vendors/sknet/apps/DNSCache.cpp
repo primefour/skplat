@@ -68,7 +68,7 @@ int DnsCache::getAddrInfo(const char *host,const char *service){
         if(rp->ai_family ==AF_INET){
             struct sockaddr_in *xaddr = (struct sockaddr_in *) rp->ai_addr;
             inet_ntop(rp->ai_family,&(xaddr->sin_addr),xbuff,sizeof(xbuff));
-            ALOGD("address %s  \n",xbuff);
+            ALOGD("service = %s address %s  port %d \n",service,xbuff,ntohs(xaddr->sin_port));
             SocketAddress sa(host,xbuff,xaddr);
             //add to cache
             hostAddrs.mAddrs.push(sa);
@@ -77,7 +77,7 @@ int DnsCache::getAddrInfo(const char *host,const char *service){
         }else if(rp->ai_family == AF_INET6){
             struct sockaddr_in6 *xaddr6 = (struct sockaddr_in6 *) rp->ai_addr;
             inet_ntop(rp->ai_family,&(xaddr6->sin6_addr),xbuff,sizeof(xbuff));
-            ALOGD("address %s  \n",xbuff);
+            ALOGD("service = %s address %s  port %d \n",service,xbuff,ntohs(xaddr6->sin6_port));
             SocketAddress sa6(host,xbuff,xaddr6);
             //add to cache
             hostAddrs.mAddrs.push(sa6);
