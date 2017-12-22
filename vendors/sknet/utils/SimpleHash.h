@@ -25,7 +25,7 @@ class SimpleHash:RefBase{
         const VALUE& get(KEY& key,int *idx);
 
         //remove item by key 
-        void remove(KEY& key);
+        void remove(KEY& key,int *idx);
 
         //for scan entries
         //first index should set -1 or NULL to get fisrt entry
@@ -33,9 +33,9 @@ class SimpleHash:RefBase{
         const VALUE& next(int *index) const {
             int i = 0;
             if(index == NULL){
-                 i = BasicHashtableImpl::next(-1);
+                 i = mContain.next(-1);
             }else{
-                i = BasicHashtableImpl::next(*index);
+                i = mContain.next(*index);
                 if(index != NULL){
                     *index = i;
                 }
@@ -43,7 +43,7 @@ class SimpleHash:RefBase{
                     return mNullItem;
                 }
             }
-            return mContain.entryAt(idx);
+            return mContain.entryAt(i);
         }
 
         //add entry and return idx of entry
@@ -84,7 +84,7 @@ const VALUE& SimpleHash<KEY,VALUE>::get(KEY& key,int *idx){
         return mNullItem;
     }
     *idx = i;
-    return mContain.entryAt(idx);
+    return mContain.entryAt(*idx);
 }
 
 

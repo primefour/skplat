@@ -1,12 +1,107 @@
+#include"HttpTransfer.h"
+#include"SocksConnect.h"
+#include"Vector.h"
+#include"DNSCache.h"
+#include"SocketAddress.h"
+#include"BufferUtils.h"
+#include"Url.h"
+#include"HttpHeader.h"
+#include<unistd.h>
+#include<fcntl.h>
+#include<string>
 
-void
+int HttpTransfer::doGet(const char *url){
+    //create a get request obj
+    HttpRequest *req= new HttpRequest();
+    req->mMethod = "GET";
+    if(Url::parseUrl(url,&(req->mUrl)) == NULL){
+        return BAD_VALUE;
+    }
+    req->mHeader.setEntry("Accept","*/*");
+    req->mHeader.setEntry("User-Agent","sknet");
+    req->mHeader.setEntry("Accept-Language","zh-cn,zh;q=0.5");
+    req->mHeader.setEntry("Accept-Charset","GBK,utf-8;q=0.7,*;q=0.7");
+    req->mHeader.setEntry("Connection","keep-alive");
+    req->mHeader.setEntry("Content-Length","%d",0);
+    HttpGet(req);
+    delete(req);
+}
+
+int HttpTransfer::doPost(const char *url,BufferUtils &buff){
+    //create a post request obj
+}
+
+int HttpTransfer::HttpGet(HttpRequest *req){
+    //get Address
+    sp<DnsCache>& Cache = DnsCache::getInstance() ;
+    Vector<SocketAddress> addrs = Cache->getAddrs(req->mUrl.mHost.c_str(),req->mUrl.mPort.empty()?NULL:req->mUrl.mPort.c_str());
+    //connect to server
+    SocksConnect connect(addrs);
+    int ret = connect.connect(5000);
+    if(ret != OK){
+        ALOGD("connect fail ");
+    }
+    int fd = connect.getSocket();
+    ALOGD("fd = %d ",fd);
+    //reset for use again
+    //connect.reset();
+
+    BufferUtils sendBuffer;
+    char tmpBuff[1024]={0};
+    snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),req->mUrl.mHref.c_str(),req->mProto.c_str());
+    sendBuffer.append(tmpBuff,strlen(tmpBuff));
+
+    req->mHeader.toString(sendBuffer);
+
+    ALOGD("%s ",sendBuffer.data());
+
+    int n = 0;
+    int nsended = 0;
+    while(nsended < sendBuffer.size()){
+        n = write(fd,sendBuffer.data(),sendBuffer.size() - n);
+        if(n > 0){
+            sendBuffer.offset(n,SEEK_CUR);
+            nsended += n;
+        }else if(n < 0){
+            ALOGD("send data fail %p size: %zd  ret = %d err :%s ",sendBuffer.data(),sendBuffer.size(),n,strerror(errno));
+            mError ++;
+            break;
+        }
+    }
+    if(mError){
+        return UNKNOWN_ERROR;
+    }
+    n = 0;
+    BufferUtils recvBuffer;
+    int nrecved = 0;
+    while(1){
+        n = read(fd,tmpBuff,sizeof(tmpBuff));
+        if(n > 0){
+            recvBuffer.append(tmpBuff,n);
+            nrecved += n;
+        }else if(n < 0){
+            ALOGD("recv data fail %p size: %zd ",recvBuffer.data(),recvBuffer.size());
+            mError ++;
+            break;
+        }else{
+            ALOGD("recv data complete %p size: %zd ",recvBuffer.data(),recvBuffer.size());
+            break;
+        }
+
+    }
+    ALOGD("%s ",recvBuffer.data());
+    close(fd);
+}
+    
+
+/*
+    void
 http_get(http_t *conn, char *lurl)
 {
 	*conn->request = 0;
 	if (conn->proxy) {
 		const char *proto = scheme_from_proto(conn->proto);
-		http_addheader(conn, "GET %s%s%s HTTP/1.0", proto, conn->host,
-			       lurl);
+		http_addheader(conn, "GET %s%s%s HTTP/1.0", proto, conn->host, lurl);
 	} else {
 		http_addheader(conn, "GET %s HTTP/1.0", lurl);
 		if ((conn->proto == PROTO_HTTP &&
@@ -23,7 +118,7 @@ http_get(http_t *conn, char *lurl)
 	if (*conn->proxy_auth)
 		http_addheader(conn, "Proxy-Authorization: Basic %s",
 			       conn->proxy_auth);
-	http_addheader(conn, "Accept: */*");
+	http_addheader(conn, "Accept: *//*");
 	if (conn->firstbyte) {
 		if (conn->lastbyte)
 			http_addheader(conn, "Range: bytes=%lld-%lld",
@@ -126,3 +221,4 @@ httpPost.setEntity(mutiEntity);
 HttpResponse  httpResponse = httpClient.execute(httpPost);
 HttpEntity httpEntity =  httpResponse.getEntity();
 String content = EntityUtils.toString(httpEntity);
+*/

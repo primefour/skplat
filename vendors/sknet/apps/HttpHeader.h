@@ -1,10 +1,5 @@
-/*******************************************************************************
- **      Filename: apps/HttpHeader.h
- **        Author: crazyhorse                  
- **   Description: ---
- **        Create: 2017-12-20 18:09:04
- ** Last Modified: 2017-12-20 18:09:04
- ******************************************************************************/
+#ifndef __HTTP_HEADER_H__
+#define __HTTP_HEADER_H__
 // ReadMIMEHeader reads a MIME-style header from r.
 // The header is a sequence of possibly continued Key: Value lines
 // ending in a blank line.
@@ -83,32 +78,39 @@
 //    }; 
 //
 //http header entry
+
+#include<string>
+#include"BufferUtils.h"
+#include"SimpleHash.h"
+#include"TypeHelpers.h"
+
 struct HttpHeaderEntry{
     std::string mKey;
     const std::string getKey() const{
         return mKey;
     }
     std::string mValue;
+    bool operator==(const HttpHeaderEntry &k) const{
+        return mKey ==k.mKey;
+    }
 };
 
 struct HttpHeader{
-        //response
-        static HttpHeader& parser(BufferUtils &buffer,HttpHeader& header);
-        //get entry value 
-        const std::string& getValues(const std::string key);
-        //get entry value 
-        const std::string& getValues(const char *key);
-
-        //create request header
-        const char *toString();
-        //create request header
-        char *toString(char *buff);
-
-        //add entry
-        void setEntry(const std::string key,const std::value);
-        void setEntry(const char *value,const char *format,...);
-
-        //entries key=>value
-        BasicHashtable<std::string,HttpHeaderEntry> mEntries;
+    HttpHeader():mEntries(20,getStringHash){
+    }
+    //static function to parser header only
+    //Buffer is data of header
+    static HttpHeader* parser(BufferUtils &buffer,HttpHeader *ptrHeader);
+    //add entry
+    void setEntry(const std::string key,const std::string value);
+    void setEntry(const char *key,const char *format,...);
+    void toString(BufferUtils &buffer);
+    //get entry value 
+    const std::string& getValues(const std::string key);
+    //get entry value 
+    const std::string& getValues(const char *key);
+    //entries key=>value
+    SimpleHash<std::string,HttpHeaderEntry> mEntries;
 };
 
+#endif //

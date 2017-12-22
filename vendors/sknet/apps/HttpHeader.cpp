@@ -1,29 +1,16 @@
 #include"HttpHeader.h"
 #include"SimpleHash.h"
+#include<string.h>
+#include<string>
+#include"AppUtils.h"
+#include<stdarg.h>
 
 static const char lineHints[] = "\r\n";
-
-struct HttpHeader{
-        //get entry value 
-        const std::string& getValues(const std::string key);
-        //get entry value 
-        const std::string& getValues(const char *key);
-
-        //create request header
-        void toString(BufferUtils &buffer);
-
-        //add entry
-        void setEntry(const std::string key,const std::value);
-
-        void setEntry(const char *value,const char *format,...);
-
-        //entries key=>value
-        SimpleHash<std::string,HttpHeaderEntry> mEntries;
-};
-
+template<> HttpHeaderEntry SimpleHash<std::string, HttpHeaderEntry>::mNullItem = HttpHeaderEntry();
+#define MAX_STRING       (1024) 
 //static function to parser header only
 //Buffer is data of header
-static HttpHeader* HttpHeader::parser(BufferUtils &buffer,HttpHeader *ptrHeader){
+HttpHeader* HttpHeader::parser(BufferUtils &buffer,HttpHeader *ptrHeader){
     //get size of buffer data 
     int size = buffer.offset(0,SEEK_END);
     //seek to 0
@@ -44,13 +31,13 @@ static HttpHeader* HttpHeader::parser(BufferUtils &buffer,HttpHeader *ptrHeader)
     while(newLine != NULL && (newLine - data) < size){
         std::string entryString =  ::trim(lineStart,newLine-lineStart);
         //split key and value
-        std::size_t pos = str.find(":");
+        std::size_t pos = entryString.find(":");
 
         newLine +=sizeof(lineHints);
         lineStart = newLine;
         newLine = strstr(lineStart,lineHints);
         if(pos < 0){
-            ALOGW("get a imform header %s ",entryString.c_str()); 
+            ALOGW("get a malform header %s ",entryString.c_str()); 
             continue ;
         }
         std::string key = ::trim(entryString.c_str(),pos);
@@ -61,15 +48,12 @@ static HttpHeader* HttpHeader::parser(BufferUtils &buffer,HttpHeader *ptrHeader)
 }
 
 //add entry
-void HttpHeader::setEntry(const std::string key,const std::value){
+void HttpHeader::setEntry(const std::string key,const std::string value){
     HttpHeaderEntry tmpEntry;
-    tmpEntry->mKey = key;
-    tmpEntry->mValue = value;
-    mEntries.add(key,tmpEntry);
+    tmpEntry.mKey = key;
+    tmpEntry.mValue = value;
+    mEntries.add(tmpEntry.mKey,tmpEntry);
 }
-
-
-#define MAX_STRING       (1024) 
 
 void HttpHeader::setEntry(const char *key,const char *format,...){
 	char s[MAX_STRING] ={0};
@@ -78,9 +62,9 @@ void HttpHeader::setEntry(const char *key,const char *format,...){
 	vsnprintf(s, sizeof(s), format, params);
 	va_end(params);
     HttpHeaderEntry tmpEntry;
-    tmpEntry->mKey = key;
-    tmpEntry->mValue = s;
-    mEntries.add(key,tmpEntry);
+    tmpEntry.mKey = key;
+    tmpEntry.mValue = s;
+    mEntries.add(tmpEntry.mKey,tmpEntry);
 }
 
 
@@ -88,11 +72,11 @@ void HttpHeader::toString(BufferUtils &buffer){
     //scan header and create buffer
     int idx = -1;
     while(1){
-        const HttpHeaderEntry &tmpEntry = mEnties.next(&idx);
-        if(tmpEntry == mEnties.getNull()){
+        const HttpHeaderEntry &tmpEntry = mEntries.next(&idx);
+        if(tmpEntry == mEntries.getNull()){
             break;
         }
-        buffer.append(tmpEntry.mkey.c_str(),tmpEntry.mkey.size());
+        buffer.append(tmpEntry.mKey.c_str(),tmpEntry.mKey.size());
         buffer.append(":",1);
         buffer.append(tmpEntry.mValue.c_str(),tmpEntry.mValue.size());
         buffer.append("\r\n",2);
@@ -100,13 +84,14 @@ void HttpHeader::toString(BufferUtils &buffer){
 }
 
 //get entry value 
-const std::string& getValues(const std::string key){
+const std::string& HttpHeader::getValues(std::string key){
     int idx = -1;
-    return mEntries.get(key,&idx);
+    const HttpHeaderEntry &tmp = mEntries.get(key,&idx);
+    return tmp.mValue;
 }
 
 //get entry value 
-const std::string& getValues(const char *key){
+const std::string& HttpHeader::getValues(const char *key){
     std::string xkey = key;
     return getValues(xkey);
 }

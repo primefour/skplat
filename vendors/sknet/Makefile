@@ -35,7 +35,12 @@ STORE_SRC :=store/NetworkDatabase.cpp \
 	store/SqliteWrapper.cpp
 
 APPS_SRC := apps/SocksConnect.cpp \
-	apps/DNSCache.cpp
+	apps/DNSCache.cpp \
+	apps/Url.cpp \
+	apps/AppUtils.cpp \
+	apps/HttpHeader.cpp \
+	apps/HttpTransfer.cpp
+
 
 UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)  
 MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)  

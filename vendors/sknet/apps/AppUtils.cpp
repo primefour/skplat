@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<string.h>
 #include<string>
-#include"Utils.h"
 static std::string NullString = std::string();
 static const int toLower = 'a' - 'A';
 // For invalid inputs (if a contains spaces or non-token bytes), a

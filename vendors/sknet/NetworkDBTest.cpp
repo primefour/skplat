@@ -6,6 +6,10 @@
 #include "Vector.h"
 #include "SocksConnect.h"
 #include "DNSCache.h"
+#include "Url.h"
+#include "HttpHeader.h"
+#include "HttpTransfer.h"
+
 /*
  *localhost:10443
  */
@@ -55,8 +59,9 @@ int main(){
     if(ret != OK){
         ALOGD("connect fail ");
     }
-    DnsCache Cache;
-    const Vector<SocketAddress> &jdAddrs = Cache.getAddrs("www.jd.com","http");
+
+    sp<DnsCache> Cache = DnsCache::getInstance();
+    const Vector<SocketAddress> &jdAddrs = Cache->getAddrs("www.jd.com","http");
     if(jdAddrs.size() != 0){
         SocksConnect jdConnect(jdAddrs);
         ret = jdConnect.connect(5000);
@@ -67,5 +72,21 @@ int main(){
         ALOGD("failed to get address");
     }
 
+    // schema://username:password@host:port/path?key=value#fragment
+    Url tmpUrl;
+    Url::parseUrl("http://www.baidu.com:1010/?hello=xjk&helk=jj",&tmpUrl);
+    Url::dumpUrl(&tmpUrl);
+
+    HttpHeader header ;
+    ALOGD("exit");
+    header.setEntry("Hello","World");
+    header.setEntry("world","this is %s ","world");
+    BufferUtils xTmpbuff ;
+    header.toString(xTmpbuff);
+    xTmpbuff.offset(0,SEEK_SET);
+    ALOGD("header to string is \n%s ",xTmpbuff.data());
+
+    HttpTransfer transfer;
+    transfer.doGet("http://www.baidu.com");
     return 0;
 }

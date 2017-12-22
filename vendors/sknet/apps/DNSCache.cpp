@@ -17,10 +17,26 @@
 #include "BufferUtils.h"
 #include "Vector.h"
 #include "SocksConnect.h"
+#include "RefBase.h"
+
+static Mutex gDnsCacheMutex;
 
 template<> HostAddress LruCache<std::string, HostAddress>::mNullItem = HostAddress();
-DnsCache::DnsCache(int count):mHostCache(count,getStringHash){
+sp<DnsCache> DnsCache::mDnsCacheInst = NULL;
+//mutex for single instance
+
+sp<DnsCache>& DnsCache::getInstance(){
+    AutoMutex _l(gDnsCacheMutex);
+    if(mDnsCacheInst == NULL){
+        mDnsCacheInst = new DnsCache(20);
+    }
+    return mDnsCacheInst;
 }
+
+DnsCache::DnsCache(int count):mHostCache(count,getStringHash){
+
+}
+
 /*
  * get host address by host name and service type
  * eg:www.baidu.com,http/8080

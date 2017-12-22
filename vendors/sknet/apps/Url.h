@@ -8,6 +8,9 @@
 
 #ifndef __URL_H__
 #define __URL_H__
+#include<string>
+#include"KeyedHash.h"
+#include"TypeHelpers.h"
 
 /*
  * parse url like this
@@ -26,12 +29,12 @@
  */
 struct Query{
     std::string mKey;
-    const char *getKey(){
+    const std::string getKey() const{
         return mKey;
     }
     std::string mValue;
     std::string toString(){
-        return mKey+?+mValue; 
+        return mKey+"="+mValue; 
     }
 };
 
@@ -45,8 +48,13 @@ struct Url{
     std::string mPath;
     std::string mFragment;
     KeyedHash<std::string,Query> mQueries;
-    void parseLocation(const char *url);
-    static int parse(const char *url,Url &url);
+    Url():mQueries(10,getStringHash){
+    }
+    void parseReloc(const char *str);
+    static void parseQuery(const char *query,Url *url);
+    static std::string dupString(const char *str, int n);
+    static Url* parseUrl(const char *str,Url *url);
+    static void dumpUrl(Url*url);
 };
 #endif /* !__URI_H__ */
 

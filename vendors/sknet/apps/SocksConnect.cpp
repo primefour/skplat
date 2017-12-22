@@ -24,21 +24,18 @@
 /* create mutil-address connect*/
 SocksConnect::SocksConnect(const Vector<SocketAddress>& Addrs){
     mAddrs = Addrs;
-    //non-block
-    pipe2(mPipe,0);
     //init sockets
     initSocket();
 }
 /*create one address connect*/
 SocksConnect::SocksConnect(SocketAddress&Addrs){
     mAddrs.add(Addrs); 
-    //non-block
-    pipe2(mPipe,0);
     //init sockets
     initSocket();
 }
 
 SocksConnect::~SocksConnect(){
+    ALOGD("%s %d ",__func__,__LINE__);
     dispose();
 }
 
@@ -46,6 +43,9 @@ SocksConnect::~SocksConnect(){
 int SocksConnect::interrupt(){
     if(mMutex.tryLock() != 0){
         char aa ;
+        ALOGD(" wait for read ");
+        //mMutex.lock();
+        ALOGD(" wait for read 2");
         return read(mPipe[0],&aa,1);
     }else{
         mMutex.unlock();
@@ -54,6 +54,7 @@ int SocksConnect::interrupt(){
 }
 
 void SocksConnect::initSocket(){
+    pipe2(mPipe,0);
     //create socket for each address
     int size = mAddrs.size();
     mFds = new int[size *2];
@@ -80,24 +81,19 @@ void SocksConnect::initSocket(){
 
 //dispose 
 void SocksConnect::dispose(){
-    //if connecting state,interrupt the connect state 
-    //and then reset all state
-    if(mMutex.tryLock() != 0){
-        interrupt();
-    }else{
-        mMutex.unlock();
-    }
     //wait for connect function getting out
-    {
-        mMutex.lock();
-        int size = mAddrs.size();
-        int i = 0;
-        for (i = 0 ;i < size;i++){
-            close(mFds[i]);
-        }
-        delete[] mFds;
-        mFds = NULL;
+    mMutex.lock();
+    if(mPipe[0] > 0){
+        close(mPipe[0]);
+        close(mPipe[1]);
     }
+    int size = mAddrs.size();
+    int i = 0;
+    for (i = 0 ;i < size;i++){
+        close(mFds[i]);
+    }
+    delete[] mFds;
+    mFds = NULL;
 }
 
 //reset
@@ -219,6 +215,7 @@ int SocksConnect::connect(long timeout){ //millisecond
             }
         }
     }
+    ALOGD("connect exit");
 }
 
 /*
