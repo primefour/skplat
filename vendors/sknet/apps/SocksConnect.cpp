@@ -42,11 +42,8 @@ SocksConnect::~SocksConnect(){
 //interrupt select wait
 int SocksConnect::interrupt(){
     if(mMutex.tryLock() != 0){
-        char aa ;
-        ALOGD(" wait for read ");
-        //mMutex.lock();
-        ALOGD(" wait for read 2");
-        return read(mPipe[0],&aa,1);
+        ALOGD(" wait for read socks connect");
+        return write(mPipe[1],"a",1);
     }else{
         mMutex.unlock();
     }
@@ -169,14 +166,16 @@ int SocksConnect::connect(long timeout){ //millisecond
         return UNKNOWN_ERROR;
     }
 
-    FD_SET(mPipe[1],&wrSet);
-    if(maxFd < mPipe[1]) {
-        maxFd = mPipe[1];
+    fd_set rdSet;
+    FD_ZERO(&rdSet); 
+    FD_SET(mPipe[0],&rdSet);
+    if(maxFd < mPipe[0]) {
+        maxFd = mPipe[0];
     }
     //select wait for connect
     maxFd += 1;
     ALOGD("call select start maxFd =%d ",maxFd);
-    ret = select(maxFd,NULL,&wrSet,NULL,timeout == -1 ?NULL:&tv); 
+    ret = select(maxFd,&rdSet,&wrSet,NULL,timeout == -1 ?NULL:&tv); 
     ALOGD("call select end ");
 
     if (ret < 0){//select exception
@@ -185,16 +184,24 @@ int SocksConnect::connect(long timeout){ //millisecond
         mDuration.stop();
         return UNKNOWN_ERROR;
     } else if (0 == ret) {//timeout
+        ALOGW("socket connect timeout %s ",strerror(errno));
         mDuration.stop();
         mError = 1;
         return TIMEOUT_ERROR;
     } else { //connect
+        //check pipe 
+        if(FD_ISSET(mPipe[0],&rdSet)){
+            ALOGD("socket connect abort by user");
+            return ABORT_ERROR;
+        }
+
         size = mAddrs.size();
         i = 0 ;
         int optValue  =-1;
         socklen_t optSize = sizeof(optValue);
-
+        ALOGD("socket connect successfuly and then filter fd");
         for (i = 0 ;i < size;i ++){
+            ALOGD("socket connect successfuly and check fd %d ",mFds[i]); 
             if(FD_ISSET(mFds[i],&wrSet)) {//connect
                 if (getsockopt(mFds[i],SOL_SOCKET,SO_ERROR,&optValue,&optSize) < 0) { 
                     ALOGW("getsockopt fail error string %s fd %d",strerror(errno),mFds[i]);

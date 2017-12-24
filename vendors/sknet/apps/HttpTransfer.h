@@ -74,8 +74,10 @@
 #include"HttpHeader.h"
 #include<unistd.h>
 #include<fcntl.h>
+#include"RefBase.h"
+#include"TaskInfo.h"
 
-class HttpTransfer{
+class HttpTransfer :RefBase{
     enum{
             StatusContinue           = 100,// RFC 7231, 6.2.1
             StatusSwitchingProtocols = 101,// RFC 7231, 6.2.2
@@ -160,35 +162,31 @@ class HttpTransfer{
             mFd = -1;
             mState = HTTP_INIT;
             mRequest = NULL;
-            pipe2(mPipe,0);
+            pipe2(mPipe,O_NONBLOCK);
             mError = 0;
         }
-        int  interrupt(){//may be block
-            if(mMutex.tryLock() != 0){
-                char aa ;
-                ALOGD(" http transfer wait for read ");
-                return read(mPipe[0],&aa,1);
-            }else{
-                mMutex.unlock();
-            }
-            return 0;
+
+        void interrupt(){//may be block
+            ALOGD(" http transfer wait for write");
+            write(mPipe[1],"a",1);
+            return ;
         }
+
         void dispose(){
+            close(mPipe[0]);
+            close(mPipe[1]);
             if(mFd != -1){
                 close(mFd);
                 mFd = -1;
             }
             mState = HTTP_INIT;
-            if(mRequest != NULL){
-                delete mRequest;
-            }
-            close(mPipe[0]);
-            close(mPipe[1]);
         }
+
         void reset(){
             dispose();
             init();
         }
+
         int doGet(const char *url);
         int doPost(const char *url,BufferUtils &buff);
         int HttpGet(HttpRequest *req);
@@ -198,9 +196,10 @@ class HttpTransfer{
         int mPipe[2];
         int mError;
         DurationTimer mDuration;
+        sp<HttpRequest> mRequest;
+        sp<HttpResponse> mResponse;
+        TaskInfo *mTask;
         Mutex mMutex;
-        HttpRequest  *mRequest;
-        //HttpResponse *mResponse;
 };
 
 #endif //__HTTP_H__

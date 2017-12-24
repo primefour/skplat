@@ -1,12 +1,23 @@
 #ifndef __HTTP_REQUEST_H__
 #define __HTTP_REQUEST_H__
-
 #include"Url.h"
 #include"HttpHeader.h"
 #include"BufferUtils.h"
-
 #include<string>
-struct HttpRequest{
+#include"RefBase.h"
+#include"HttpResponse.h"
+
+struct HttpResponse;
+
+struct HttpRequest:public RefBase{
+    HttpRequest(){
+        mProtoMajor = 1;
+        mProtoMinor = 1;
+        mProto = "HTTP/1.1"; 
+        mClose = true;
+        mUseProxy = false;
+        mContentLength = 0;
+    }
 	// Method specifies the HTTP method (GET, POST, PUT, etc.).
 	// For client requests an empty string means GET.
     std::string mMethod; 
@@ -53,6 +64,12 @@ struct HttpRequest{
 	// TCP connections between requests to the same hosts, as if
 	// Transport.DisableKeepAlives were set.
 	bool mClose; 
+    // response from server
+    sp<HttpResponse> mResp;
+
+    //Proxy url
+    Url mProxyUrl;
+    bool mUseProxy;
 };
 
 #endif //__HTTP_REQUEST_H__

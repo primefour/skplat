@@ -9,6 +9,30 @@
 #include<unistd.h>
 #include<fcntl.h>
 #include<string>
+#include"Log.h"
+/*
+GET / HTTP/1.1
+Host: www.163.com
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*
+/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: vjuids=-3dd6df54d.15e9ad44c20.0.5ce710462eea; _ntes_nnid=5fa8714d6ebdf9ab84afc38eb5322a23,1505836157990; usertrack=c+xxClnBPH6NJ66MBFFFAg==; _ntes_nuid=5fa8714d6ebdf9ab84afc38eb5322a23; UM_distinctid=15e9ad4cb11106-08a044a68e29-1c29160a-1fa400-15e9ad4cb12462; __gads=ID=b69a461dd3308690:T=1505836191:S=ALNI_MbOv77TDsxHiHEimeD1bCNsaE7O3A; mail_psc_fingerprint=d5d80616f93a7a977100394b9c21a1df; P_INFO=primefour@163.com|1511711367|0|163|00&21|shh&1511410577&163#shh&null#10#0#0|158993&0|163&mail163|primefour@163.com; Province=021; City=021; vjlast=1505836158.1514081471.11; NNSSPID=a4ba10487e644f73a8a90f05932ad86c; vinfo_n_f_l_n3=7d24fc61281cd963.1.10.1505836157998.1514081879084.1514083480106; NTES_hp_textlink1=old
+
+
+GET / HTTP/1.1
+Host:www.163.com
+User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Content-Length:0
+/* q=0.8
+*/
 
 int HttpTransfer::doGet(const char *url){
     //create a get request obj
@@ -17,14 +41,26 @@ int HttpTransfer::doGet(const char *url){
     if(Url::parseUrl(url,&(req->mUrl)) == NULL){
         return BAD_VALUE;
     }
-    req->mHeader.setEntry("Accept","*/*");
-    req->mHeader.setEntry("User-Agent","sknet");
-    req->mHeader.setEntry("Accept-Language","zh-cn,zh;q=0.5");
-    req->mHeader.setEntry("Accept-Charset","GBK,utf-8;q=0.7,*;q=0.7");
-    req->mHeader.setEntry("Connection","keep-alive");
+    req->mProto="HTTP/1.1";
+    req->mProtoMajor = 1;
+    req->mProtoMinor = 1;
+    req->mHeader.setEntry("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
+    req->mHeader.setEntry("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
+    req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
+    //req->mHeader.setEntry("Connection","close");
+    //req->mHeader.setEntry("Connection","keep-alive");
+    //req->mHeader.setEntry("Accept-Encoding","gzip, deflate");
     req->mHeader.setEntry("Content-Length","%d",0);
+    //set host entry
+    req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
+
+    //set requst and response
+    mRequest = req;
+    HttpResponse *response = new HttpResponse();
+    mRequest->mResp = response;
+    mResponse = response;
+    mResponse->mRequest = req;
     HttpGet(req);
-    delete(req);
 }
 
 int HttpTransfer::doPost(const char *url,BufferUtils &buff){
@@ -32,65 +68,167 @@ int HttpTransfer::doPost(const char *url,BufferUtils &buff){
 }
 
 int HttpTransfer::HttpGet(HttpRequest *req){
-    //get Address
+    const char *host = NULL;
+    const char *service = NULL;
+    if(req->mUseProxy){
+        host = req->mProxyUrl.mHost.c_str();
+        if(req->mProxyUrl.mPort.empty()){
+            service = req->mProxyUrl.mSchema.c_str();
+        }else{
+            service = req->mProxyUrl.mPort.c_str();
+        }
+    }else{
+        host = req->mUrl.mHost.c_str();
+        if(req->mUrl.mPort.empty()){
+            service = req->mUrl.mSchema.c_str();
+        }else{
+            service = req->mUrl.mPort.c_str();
+        }
+    }
+
+    //get address using dns cache
     sp<DnsCache>& Cache = DnsCache::getInstance() ;
-    Vector<SocketAddress> addrs = Cache->getAddrs(req->mUrl.mHost.c_str(),req->mUrl.mPort.empty()?"http":req->mUrl.mPort.c_str());
+    //get Address
+    Vector<SocketAddress> addrs = Cache->getAddrs(host,service);
+
     //connect to server
     SocksConnect connect(addrs);
-    int ret = connect.connect(5000);
-    if(ret != OK){
-        ALOGD("connect fail ");
+    int ret = 0;
+    if(mTask != NULL){
+        ret = connect.connect(mTask->mConnTimeout);
+    }else{
+        ret = connect.connect();
     }
-    int fd = connect.getSocket();
-    ALOGD("fd = %d ",fd);
-    //reset for use again
-    //connect.reset();
+
+    if(ret != OK){
+        ALOGD("http get connect fail ");
+        return UNKNOWN_ERROR;   
+    }
+
+    //get validate socket fd
+    mFd = connect.getSocket();
+    ALOGD("socket fd = %d ",mFd);
 
     BufferUtils sendBuffer;
     char tmpBuff[1024]={0};
-    snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),req->mUrl.mHref.c_str(),req->mProto.c_str());
+    //create http header
+    if(req->mUseProxy){
+        snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
+                req->mUrl.mHref.c_str(),req->mProto.c_str());
+    }else{
+        snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s\r\n",req->mMethod.c_str(),
+                req->mUrl.mPath.empty()?"/":req->mUrl.mPath.c_str(),req->mProto.c_str());
+    }
     sendBuffer.append(tmpBuff,strlen(tmpBuff));
-
+    //add http header entry
     req->mHeader.toString(sendBuffer);
-
     ALOGD("%s ",sendBuffer.data());
 
+    fd_set rdSet,wrSet;
     int n = 0;
     int nsended = 0;
+    struct timeval tv;
+
+    if(mTask != NULL && mTask->mTaskTimeout != 0){
+        tv.tv_sec = mTask->mTaskTimeout /1000;
+        tv.tv_usec = mTask->mTaskTimeout %1000 * 1000;
+    }
+
     while(nsended < sendBuffer.size()){
-        n = write(fd,sendBuffer.data(),sendBuffer.size() - n);
-        if(n > 0){
-            sendBuffer.offset(n,SEEK_CUR);
-            nsended += n;
-        }else if(n < 0){
-            ALOGD("send data fail %p size: %zd  ret = %d err :%s ",sendBuffer.data(),sendBuffer.size(),n,strerror(errno));
+        FD_ZERO(&wrSet); 
+        FD_ZERO(&rdSet);
+        FD_SET(mPipe[1],&rdSet);
+        FD_SET(mFd,&wrSet);
+        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
+        maxFd ++;
+        ALOGD("http get write wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        ret = select(maxFd,&rdSet,&wrSet,NULL,mTask != NULL ?&tv:NULL);
+        ALOGD("http get write wait select end");
+        if(ret > 0){
+            if(FD_ISSET(mPipe[1],&rdSet)){
+                ALOGD("transfer http get is aborted by user");
+                mError ++;
+                return ABORT_ERROR;
+            }else if (FD_ISSET(mFd,&wrSet)){
+                n = write(mFd,sendBuffer.data(),sendBuffer.size() - n);
+                if(n > 0){
+                    sendBuffer.offset(n,SEEK_CUR);
+                    nsended += n;
+                }else if(n < 0){
+                    ALOGD("send data fail %p size: %zd  ret = %d err :%s ",sendBuffer.data(),sendBuffer.size(),n,strerror(errno));
+                    mError ++;
+                    return UNKNOWN_ERROR;
+                }
+            }else{
+                //unknown error
+                ALOGE("SOCKET ERROR %s ",strerror(errno));
+                mError ++;
+                return UNKNOWN_ERROR;
+            }
+        }else if(ret == 0){
+            //timeout
+            ALOGW("ret %d SOCKET SEND TIMEOUT %s ",ret,strerror(errno));
             mError ++;
-            break;
-        }
-    }
-    if(mError){
-        return UNKNOWN_ERROR;
-    }
-    n = 0;
-    BufferUtils recvBuffer;
-    int nrecved = 0;
-    while(1){
-        n = read(fd,tmpBuff,sizeof(tmpBuff));
-        if(n > 0){
-            recvBuffer.append(tmpBuff,n);
-            nrecved += n;
-        }else if(n < 0){
-            ALOGD("recv data fail %p size: %zd ",recvBuffer.data(),recvBuffer.size());
-            mError ++;
-            break;
-        }else{
-            ALOGD("recv data complete %p size: %zd ",recvBuffer.data(),recvBuffer.size());
-            break;
+            return TIMEOUT_ERROR;
+        }else {
+            //socket error
+            ALOGE("ret %d SOCKET ERROR %s ",ret,strerror(errno));
+            return UNKNOWN_ERROR;
         }
 
     }
-    ALOGD("%s ",recvBuffer.data());
-    close(fd);
+
+    if(mError){
+        ALOGE("UNKNOWN_ERROR HTTP GET TRANSFER");
+        return UNKNOWN_ERROR;
+    }
+
+    n = 0;
+    sp<BufferUtils> recvBuffer = mTask->mRecvData;
+    int nrecved = 0;
+    while(1){
+        FD_ZERO(&rdSet);
+        FD_SET(mPipe[1],&rdSet);
+        FD_SET(mFd,&rdSet);
+        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
+        maxFd ++;
+        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ALOGD("http get read wait select end");
+        if(ret > 0){
+            if(FD_ISSET(mPipe[1],&rdSet)){
+                ALOGW("http get write abort by user");
+                return ABORT_ERROR;
+            }else if(FD_ISSET(mFd,&rdSet)){
+                memset(tmpBuff,0,sizeof(tmpBuff));
+                n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
+                if(n > 0){
+                    ALOGD("%s ",tmpBuff);
+                    recvBuffer.append(tmpBuff,n);
+                    nrecved += n;
+                }else if(n < 0){
+                    ALOGD("recv data fail %p size: %zd error:%s",
+                            recvBuffer.data(),recvBuffer.size(),strerror(errno));
+                    mError ++;
+                    return UNKNOW_ERROR;
+                }else{
+                    ALOGD("recv data complete %p size: %zd  error:%s",
+                            recvBuffer.data(),recvBuffer.size(),strerror(errno));
+                    break;
+                }
+
+            }else{
+                ALOGE("http get recv data  fail!");
+                return UNKNOW_ERROR;
+            }
+        }else if(ret == 0){
+            ALOGE("http get recv data timeout !");
+            return TIMEOUT_ERROR;
+        }else{
+            ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
+            return UNKNOW_ERROR;
+        }
+    }
 }
     
 

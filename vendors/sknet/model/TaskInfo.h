@@ -10,6 +10,8 @@
 #define CONNECT_DEFAULT_TIMEOUT 15000 //ms
 #define TASK_DEFAULT_TIMEOUT 60000 //ms
 
+class  HttpTransfer;
+
 enum TASK_INFO_TYPE{
     TASK_TYPE_HTTP,
     TASK_TYPE_HTTPS,
@@ -77,15 +79,6 @@ struct TaskInfo{
         mRecvData = new BufferUtils();
         mSendData = new BufferUtils();
     }
-
-    /*
-    TaskInfo(const TaskInfo& task){
-        mRecvData = task.mRecvData;
-    }
-
-    void operator=(const TaskInfo &task){
-
-    }
-    */
+    sp<HttpTransfer> mTransfer;
 };
 #endif//

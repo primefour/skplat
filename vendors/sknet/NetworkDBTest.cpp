@@ -88,5 +88,6 @@ int main(){
 
     HttpTransfer transfer;
     transfer.doGet("http://www.163.com");
+    ALOGD("EXIT ####");
     return 0;
 }

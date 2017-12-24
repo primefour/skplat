@@ -81,6 +81,7 @@ void HttpHeader::toString(BufferUtils &buffer){
         buffer.append(tmpEntry.mValue.c_str(),tmpEntry.mValue.size());
         buffer.append("\r\n",2);
     }
+    buffer.append("\r\n\r\n",4);
 }
 
 //get entry value 

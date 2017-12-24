@@ -14,6 +14,7 @@ typedef int status_t;
 #define BAD_VALUE (-6)
 #define NAME_NOT_FOUND (-7)
 #define TIMEOUT_ERROR (-8)
+#define ABORT_ERROR (-9)
 
 #define LOG_WARN "warning"
 
