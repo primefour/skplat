@@ -5,12 +5,14 @@
 #include<string.h>
 #include<stdlib.h>
 #include"BufferUtils.h"
+#include"HttpTransfer.h"
+#include"RefBase.h"
 
 #define RETRY_DEFAULT_TIMES 5
 #define CONNECT_DEFAULT_TIMEOUT 15000 //ms
 #define TASK_DEFAULT_TIMEOUT 60000 //ms
 
-class  HttpTransfer;
+//class HttpTransfer;
 
 enum TASK_INFO_TYPE{
     TASK_TYPE_HTTP,
@@ -41,7 +43,7 @@ enum TASK_METHOD_STATE {
     TASK_METHOD_MAX,
 };
 
-struct TaskInfo{
+struct TaskInfo {
     std::string mTaskId; //task name or id
     std::string mModuleName; //for notify callback
     std::string mUrl;
@@ -53,6 +55,9 @@ struct TaskInfo{
     sp<BufferUtils> mSendData; //data will send to server
     //write buffer
     sp<BufferUtils> mRecvData;
+    //transfer 
+    sp<HttpTransfer> mTransfer;
+
     bool mSendOnly; 
     int  mMethod;
     int  mRetryTimes; //retry times
@@ -64,21 +69,6 @@ struct TaskInfo{
     int mTryTimes;
     long mStartTime;
     long mStartConnTime;
-    TaskInfo(){
-        //set default value
-        mSendOnly = false;
-        mMethod = TASK_METHOD_HTTP_GET;
-        mRetryTimes = RETRY_DEFAULT_TIMES;
-        mTaskType = TASK_TYPE_HTTP;
-        mConnTimeout = CONNECT_DEFAULT_TIMEOUT;//15s
-        mTaskTimeout = TASK_DEFAULT_TIMEOUT;//1min
-        mTaskState = TASK_STATE_IDLE;
-        mTryTimes = 0;
-        mStartTime = 0;
-        mStartConnTime = 0;
-        mRecvData = new BufferUtils();
-        mSendData = new BufferUtils();
-    }
-    sp<HttpTransfer> mTransfer;
+    TaskInfo();
 };
 #endif//

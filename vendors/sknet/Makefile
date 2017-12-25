@@ -29,7 +29,9 @@ UTILS_SRC := utils/BasicHashtable.cpp \
 	utils/WorkQueue.cpp \
 
 
-MODEL_SRC := model/SocketAddress.cpp
+MODEL_SRC := model/SocketAddress.cpp \
+	model/TaskInfo.cpp
+
 
 STORE_SRC :=store/NetworkDatabase.cpp \
 	store/SqliteWrapper.cpp
@@ -63,13 +65,13 @@ $(UTILS_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/
 
 $(MODEL_OBJS):%.o : %.cpp
-	g++ -c $< -o $@ $(CXXFLAGS) -I ./utils/
+	g++ -c $< -o $@ $(CXXFLAGS) -I ./utils/ -I ./apps/
 
 $(STORE_OBJS):%.o : %.cpp
-	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./apps/
 
 $(APPS_OBJS):%.o : %.cpp
-	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./store
+	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./store -I ./apps/
 
 clean:
 	rm -r utils/*.o model/*.o store/*.o apps/*.o

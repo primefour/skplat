@@ -10,6 +10,7 @@
 #include<fcntl.h>
 #include<string>
 #include"Log.h"
+#include"TaskInfo.h"
 /*
 GET / HTTP/1.1
 Host: www.163.com
@@ -94,8 +95,9 @@ int HttpTransfer::HttpGet(HttpRequest *req){
     //connect to server
     SocksConnect connect(addrs);
     int ret = 0;
-    if(mTask != NULL){
-        ret = connect.connect(mTask->mConnTimeout);
+    TaskInfo *task = (TaskInfo*)mTask;
+    if(task != NULL){
+        ret = connect.connect(task->mConnTimeout);
     }else{
         ret = connect.connect();
     }
@@ -129,9 +131,9 @@ int HttpTransfer::HttpGet(HttpRequest *req){
     int nsended = 0;
     struct timeval tv;
 
-    if(mTask != NULL && mTask->mTaskTimeout != 0){
-        tv.tv_sec = mTask->mTaskTimeout /1000;
-        tv.tv_usec = mTask->mTaskTimeout %1000 * 1000;
+    if(task != NULL && task->mTaskTimeout != 0){
+        tv.tv_sec = task->mTaskTimeout /1000;
+        tv.tv_usec = task->mTaskTimeout %1000 * 1000;
     }
 
     while(nsended < sendBuffer.size()){
@@ -184,7 +186,7 @@ int HttpTransfer::HttpGet(HttpRequest *req){
     }
 
     n = 0;
-    sp<BufferUtils> recvBuffer = mTask->mRecvData;
+    sp<BufferUtils> recvBuffer = task->mRecvData;
     int nrecved = 0;
     while(1){
         FD_ZERO(&rdSet);
@@ -204,29 +206,29 @@ int HttpTransfer::HttpGet(HttpRequest *req){
                 n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
                 if(n > 0){
                     ALOGD("%s ",tmpBuff);
-                    recvBuffer.append(tmpBuff,n);
+                    recvBuffer->append(tmpBuff,n);
                     nrecved += n;
                 }else if(n < 0){
                     ALOGD("recv data fail %p size: %zd error:%s",
-                            recvBuffer.data(),recvBuffer.size(),strerror(errno));
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
                     mError ++;
-                    return UNKNOW_ERROR;
+                    return UNKNOWN_ERROR;
                 }else{
                     ALOGD("recv data complete %p size: %zd  error:%s",
-                            recvBuffer.data(),recvBuffer.size(),strerror(errno));
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
                     break;
                 }
 
             }else{
                 ALOGE("http get recv data  fail!");
-                return UNKNOW_ERROR;
+                return UNKNOWN_ERROR;
             }
         }else if(ret == 0){
             ALOGE("http get recv data timeout !");
             return TIMEOUT_ERROR;
         }else{
             ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
-            return UNKNOW_ERROR;
+            return UNKNOWN_ERROR;
         }
     }
 }

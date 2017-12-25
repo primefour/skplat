@@ -75,9 +75,8 @@
 #include<unistd.h>
 #include<fcntl.h>
 #include"RefBase.h"
-#include"TaskInfo.h"
 
-class HttpTransfer :RefBase{
+class HttpTransfer :public RefBase{
     enum{
             StatusContinue           = 100,// RFC 7231, 6.2.1
             StatusSwitchingProtocols = 101,// RFC 7231, 6.2.2
@@ -198,8 +197,8 @@ class HttpTransfer :RefBase{
         DurationTimer mDuration;
         sp<HttpRequest> mRequest;
         sp<HttpResponse> mResponse;
-        TaskInfo *mTask;
         Mutex mMutex;
+        void *mTask;
 };
 
 #endif //__HTTP_H__
