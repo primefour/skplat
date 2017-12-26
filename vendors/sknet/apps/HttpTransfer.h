@@ -163,6 +163,7 @@ class HttpTransfer :public RefBase{
             mRequest = NULL;
             pipe2(mPipe,O_NONBLOCK);
             mError = 0;
+            mTask = NULL;
         }
 
         void interrupt(){//may be block

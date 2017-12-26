@@ -59,7 +59,7 @@ CXXFLAGS += -DHAVE_PTHREADS
 #
 
 networkdb_test:NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(APPS_OBJS)
-	g++ -o $@ NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(APPS_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/ -I ../sqlite/ -I ./apps/
+	g++ -o $@ $(CXXFLAGS) NetworkDBTest.cpp $(UTILS_OBJS) $(MODEL_OBJS) $(STORE_OBJS) $(APPS_OBJS) $(LDFLAGS) -L ../sqlite/ -I ./utils/ -I ./model -I ./store/ -I ../sqlite/ -I ./apps/
 
 $(UTILS_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/  -I ./utils/

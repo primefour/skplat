@@ -185,6 +185,11 @@ int HttpTransfer::HttpGet(HttpRequest *req){
         return UNKNOWN_ERROR;
     }
 
+    if(task == NULL){
+        ALOGE("BAD_VALUE HTTP GET TRANSFER");
+        return BAD_VALUE;
+    }
+
     n = 0;
     sp<BufferUtils> recvBuffer = task->mRecvData;
     int nrecved = 0;
