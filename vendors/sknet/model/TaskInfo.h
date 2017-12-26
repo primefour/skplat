@@ -43,7 +43,7 @@ enum TASK_METHOD_STATE {
     TASK_METHOD_MAX,
 };
 
-struct TaskInfo {
+struct TaskInfo :public RefBase{
     std::string mTaskId; //task name or id
     std::string mModuleName; //for notify callback
     std::string mUrl;

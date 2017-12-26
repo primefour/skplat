@@ -28,8 +28,8 @@ class NetworkDatabase:public RefBase{
         int xDnsUpdateHostIp(const char *host,const char *ip,const char *new_ip);
         int xDnsDelete(const char *host,const char *ip);
         int xDnsDelete(SocketAddress &sa);
-        int xTaskGetTasks(Vector<TaskInfo> &tasks,int taskState = TASK_STATE_IDLE);
-        int xTaskInsert(TaskInfo& task,int taskState = TASK_STATE_IDLE);
+        int xTaskGetTasks(Vector<sp<TaskInfo> > &tasks,int taskState = TASK_STATE_IDLE);
+        int xTaskInsert(sp<TaskInfo> &task,int taskState = TASK_STATE_IDLE);
         int xTaskCount(int taskState);
         int xTaskDelete(std::string taskId);
         int xTaskUpdateState(std::string taskId,int state);

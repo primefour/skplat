@@ -206,34 +206,34 @@ int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colE
         ASSERT(false,"get task id invalidate key %s ",taskIdKey.c_str());
     }
 
-    Vector<TaskInfo> *pTaskArray = (Vector<TaskInfo>*)pArgs;
-    TaskInfo ti;
-    ti.mTaskId = colEntries->get(taskIdKey).getString();
-    ti.mModuleName = colEntries->get(moduleKey).getString();
-    ti.mUrl = colEntries->get(urlKey).getString();
-    ti.mMethod = colEntries->get(methodKey).getLong();
+    Vector<sp<TaskInfo> > *pTaskArray = (Vector<sp<TaskInfo> >*)pArgs;
+    sp<TaskInfo> newTask = new TaskInfo();
+    newTask->mTaskId = colEntries->get(taskIdKey).getString();
+    newTask->mModuleName = colEntries->get(moduleKey).getString();
+    newTask->mUrl = colEntries->get(urlKey).getString();
+    newTask->mMethod = colEntries->get(methodKey).getLong();
     const char *data = colEntries->get(sendDataKey).getString();
     if(data != NULL){
         int size = colEntries->get(sendDataKey).size();
         //use append,will not change offset
-        ti.mSendData->append(data,size);
+        newTask->mSendData->append(data,size);
     }
-    ti.mTaskType = colEntries->get(taskTypeKey).getLong();
-    ti.mSendOnly = colEntries->get(sendOnlyKey).getLong();
-    ti.mRecvFile = colEntries->get(recvFileKey).getString() == NULL ?"":colEntries->get(recvFileKey).getString();
-    ti.mSendFile = colEntries->get(sendFileKey).getString() == NULL ?"":colEntries->get(sendFileKey).getString();
-    ti.mRetryTimes = colEntries->get(retryTimesKey).getLong();
-    ti.mConnTimeout = colEntries->get(connTimeoutKey).getLong();
-    ti.mTaskTimeout = colEntries->get(taskTimeoutKey).getLong();
-    ti.mTaskState = colEntries->get(taskStateKey).getLong();
-    ti.mStartTime = colEntries->get(startTimeKey).getLong();
-    ti.mStartConnTime = colEntries->get(connTimeKey).getLong();
-    ti.mTryTimes = colEntries->get(tryTimesKey).getLong();
-    pTaskArray->push(ti);
+    newTask->mTaskType = colEntries->get(taskTypeKey).getLong();
+    newTask->mSendOnly = colEntries->get(sendOnlyKey).getLong();
+    newTask->mRecvFile = colEntries->get(recvFileKey).getString() == NULL ?"":colEntries->get(recvFileKey).getString();
+    newTask->mSendFile = colEntries->get(sendFileKey).getString() == NULL ?"":colEntries->get(sendFileKey).getString();
+    newTask->mRetryTimes = colEntries->get(retryTimesKey).getLong();
+    newTask->mConnTimeout = colEntries->get(connTimeoutKey).getLong();
+    newTask->mTaskTimeout = colEntries->get(taskTimeoutKey).getLong();
+    newTask->mTaskState = colEntries->get(taskStateKey).getLong();
+    newTask->mStartTime = colEntries->get(startTimeKey).getLong();
+    newTask->mStartConnTime = colEntries->get(connTimeKey).getLong();
+    newTask->mTryTimes = colEntries->get(tryTimesKey).getLong();
+    pTaskArray->push(newTask);
     return 1;
 }
 
-int NetworkDatabase::xTaskGetTasks(Vector<TaskInfo> &tasks,int taskState){
+int NetworkDatabase::xTaskGetTasks(Vector<sp<TaskInfo> > &tasks,int taskState){
     char sql_buff[512]={0};
     snprintf(sql_buff,sizeof(sql_buff),"select * from xtask where task_state = %d;",taskState);
     int rc = mDBWrapper->execSql(sql_buff,xTaskInfoVCallback,&tasks);
@@ -244,41 +244,41 @@ int NetworkDatabase::xTaskGetTasks(Vector<TaskInfo> &tasks,int taskState){
     }
 }
 
-int NetworkDatabase::xTaskInsert(TaskInfo& task,int taskState){
+int NetworkDatabase::xTaskInsert(sp<TaskInfo> &task,int taskState){
     char sql_buff[4096]={0};
-    if(task.mTaskId.empty() ||task.mModuleName.empty()){
+    if(task->mTaskId.empty() ||task->mModuleName.empty()){
         ALOGE("invalidate task,please check host module name and task id ");
         return BAD_VALUE;
     }
     sqlite3_stmt* pStmt = NULL;
-    if(task.mSendData->size() > 0){
+    if(task->mSendData->size() > 0){
         snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
                 "send_file,send_data,send_only,retry_times,task_type,conn_timeout,task_timeout)"
                 "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%ld,%ld);",
-                task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl.c_str(),task.mMethod,
-                task.mRecvFile.empty() ?"NULL":task.mRecvFile.c_str(),
-                task.mSendFile.empty() ?"NULL":task.mSendFile.c_str(),
-                task.mSendOnly ?1:0,
-                task.mRetryTimes, 
-                task.mTaskType,
-                task.mConnTimeout,
-                task.mTaskTimeout);
+                task->mTaskId.c_str(),task->mModuleName.c_str(),task->mUrl.c_str(),task->mMethod,
+                task->mRecvFile.empty() ?"NULL":task->mRecvFile.c_str(),
+                task->mSendFile.empty() ?"NULL":task->mSendFile.c_str(),
+                task->mSendOnly ?1:0,
+                task->mRetryTimes, 
+                task->mTaskType,
+                task->mConnTimeout,
+                task->mTaskTimeout);
         pStmt = mDBWrapper->compileSQL(sql_buff);
         if(pStmt != NULL){
-            pStmt = mDBWrapper->bindValue(pStmt,1,task.mSendData->data(),task.mSendData->size());
+            pStmt = mDBWrapper->bindValue(pStmt,1,task->mSendData->data(),task->mSendData->size());
         }
     }else{
         snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
                 "send_file,send_only,retry_times,task_type,conn_timeout,task_timeout)"
                 "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',%d,%d,%d,%ld,%ld);",
-                task.mTaskId.c_str(),task.mModuleName.c_str(),task.mUrl.c_str(),task.mMethod,
-                task.mRecvFile.empty() ?"NULL":task.mRecvFile.c_str(),
-                task.mSendFile.empty() ?"NULL":task.mSendFile.c_str(),
-                task.mSendOnly ?1:0,
-                task.mRetryTimes, 
-                task.mTaskType,
-                task.mConnTimeout,
-                task.mTaskTimeout);
+                task->mTaskId.c_str(),task->mModuleName.c_str(),task->mUrl.c_str(),task->mMethod,
+                task->mRecvFile.empty() ?"NULL":task->mRecvFile.c_str(),
+                task->mSendFile.empty() ?"NULL":task->mSendFile.c_str(),
+                task->mSendOnly ?1:0,
+                task->mRetryTimes, 
+                task->mTaskType,
+                task->mConnTimeout,
+                task->mTaskTimeout);
         pStmt = mDBWrapper->compileSQL(sql_buff);
     }
     int ret = UNKNOWN_ERROR;

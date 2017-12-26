@@ -31,14 +31,14 @@ int main(){
     char ipAddr[1024] ={0};
     inet_ntop(AF_INET,&(inetIp->sin_addr),ipAddr,sizeof(ipAddr));
     ALOGD("ip = %s ",ipAddr);
-    TaskInfo task1;
-    task1.mUrl = "www.jd.com";
-    task1.mTaskId = "helloworld1";
-    task1.mModuleName = "network";
+    sp<TaskInfo> task1 = new TaskInfo();
+    task1->mUrl = "www.jd.com";
+    task1->mTaskId = "helloworld1";
+    task1->mModuleName = "network";
     const char *data="send data is OK";
-    task1.mSendData->write(data,strlen(data));
-    task1.mSendData->offset(0,SEEK_SET);
-    int count = task1.mSendData->read(ipAddr,sizeof(ipAddr));
+    task1->mSendData->write(data,strlen(data));
+    task1->mSendData->offset(0,SEEK_SET);
+    int count = task1->mSendData->read(ipAddr,sizeof(ipAddr));
     ALOGD("count = %d ipAddr = %s ",count,ipAddr);
     db->xTaskInsert(task1);
 
@@ -46,11 +46,12 @@ int main(){
     int ss = db->getAddrByHost("www.baidu.com",helo);
     ALOGD("ss = %d size helo = %zd ",ss,helo.size());
 
-    Vector<TaskInfo> tasks;
+    Vector<sp<TaskInfo> > tasks;
     int cx = db->xTaskGetTasks(tasks);
     ALOGD("cx = %d size helo = %zd ",cx,tasks.size());
 
-    count = tasks[0].mSendData->read(ipAddr,sizeof(ipAddr));
+    count = tasks[0]->mSendData->read(ipAddr,sizeof(ipAddr));
+
     ALOGD("task 0 count = %d ipAddr = %s ",count,ipAddr);
     SocketAddress sockAddrx("115.239.210.27");
     sockAddrx.setPort(80);
