@@ -185,13 +185,18 @@ int HttpTransfer::HttpGet(HttpRequest *req){
         return UNKNOWN_ERROR;
     }
 
+    //for test 
+#if 1
+    sp<BufferUtils> recvBuffer = new BufferUtils();
+#else
     if(task == NULL){
         ALOGE("BAD_VALUE HTTP GET TRANSFER");
         return BAD_VALUE;
     }
+    sp<BufferUtils> recvBuffer = task->mRecvData;
+#endif
 
     n = 0;
-    sp<BufferUtils> recvBuffer = task->mRecvData;
     int nrecved = 0;
     while(1){
         FD_ZERO(&rdSet);
@@ -210,9 +215,21 @@ int HttpTransfer::HttpGet(HttpRequest *req){
                 memset(tmpBuff,0,sizeof(tmpBuff));
                 n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
                 if(n > 0){
-                    ALOGD("%s ",tmpBuff);
                     recvBuffer->append(tmpBuff,n);
                     nrecved += n;
+                    //check header whether is complete
+                    if(HttpHeader::checkHeader(recvBuffer)){
+                        //parse header
+                        if(mRequest->mHeader.parser(recvBuffer,&mRequest->mHeader) == NULL){
+                            ALOGE("recv data %s parse http header fail ",(const char *)recvBuffer->data());
+                            return UNKNOWN_ERROR;
+                        }else{
+                            sp<BufferUtils> debugBuffer = new BufferUtils();
+                            mRequest->mHeader.toString(*debugBuffer);
+                            ALOGD("recv data parse http header %s ",(const char *)debugBuffer->data());
+                        }
+                    }
+                    //ALOGD("recv data %p size: %zd n :%d ", recvBuffer->data(),recvBuffer->size(),n);
                 }else if(n < 0){
                     ALOGD("recv data fail %p size: %zd error:%s",
                             recvBuffer->data(),recvBuffer->size(),strerror(errno));

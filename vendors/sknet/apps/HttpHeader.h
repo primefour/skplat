@@ -98,9 +98,11 @@ struct HttpHeaderEntry{
 struct HttpHeader{
     HttpHeader():mEntries(20,getStringHash){
     }
+
+    static bool checkHeader(sp<BufferUtils> &buffer);
     //static function to parser header only
     //Buffer is data of header
-    static HttpHeader* parser(BufferUtils &buffer,HttpHeader *ptrHeader);
+    static HttpHeader* parser(sp<BufferUtils> &buffer,HttpHeader *ptrHeader);
     //add entry
     void setEntry(const std::string key,const std::string value);
     void setEntry(const char *key,const char *format,...);

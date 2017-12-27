@@ -6,18 +6,33 @@
 #include<stdarg.h>
 
 static const char lineHints[] = "\r\n";
+static const char headerHints[] = "\r\n\r\n";
 template<> HttpHeaderEntry SimpleHash<std::string, HttpHeaderEntry>::mNullItem = HttpHeaderEntry();
 #define MAX_STRING       (1024) 
+
+bool HttpHeader::checkHeader(sp<BufferUtils> &buffer){
+    int size = buffer->size();
+    if(size == 0){
+        return false;
+    }
+    //get buffer data
+    const char *data = (const char *)buffer->data();
+    if(strstr(data,headerHints) != NULL){
+        return false;
+    }else{
+        return true;
+    }
+}
 //static function to parser header only
 //Buffer is data of header
-HttpHeader* HttpHeader::parser(BufferUtils &buffer,HttpHeader *ptrHeader){
+HttpHeader* HttpHeader::parser(sp<BufferUtils> &buffer,HttpHeader *ptrHeader){
     //get size of buffer data 
-    int size = buffer.offset(0,SEEK_END);
+    int size = buffer->offset(0,SEEK_END);
     //seek to 0
-    buffer.offset(0,SEEK_SET);
+    buffer->offset(0,SEEK_SET);
 
     //get buffer data
-    const char *data = (const char *)buffer.data();
+    const char *data = (const char *)buffer->data();
 
     if(size == 0){
         return NULL;
