@@ -18,6 +18,7 @@ struct HttpResponse:public RefBase{
 
     sp<HttpRequest> mRequest;
     HttpHeader mHeader;
+
     std::string mStatus;   // e.g. "200 OK"
     int mStatusCode;       // e.g. 200
     std::string mProto;    // e.g. "HTTP/1.0"

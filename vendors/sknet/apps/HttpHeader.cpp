@@ -17,38 +17,39 @@ bool HttpHeader::checkHeader(sp<BufferUtils> &buffer){
     }
     //get buffer data
     const char *data = (const char *)buffer->data();
-    if(strstr(data,headerHints) != NULL){
-        return false;
-    }else{
+    if(strstr(data,lineHints) != NULL){
         return true;
+    }else{
+        return false;
     }
 }
 //static function to parser header only
 //Buffer is data of header
 HttpHeader* HttpHeader::parser(sp<BufferUtils> &buffer,HttpHeader *ptrHeader){
     //get size of buffer data 
-    int size = buffer->offset(0,SEEK_END);
-    //seek to 0
-    buffer->offset(0,SEEK_SET);
-
+    int size = buffer->size();
     //get buffer data
     const char *data = (const char *)buffer->data();
-
     if(size == 0){
         return NULL;
     }
 
     //get lines and parse
     const char *newLine = strstr(data,lineHints);
-    const char *lineStart = data;
+    newLine += 2;//seek to http header entries
+    const char *lineStart = newLine ;
+    const char *headerEnd = strstr(data,headerHints);
 
+    //seek to the first header entries
+    newLine = strstr(lineStart,lineHints);
     //parse header entry
-    while(newLine != NULL && (newLine - data) < size){
+    while(newLine != NULL && newLine < headerEnd){
         std::string entryString =  ::trim(lineStart,newLine-lineStart);
+        //ALOGD("%s ",entryString.c_str());
         //split key and value
         std::size_t pos = entryString.find(":");
 
-        newLine +=sizeof(lineHints);
+        newLine +=strlen(lineHints);
         lineStart = newLine;
         newLine = strstr(lineStart,lineHints);
         if(pos < 0){
@@ -57,6 +58,7 @@ HttpHeader* HttpHeader::parser(sp<BufferUtils> &buffer,HttpHeader *ptrHeader){
         }
         std::string key = ::trim(entryString.c_str(),pos);
         std::string value = ::trim(entryString.c_str() + pos +1,entryString.size() - pos - 1);
+        //ALOGD("key : %s value:%s ",key.c_str(),value.c_str());
         ptrHeader->setEntry(key,value);
     }
     return ptrHeader;

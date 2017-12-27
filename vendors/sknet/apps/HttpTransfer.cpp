@@ -198,6 +198,7 @@ int HttpTransfer::HttpGet(HttpRequest *req){
 
     n = 0;
     int nrecved = 0;
+    int headerFind = 0;
     while(1){
         FD_ZERO(&rdSet);
         FD_SET(mPipe[1],&rdSet);
@@ -218,14 +219,17 @@ int HttpTransfer::HttpGet(HttpRequest *req){
                     recvBuffer->append(tmpBuff,n);
                     nrecved += n;
                     //check header whether is complete
-                    if(HttpHeader::checkHeader(recvBuffer)){
+                    if(!headerFind && HttpHeader::checkHeader(recvBuffer)){
+                        headerFind  = 1;
                         //parse header
-                        if(mRequest->mHeader.parser(recvBuffer,&mRequest->mHeader) == NULL){
-                            ALOGE("recv data %s parse http header fail ",(const char *)recvBuffer->data());
+                        
+                        ALOGD("recv data http header %s ",(const char *)recvBuffer->data());
+                        if(mResponse->mHeader.parser(recvBuffer,&mResponse->mHeader) == NULL){
+                            ALOGE("recv data parse http header fail ");
                             return UNKNOWN_ERROR;
                         }else{
                             sp<BufferUtils> debugBuffer = new BufferUtils();
-                            mRequest->mHeader.toString(*debugBuffer);
+                            mResponse->mHeader.toString(*debugBuffer);
                             ALOGD("recv data parse http header %s ",(const char *)debugBuffer->data());
                         }
                     }
@@ -253,6 +257,50 @@ int HttpTransfer::HttpGet(HttpRequest *req){
             return UNKNOWN_ERROR;
         }
     }
+}
+
+
+int HttpTransfer::parseStatus(const char *buff){
+
+    int i = 0 ;
+    int begin = 0,end = 0;
+    string sAarry[4];
+    while( buff[i] != '\r' && buff[i+1] != '\n'){
+        if(buff[i] == ' '){
+            sAarry[j++] = ::trim(buff,begin,i);
+            begin = i;
+        }
+        i++;
+    }
+
+    for(i = 0 ;i < 4 ;i ++){
+        if(!sAarry.empty()){
+            ALOGD("%s ",sAarry.c_str());
+        }
+    }
+
+    if(sAarry[2].empty()){
+        ALOGE("malformed HTTP response %s",buff);
+        return BAD_VALUE;
+    }
+
+    ALOGD("HTTP response %s",sArray[2]);
+
+	if (sArray[1].size() != 3 ){
+        ALOGE("malformed HTTP status code %s",sArray[1].c_str());
+		return BAD_VALUE;
+	}
+
+	resp.StatusCode, err = strconv.Atoi(f[1])
+	if err != nil || resp.StatusCode < 0 {
+		return nil, &badStringError{"malformed HTTP status code", f[1]}
+	}
+	resp.Status = f[1] + " " + reasonPhrase
+	resp.Proto = f[0]
+	var ok bool
+	if resp.ProtoMajor, resp.ProtoMinor, ok = ParseHTTPVersion(resp.Proto); !ok {
+		return nil, &badStringError{"malformed HTTP version", resp.Proto}
+	}
 }
     
 
