@@ -30,11 +30,14 @@ int HttpTransfer::doGet(const char *url){
     req->mHeader.setEntry("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
     req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
     //req->mHeader.setEntry("Connection","close");
-    //req->mHeader.setEntry("Connection","keep-alive");
+    req->mHeader.setEntry("Connection","keep-alive");
     //req->mHeader.setEntry("Accept-Encoding","gzip, deflate");
-    req->mHeader.setEntry("Content-Length","%d",0);
+    //req->mHeader.setEntry("Content-Length","%d",0);
+    req->mHeader.setEntry("Referer","http://www.163.com/");
     //set host entry
     req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
+    req->mHeader.setEntry("Upgrade-Insecure-Requests","%d",1);
+    //req->mHeader.setEntry("Cookie","vjuids=-3dd6df54d.15e9ad44c20.0.5ce710462eea; _ntes_nnid=5fa8714d6ebdf9ab84afc38eb5322a23,1505836157990; usertrack=c+xxClnBPH6NJ66MBFFFAg==; _ntes_nuid=5fa8714d6ebdf9ab84afc38eb5322a23; UM_distinctid=15e9ad4cb11106-08a044a68e29-1c29160a-1fa400-15e9ad4cb12462; __gads=ID=b69a461dd3308690:T=1505836191:S=ALNI_MbOv77TDsxHiHEimeD1bCNsaE7O3A; mail_psc_fingerprint=d5d80616f93a7a977100394b9c21a1df; P_INFO=primefour@163.com|1511711367|0|163|00&21|shh&1511410577&163#shh&null#10#0#0|158993&0|163&mail163|primefour@163.com; CNZZDATA1271207190=485797003-1512128773-http%253A%252F%252Fnews.163.com%252F%7C1512128773; NNSSPID=0fea259fd0b646e5a83725c72757f3f9; Province=021; City=021; NTES_hp_textlink1=old; vjlast=1505836158.1514474647.11; CNZZDATA1256734798=1152423267-1511578113-http%253A%252F%252Fnews.163.com%252F%7C1514473122; CNZZDATA1256336326=1972669584-1505835976-http%253A%252F%252Fnews.163.com%252F%7C1514474288; ne_analysis_trace_id=1514474658373; s_n_f_l_n3=7d24fc61281cd9631514474658382; vinfo_n_f_l_n3=7d24fc61281cd963.1.13.1505836157998.1514117875751.1514474821367");
 
     //set requst and response
     mRequest = req;
@@ -99,8 +102,12 @@ int HttpTransfer::HttpGet(HttpRequest *req){
         snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
                 req->mUrl.mHref.c_str(),req->mProto.c_str());
     }else{
-        snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s\r\n",req->mMethod.c_str(),
-                req->mUrl.mPath.empty()?"/":req->mUrl.mPath.c_str(),req->mProto.c_str());
+        std::string xpath = "/";
+        if(!req->mUrl.mPath.empty()){
+            xpath += req->mUrl.mPath;
+        }
+        snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s\r\n",req->mMethod.c_str(), 
+                xpath.c_str(),req->mProto.c_str());
     }
     sendBuffer.append(tmpBuff,strlen(tmpBuff));
     //add http header entry
@@ -273,7 +280,7 @@ int HttpTransfer::HttpGet(HttpRequest *req){
     }
 
 
-    if(mResponse->mStatusCode >= HttpHeader::StatusSwitchingProtocols ){
+    if(mResponse->mStatusCode == HttpHeader::StatusSwitchingProtocols ){
         ALOGE("don't support switch protocol code is %d ",mResponse->mStatusCode);
         return BAD_VALUE;
     }
@@ -286,6 +293,7 @@ int HttpTransfer::HttpGet(HttpRequest *req){
     }else{
         if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
             std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
+            ALOGD(">>>len = %s",len.c_str());
             mResponse->mContentLength = ::atoi(len.c_str()); 
             if(mResponse->mContentLength < 0){
                 ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
