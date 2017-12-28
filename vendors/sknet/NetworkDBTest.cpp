@@ -90,5 +90,8 @@ int main(){
     HttpTransfer transfer;
     transfer.doGet("http://www.163.com");
     ALOGD("EXIT ####");
+    transfer.doGet("http://www.baidu.com");
+
+    transfer.doGet("http://i.weather.com.cn/i/product/pic/m/sevp_nmc_stfc_sfer_er24_achn_l88_p9_20171228130002400.jpg");
     return 0;
 }

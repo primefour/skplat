@@ -41,7 +41,8 @@ APPS_SRC := apps/SocksConnect.cpp \
 	apps/Url.cpp \
 	apps/AppUtils.cpp \
 	apps/HttpHeader.cpp \
-	apps/HttpTransfer.cpp
+	apps/HttpTransfer.cpp \
+	apps/HttpResponse.cpp
 
 
 UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)  

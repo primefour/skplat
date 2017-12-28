@@ -4,7 +4,7 @@
 #include<stdio.h>
 #include<string>
 #include"Url.h"
-#include"RefBase.h"
+#include"HttpHeader.h"
 
 struct HttpRequest ; 
 
@@ -15,6 +15,7 @@ struct HttpResponse:public RefBase{
     // the Response's Request. ErrNoLocation is returned if no
     // Location header is present.
     int relocation(const char *reloc);
+    HttpResponse();
 
     sp<HttpRequest> mRequest;
     HttpHeader mHeader;
@@ -22,8 +23,8 @@ struct HttpResponse:public RefBase{
     std::string mStatus;   // e.g. "200 OK"
     int mStatusCode;       // e.g. 200
     std::string mProto;    // e.g. "HTTP/1.0"
-    int ProtoMajor;        // e.g. 1
-    int ProtoMinor;        // e.g. 0
+    int mProtoMajor;        // e.g. 1
+    int mProtoMinor;        // e.g. 0
 
     // ContentLength records the length of the associated content. The
     // value -1 indicates that the length is unknown. Unless Request.Method

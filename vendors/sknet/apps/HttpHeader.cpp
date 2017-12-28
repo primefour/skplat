@@ -5,22 +5,36 @@
 #include"AppUtils.h"
 #include<stdarg.h>
 
-static const char lineHints[] = "\r\n";
-static const char headerHints[] = "\r\n\r\n";
+const char * HttpHeader::connectionHints = "Connection";
+const char * HttpHeader::hostHints = "Host";
+const char * HttpHeader::userAgentHints = "User-Agent";
+const char * HttpHeader::contentLengthHints = "Content-Length";
+const char * HttpHeader::transferEncodingHints = "Transfer-Encoding";
+const char * HttpHeader::encodingChunkedHints = "chunked";
+const char * HttpHeader::trailerHints = "Trailer";
+const char * HttpHeader::encodingCompressHints = "compress";
+const char * HttpHeader::encodingDeflateHints = "deflate";
+const char * HttpHeader::encodingGzipHints = "gzip";
+const char * HttpHeader::encodingIdentifyHints = "identity";
+const char * HttpHeader::locationHints ="Location" ;
+const char * HttpHeader::lineHints= "\r\n";
+const char * HttpHeader::headerHints = "\r\n\r\n";
+
 template<> HttpHeaderEntry SimpleHash<std::string, HttpHeaderEntry>::mNullItem = HttpHeaderEntry();
 #define MAX_STRING       (1024) 
 
-bool HttpHeader::checkHeader(sp<BufferUtils> &buffer){
+int HttpHeader::checkHeader(sp<BufferUtils> &buffer){
     int size = buffer->size();
     if(size == 0){
-        return false;
+        return -1;
     }
     //get buffer data
     const char *data = (const char *)buffer->data();
-    if(strstr(data,lineHints) != NULL){
-        return true;
+    const char *tmp = NULL;
+    if((tmp = strstr(data,lineHints)) != NULL){
+        return tmp - data + strlen(headerHints);
     }else{
-        return false;
+        return -1;
     }
 }
 //static function to parser header only

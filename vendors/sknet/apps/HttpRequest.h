@@ -59,7 +59,7 @@ struct HttpRequest:public RefBase{
 	// For client requests a nil body means the request has no
 	// body, such as a GET request. The HTTP Client's Transport
 	// is responsible for calling the Close method.
-	BufferUtils mBody;
+	sp<BufferUtils> mBody;
 	// For client requests, setting this field prevents re-use of
 	// TCP connections between requests to the same hosts, as if
 	// Transport.DisableKeepAlives were set.
