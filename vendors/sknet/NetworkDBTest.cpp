@@ -107,7 +107,7 @@ int main(){
     HttpHeader header ;
     ALOGD("exit");
     header.setEntry("Hello","World");
-    header.setEntry("world","this is %s ","world");
+    header.setEntry("world","this is %s","world");
     BufferUtils xTmpbuff ;
     header.toString(xTmpbuff);
     xTmpbuff.offset(0,SEEK_SET);
@@ -115,10 +115,15 @@ int main(){
 
     HttpTransfer transfer;
     //transfer.doGet("http://www.163.com");
-    //ALOGD("EXIT ####");
     //transfer.doGet("http://www.baidu.com");
-
     //transfer.doGet("http://i.weather.com.cn/i/product/pic/m/sevp_nmc_stfc_sfer_er24_achn_l88_p9_20171228130002400.jpg");
-    transfer.doGet("http://news.163.com/17/1228/16/D6OPQNV6000189FH.html");
+    //transfer.doGet("http://news.163.com/17/1228/16/D6OPQNV6000189FH.html");
+    const char *chunkedData = "5\r\n12345\r\n6\r\n123456\r\n0\r\n";
+    sp<BufferUtils> oldBuffer = new BufferUtils();
+    oldBuffer->append(chunkedData,strlen(chunkedData));
+    sp<BufferUtils> recvBuffer = new BufferUtils();
+    struct timeval tv;
+    transfer.chunkedReader(oldBuffer,recvBuffer,tv);
+    ALOGD("====> %s ",(const char *)recvBuffer->data());
     return 0;
 }

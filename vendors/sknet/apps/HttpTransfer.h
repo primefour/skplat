@@ -129,6 +129,10 @@ class HttpTransfer :public RefBase{
         int parseStatus(const char *buff);
         int doRelocation();
         int identifyReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBufferstruct,timeval &tv);
+        int commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv);
+        int chunkedReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBuffer,struct timeval &tv);
+        long parseHex(const char *str,long &data);
+        int chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils> &recvBuffer,int &moreData,int &leftSz);
     private:
         int mFd;
         int mState;

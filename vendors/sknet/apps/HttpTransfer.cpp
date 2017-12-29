@@ -326,6 +326,142 @@ int HttpTransfer::HttpGet(HttpRequest *req){
 }
 
 
+int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv){
+    int n = 0;
+    int ret = 0;
+    fd_set rdSet,wrSet;
+    char tmpBuff[1024] ={0};
+    int nrecved = 0;
+    while(nrecved < count){
+        FD_ZERO(&rdSet);
+        FD_SET(mPipe[1],&rdSet);
+        FD_SET(mFd,&rdSet);
+        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
+        maxFd ++;
+        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ALOGD("http get read wait select end");
+        if(ret > 0){
+            if(FD_ISSET(mPipe[1],&rdSet)){
+                ALOGW("http get write abort by user");
+                return ABORT_ERROR;
+            }else if(FD_ISSET(mFd,&rdSet)){
+                int rsize = count - nrecved;
+                if(rsize > sizeof(tmpBuff) -1){
+                    rsize = sizeof(tmpBuff) -1;
+                }
+                n = read(mFd,tmpBuff,rsize);
+                if(n > 0){
+                    recvBuffer->append(tmpBuff,n);
+                    nrecved += n;
+                    //check header whether is complete
+                }else if(n < 0){
+                    ALOGD("recv data fail %p size: %zd error:%s",
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
+                    mError ++;
+                    return UNKNOWN_ERROR;
+                }else{
+                    ALOGD("recv data complete %p size: %zd  error:%s",
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
+                    break;
+                }
+            }else{
+                ALOGE("http get recv data fail!");
+                return UNKNOWN_ERROR;
+            }
+        }else if(ret == 0){
+            ALOGE("http get recv data timeout !");
+            return TIMEOUT_ERROR;
+        }else{
+            ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
+            return UNKNOWN_ERROR;
+        }
+    }
+    return OK;
+
+}
+
+
+long HttpTransfer::parseHex(const char *str,long &data){
+    int i = 0;
+    if(str == NULL){
+        data = 0;
+        return 0;
+    }
+    int size = strlen(str);
+    for(i = 0 ;i < size ;i++){
+        int tmp = 0;
+        if(str[i] >= '0' && str[i] <='9'){
+            tmp = str[i] - '0' ;
+        }else if(str[i] >= 'a' && str[i] <= 'f'){
+            tmp = str[i] -'a' + 10;
+        }else if(str[i] >= 'A' && str[i] <= 'F'){
+            tmp = str[i] -'A' + 10;
+        }else{
+            break;
+        }
+        data <<= 4;
+        data |= tmp;
+    }
+	return data;
+}
+
+int HttpTransfer::chunkedReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBuffer,struct timeval &tv){
+    int moreData;
+    int leftSz;
+    chunkedParser(oldBuffer->data(),oldBuffer->size(),recvBuffer,moreData,leftSz);
+}
+
+int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils> &recvBuffer,int &moreData,int &leftSz){
+    const char *data = srcData;
+    const char *seekData = data;
+    const char *hints = NULL;
+    long count = 0;
+    while(1){
+        hints = strstr(seekData,HttpHeader::lineHints);
+        if(hints == NULL){
+            ALOGD("hints not found ");
+            break;
+        }
+        count = parseHex(seekData,count);
+        seekData = hints + 2;
+        if(count == 0){
+            ALOGD("count is 0 ");
+            break;
+        }
+        int dataSize = srcSize - (long)seekData + (long)data;
+        ALOGD("data size is %d ",dataSize);
+        if(dataSize < count){
+            //empty
+            recvBuffer->append(seekData,dataSize);
+            count -= dataSize;
+            seekData += dataSize;
+            ALOGD("data size is empty");
+            break;
+        }else{
+            recvBuffer->append(seekData,count);
+            seekData += count;
+            count = 0;
+        }
+
+        dataSize = srcSize - (long)seekData + (long)data;
+
+        if(dataSize > 2){
+            seekData +=2;
+        }else{
+            //empty
+            ALOGD("xkjdata size is empty %d ",dataSize);
+            break;
+        }
+    }
+    leftSz = srcSize - (long)seekData + (long)data;
+    moreData = count;
+    ALOGD("moreData = %d  leftSz = %d ",moreData,leftSz);
+    return OK;
+}
+
+
+
 int HttpTransfer::identifyReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBuffer,struct timeval &tv){
     ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
     long currLength = oldBuffer->size() - oldBuffer->offset(0,SEEK_CUR);
