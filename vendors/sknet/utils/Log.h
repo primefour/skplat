@@ -6,6 +6,7 @@
 typedef int status_t;
 #define NO_ERROR (0)
 #define OK (0)
+#define NEED_MORE (0x1f)
 #define INVALID_OPERATION (-1)
 #define WOULD_BLOCK (-2)
 #define UNKNOWN_ERROR (-3)

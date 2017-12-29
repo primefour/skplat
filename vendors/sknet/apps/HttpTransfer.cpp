@@ -322,7 +322,12 @@ int HttpTransfer::HttpGet(HttpRequest *req){
     */
 
     sp<BufferUtils> recvBuffer = new BufferUtils();
-    return identifyReader(tmpBuffer,recvBuffer,tv);
+    if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
+        return chunkedReader(tmpBuffer,recvBuffer,tv);
+    }else{
+        return identifyReader(tmpBuffer,recvBuffer,tv);
+    }
+    ALOGD("recvBuffer %s ",(const char *)recvBuffer->data());
 }
 
 
@@ -407,9 +412,72 @@ long HttpTransfer::parseHex(const char *str,long &data){
 }
 
 int HttpTransfer::chunkedReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBuffer,struct timeval &tv){
-    int moreData;
-    int leftSz;
-    chunkedParser(oldBuffer->data(),oldBuffer->size(),recvBuffer,moreData,leftSz);
+    int moreData =0;
+    int leftSz = 0;
+    if(chunkedParser(oldBuffer->data(),oldBuffer->size(),recvBuffer,moreData,leftSz) == OK){
+        return OK;
+    }
+    //need more data
+    int n = 0;
+    int ret = 0;
+    fd_set rdSet,wrSet;
+    char tmpBuff[1024] ={0};
+    int complete = 0;
+    char *tmpData = tmpBuff;
+    while(complete){
+        FD_ZERO(&rdSet);
+        FD_SET(mPipe[1],&rdSet);
+        FD_SET(mFd,&rdSet);
+        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
+        maxFd ++;
+        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ALOGD("http get read wait select end");
+        if(ret > 0){
+            if(FD_ISSET(mPipe[1],&rdSet)){
+                ALOGW("http get write abort by user");
+                return ABORT_ERROR;
+            }else if(FD_ISSET(mFd,&rdSet)){
+                int rsize = sizeof(tmpBuff) -1 ;
+                if(leftSz > 0){
+                    tmpData = tmpBuff + leftSz;
+                    rsize -= leftSz;
+                }
+                leftSz = 0;
+                n = read(mFd,tmpData,rsize);
+                if(n > 0){
+                    int dataSz = tmpData - tmpBuff + n;
+                    if(chunkedParser(tmpBuff,dataSz,recvBuffer,moreData,leftSz) == OK){
+                        return OK;
+                    }
+                    if(leftSz > 0){
+                        memcpy(tmpBuff,tmpBuff + dataSz - leftSz,leftSz);
+                    }
+                    //check header whether is complete
+                }else if(n < 0){
+                    ALOGD("recv data fail %p size: %zd error:%s",
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
+                    mError ++;
+                    return UNKNOWN_ERROR;
+                }else{
+                    ALOGD("recv data complete %p size: %zd  error:%s",
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
+                    break;
+                }
+            }else{
+                ALOGE("http get recv data fail!");
+                return UNKNOWN_ERROR;
+            }
+        }else if(ret == 0){
+            ALOGE("http get recv data timeout !");
+            return TIMEOUT_ERROR;
+        }else{
+            ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
+            return UNKNOWN_ERROR;
+        }
+    }
+    return OK;
+
 }
 
 int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils> &recvBuffer,int &moreData,int &leftSz){
@@ -417,6 +485,7 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
     const char *seekData = data;
     const char *hints = NULL;
     long count = 0;
+    int complete = 0;
     while(1){
         hints = strstr(seekData,HttpHeader::lineHints);
         if(hints == NULL){
@@ -426,7 +495,8 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
         count = parseHex(seekData,count);
         seekData = hints + 2;
         if(count == 0){
-            ALOGD("count is 0 ");
+            ALOGD("count is 0 %s ",seekData);
+            complete = 1;
             break;
         }
         int dataSize = srcSize - (long)seekData + (long)data;
@@ -457,7 +527,11 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
     leftSz = srcSize - (long)seekData + (long)data;
     moreData = count;
     ALOGD("moreData = %d  leftSz = %d ",moreData,leftSz);
-    return OK;
+    if(complete == 1){
+        return OK;
+    }else{
+        return NEED_MORE;
+    }
 }
 
 
