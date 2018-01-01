@@ -76,8 +76,14 @@
 #include<fcntl.h>
 #include"RefBase.h"
 
+
 class HttpTransfer :public RefBase{
     public:
+        typedef int (*BreakFpn)(void *obj,const void *data,int size);
+        static const char *HttpGetHints;
+        static const char *HttpPostHints;
+        static const char *HttpChunkedEOFHints;
+
         HttpTransfer(){
             init();
         }
@@ -122,18 +128,24 @@ class HttpTransfer :public RefBase{
             init();
         }
 
+        int httpDoTransfer(HttpRequest *req);
         int doGet(const char *url);
         int doPost(const char *url,BufferUtils &buff);
-        int HttpGet(HttpRequest *req);
+        int httpPost(HttpRequest *req);
+        int httpGet(HttpRequest *req);
         int parseHttpVersion(const char *version,int &major,int &minor);
         int parseStatus(const char *buff);
         int doRelocation();
-        int identifyReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBufferstruct,timeval &tv);
+        int identifyReader(sp<BufferUtils> &recvBuffer,struct timeval &tv);
         int commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv);
-        int chunkedReader(sp<BufferUtils> &oldBuffer,sp<BufferUtils> &recvBuffer,struct timeval &tv);
+        int chunkedReader(sp<BufferUtils> &recvBuffer,struct timeval &tv);
         long parseHex(const char *str,long &data);
         int chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils> &recvBuffer,int &moreData,int &leftSz);
+        int socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn);
     private:
+        static int chunkedEOF(void *obj,const void *data,int size);
+        static int identifyBreak(void *obj,const void *data,int length);
+
         int mFd;
         int mState;
         int mPipe[2];

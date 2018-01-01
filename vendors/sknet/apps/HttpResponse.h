@@ -26,6 +26,9 @@ struct HttpResponse:public RefBase{
     int mProtoMajor;        // e.g. 1
     int mProtoMinor;        // e.g. 0
 
+    //Contains the raw body data from http server
+	sp<BufferUtils> mBody;
+
     // ContentLength records the length of the associated content. The
     // value -1 indicates that the length is unknown. Unless Request.Method
     // is "HEAD", values >= 0 indicate that the given number of bytes may

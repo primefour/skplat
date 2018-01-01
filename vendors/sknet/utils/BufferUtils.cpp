@@ -128,12 +128,20 @@ size_t BufferUtils::append(BufferUtils& buffer){
     return append(buffer.data(),buffer.size());
 }
 
-const char* BufferUtils::data()const{
+const char *BufferUtils::dataWithOffset()const{
     return (char *)mBuffer + mOffset;
 }
 
-char* BufferUtils::data(){
+char* BufferUtils::dataWithOffset(){
     return (char *)mBuffer + mOffset;
+}
+
+const char* BufferUtils::data()const{
+    return (char *)mBuffer;
+}
+
+char* BufferUtils::data(){
+    return (char *)mBuffer;
 }
 
 size_t BufferUtils::size() const{

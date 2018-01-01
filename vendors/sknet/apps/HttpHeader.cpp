@@ -31,7 +31,7 @@ int HttpHeader::checkHeader(sp<BufferUtils> &buffer){
     //get buffer data
     const char *data = (const char *)buffer->data();
     const char *tmp = NULL;
-    if((tmp = strstr(data,lineHints)) != NULL){
+    if((tmp = strstr(data,headerHints)) != NULL){
         return tmp - data + strlen(headerHints);
     }else{
         return -1;
