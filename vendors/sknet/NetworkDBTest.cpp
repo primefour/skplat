@@ -114,7 +114,7 @@ int main(){
     ALOGD("header to string is \n%s ",xTmpbuff.data());
 
     HttpTransfer transfer;
-    transfer.doGet("http://www.163.com");
+    transfer.doGet("http://www.sina.com.cn");
     //transfer.doGet("http://www.baidu.com");
     //transfer.doGet("http://i.weather.com.cn/i/product/pic/m/sevp_nmc_stfc_sfer_er24_achn_l88_p9_20171228130002400.jpg");
     //transfer.doGet("http://news.163.com/17/1228/16/D6OPQNV6000189FH.html");

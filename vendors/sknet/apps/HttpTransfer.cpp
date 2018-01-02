@@ -127,7 +127,7 @@ int HttpTransfer::httpGet(HttpRequest *req){
     ALOGD("socket fd = %d ",mFd);
 
     BufferUtils sendBuffer;
-    char tmpBuff[1024]={0};
+    char tmpBuff[256]={0};
     //create http header
     if(req->mUseProxy){
         snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
@@ -321,18 +321,18 @@ int HttpTransfer::httpGet(HttpRequest *req){
     //check whether is chunked
     if(mResponse->mTransferEncoding.empty()){
         mResponse->mTransferEncoding = HttpHeader::encodingIdentifyHints; 
-    }else{
-        if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
-            std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
-            ALOGD(">>>len = %s",len.c_str());
-            mResponse->mContentLength = ::atoi(len.c_str()); 
-            if(mResponse->mContentLength < 0){
-                ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
-                return UNKNOWN_ERROR;
-            }
-        }if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
-            mResponse->mUncompressed =true;
+    }
+
+    if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
+        std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
+        ALOGD(">>>len = %s",len.c_str());
+        mResponse->mContentLength = ::atoi(len.c_str()); 
+        if(mResponse->mContentLength < 0){
+            ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
+            return UNKNOWN_ERROR;
         }
+    }if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
+        mResponse->mUncompressed =true;
     }
 
     //check connect header entry
@@ -353,12 +353,18 @@ int HttpTransfer::httpGet(HttpRequest *req){
     */
 
     sp<BufferUtils> recvBuffer = new BufferUtils();
+    /*ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
+            tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
+            */
+    if(tmpBuffer->size() > tmpBuffer->offset()){
+        recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+    }
+
     if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
         return chunkedReader(recvBuffer,tv);
     }else{
         return identifyReader(recvBuffer,tv);
     }
-    ALOGD("recvBuffer %s ",(const char *)recvBuffer->data());
 }
 
 
@@ -366,7 +372,7 @@ int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct time
     int n = 0;
     int ret = 0;
     fd_set rdSet,wrSet;
-    char tmpBuff[1024] ={0};
+    char tmpBuff[10] ={0};
     int nrecved = 0;
     while(nrecved < count){
         FD_ZERO(&rdSet);
@@ -402,14 +408,14 @@ int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct time
                     break;
                 }
             }else{
-                ALOGE("http get recv data fail!");
+                ALOGE("http recv data fail!");
                 return UNKNOWN_ERROR;
             }
         }else if(ret == 0){
-            ALOGE("http get recv data timeout !");
+            ALOGE("http recv data timeout !");
             return TIMEOUT_ERROR;
         }else{
-            ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
+            ALOGE("http recv data  fail! ret = %d %s ",ret,strerror(errno));
             return UNKNOWN_ERROR;
         }
     }
@@ -449,6 +455,8 @@ int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
     if(size < 5){
         return false;
     }
+    ALOGD("size is %d  ==> %s ",size,(data -10));
+
     if(data[size -1] == '\n' && 
             data[size -2] == '\r' &&
             data[size -3] == '0'  &&
@@ -462,6 +470,7 @@ int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
 
 
 int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn ){
+    ALOGD("socketReader recvBuffer %s  size :%zd ",recvBuffer->data(),recvBuffer->size());
     if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
         return OK;
     }
@@ -469,25 +478,27 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
     int n = 0;
     int ret = 0;
     fd_set rdSet,wrSet;
-    char tmpBuff[1024] ={0};
+    char tmpBuff[10] ={0};
     while(1){
         FD_ZERO(&rdSet);
         FD_SET(mPipe[1],&rdSet);
         FD_SET(mFd,&rdSet);
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
-        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
         ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
-        ALOGD("http get read wait select end");
+        //ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
                 ALOGW("http get write abort by user");
                 return ABORT_ERROR;
             }else if(FD_ISSET(mFd,&rdSet)){
-                n = read(mFd,tmpBuff,sizeof(tmpBuff));
+                n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
                 if(n > 0){
+                    //ALOGD("tmpBuff = %s ",tmpBuff);
                     recvBuffer->append(tmpBuff,n);
                     //check whether is complete
+                    //ALOGD("n = %d ==>  %s ==> %zd ",n,recvBuffer->data(),recvBuffer->size());
                     if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
                         return OK;
                     }
@@ -614,6 +625,7 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 
 int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
     HttpTransfer *hobj = (HttpTransfer*)obj;
+    ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",length,hobj->mResponse->mContentLength);
     if(length >= hobj->mResponse->mContentLength){
         return true; 
     }else{
@@ -779,7 +791,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     ALOGD("socket fd = %d ",mFd);
 
     BufferUtils sendBuffer;
-    char tmpBuff[1024]={0};
+    char tmpBuff[10]={0};
     //create http header
     if(req->mUseProxy){
         snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
@@ -1010,6 +1022,8 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     */
 
     sp<BufferUtils> recvBuffer = new BufferUtils();
+    ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
+            tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
     if(tmpBuffer->size() > tmpBuffer->offset()){
         recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
     }
@@ -1019,7 +1033,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }else{
         return identifyReader(recvBuffer,tv);
     }
-    ALOGD("recvBuffer %s ",(const char *)recvBuffer->data());
+    ALOGD("==> recvBuffer %s ",(const char *)recvBuffer->data());
 }
 
 

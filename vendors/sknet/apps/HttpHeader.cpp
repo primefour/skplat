@@ -72,7 +72,7 @@ HttpHeader* HttpHeader::parser(sp<BufferUtils> &buffer,HttpHeader *ptrHeader){
         }
         std::string key = ::trim(entryString.c_str(),pos);
         std::string value = ::trim(entryString.c_str() + pos +1,entryString.size() - pos - 1);
-        //ALOGD("key : %s value:%s ",key.c_str(),value.c_str());
+        ALOGD("key : %s value:%s ",key.c_str(),value.c_str());
         ptrHeader->setEntry(key,value);
     }
     return ptrHeader;

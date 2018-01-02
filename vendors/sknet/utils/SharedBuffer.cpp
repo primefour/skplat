@@ -23,7 +23,9 @@
 
 SharedBuffer* SharedBuffer::alloc(size_t size)
 {
-    SharedBuffer* sb = static_cast<SharedBuffer *>(malloc(sizeof(SharedBuffer) + size));
+    int sSize = sizeof(SharedBuffer) + size;
+    SharedBuffer* sb = static_cast<SharedBuffer *>(malloc(sSize));
+    memset(sb,0,sSize);
     if (sb) {
         sb->mRefs = 1;
         sb->mSize = size;
