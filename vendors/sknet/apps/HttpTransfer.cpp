@@ -17,7 +17,7 @@
 int HttpTransfer::mRelocationLimited = 11;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
-const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n";
+const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n\r\n";
 
 int HttpTransfer::doGet(const char *url){
     //create a get request obj
@@ -84,287 +84,7 @@ int HttpTransfer::doPost(const char *url,BufferUtils &buff){
 }
 
 int HttpTransfer::httpGet(HttpRequest *req){
-    const char *host = NULL;
-    const char *service = NULL;
-    if(req->mUseProxy){
-        host = req->mProxyUrl.mHost.c_str();
-        if(req->mProxyUrl.mPort.empty()){
-            service = req->mProxyUrl.mSchema.c_str();
-        }else{
-            service = req->mProxyUrl.mPort.c_str();
-        }
-    }else{
-        host = req->mUrl.mHost.c_str();
-        if(req->mUrl.mPort.empty()){
-            service = req->mUrl.mSchema.c_str();
-        }else{
-            service = req->mUrl.mPort.c_str();
-        }
-    }
-
-    //get address using dns cache
-    sp<DnsCache>& Cache = DnsCache::getInstance() ;
-    //get Address
-    Vector<SocketAddress> addrs = Cache->getAddrs(host,service);
-
-    //connect to server
-    SocksConnect connect(addrs);
-    int ret = 0;
-    TaskInfo *task = (TaskInfo*)mTask;
-    if(task != NULL){
-        ret = connect.connect(task->mConnTimeout);
-    }else{
-        ret = connect.connect();
-    }
-
-    if(ret != OK){
-        ALOGD("http get connect fail ");
-        return UNKNOWN_ERROR;   
-    }
-
-    //get validate socket fd
-    mFd = connect.getSocket();
-    ALOGD("socket fd = %d ",mFd);
-
-    BufferUtils sendBuffer;
-    char tmpBuff[256]={0};
-    //create http header
-    if(req->mUseProxy){
-        snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
-                req->mUrl.mHref.c_str(),req->mProto.c_str());
-    }else{
-        std::string xpath = "/";
-        if(!req->mUrl.mPath.empty()){
-            xpath += req->mUrl.mPath;
-        }
-        snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s\r\n",req->mMethod.c_str(), 
-                xpath.c_str(),req->mProto.c_str());
-    }
-    sendBuffer.append(tmpBuff,strlen(tmpBuff));
-    //add http header entry
-    req->mHeader.toString(sendBuffer);
-    ALOGD("%s ",sendBuffer.data());
-
-    fd_set rdSet,wrSet;
-    int n = 0;
-    int nsended = 0;
-    struct timeval tv;
-
-    if(task != NULL && task->mTaskTimeout != 0){
-        tv.tv_sec = task->mTaskTimeout /1000;
-        tv.tv_usec = task->mTaskTimeout %1000 * 1000;
-    }
-
-    while(nsended < sendBuffer.size()){
-        FD_ZERO(&wrSet); 
-        FD_ZERO(&rdSet);
-        FD_SET(mPipe[1],&rdSet);
-        FD_SET(mFd,&wrSet);
-        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
-        maxFd ++;
-        ALOGD("http get write wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,&wrSet,NULL,mTask != NULL ?&tv:NULL);
-        ALOGD("http get write wait select end");
-        if(ret > 0){
-            if(FD_ISSET(mPipe[1],&rdSet)){
-                ALOGD("transfer http get is aborted by user");
-                mError ++;
-                return ABORT_ERROR;
-            }else if (FD_ISSET(mFd,&wrSet)){
-                n = write(mFd,sendBuffer.dataWithOffset(),sendBuffer.size() - n);
-                if(n > 0){
-                    sendBuffer.offset(n,SEEK_CUR);
-                    nsended += n;
-                }else if(n < 0){
-                    ALOGD("send data fail %p size: %zd  ret = %d err :%s ",sendBuffer.data(),sendBuffer.size(),n,strerror(errno));
-                    mError ++;
-                    return UNKNOWN_ERROR;
-                }
-            }else{
-                //unknown error
-                ALOGE("SOCKET ERROR %s ",strerror(errno));
-                mError ++;
-                return UNKNOWN_ERROR;
-            }
-        }else if(ret == 0){
-            //timeout
-            ALOGW("ret %d SOCKET SEND TIMEOUT %s ",ret,strerror(errno));
-            mError ++;
-            return TIMEOUT_ERROR;
-        }else {
-            //socket error
-            ALOGE("ret %d SOCKET ERROR %s ",ret,strerror(errno));
-            return UNKNOWN_ERROR;
-        }
-
-    }
-
-    if(mError){
-        ALOGE("UNKNOWN_ERROR HTTP GET TRANSFER");
-        return UNKNOWN_ERROR;
-    }
-
-    sp<BufferUtils> tmpBuffer = new BufferUtils();
-    n = 0;
-    int nrecved = 0;
-    int headerFind = 0;
-    while(1){
-        FD_ZERO(&rdSet);
-        FD_SET(mPipe[1],&rdSet);
-        FD_SET(mFd,&rdSet);
-        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
-        maxFd ++;
-        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
-        ALOGD("http get read wait select end");
-        if(ret > 0){
-            if(FD_ISSET(mPipe[1],&rdSet)){
-                ALOGW("http get write abort by user");
-                return ABORT_ERROR;
-            }else if(FD_ISSET(mFd,&rdSet)){
-                memset(tmpBuff,0,sizeof(tmpBuff));
-                n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
-                if(n > 0){
-                    tmpBuffer->append(tmpBuff,n);
-                    nrecved += n;
-                    int noffset = -1;
-                    //check header whether is complete
-                    if(!headerFind && (noffset = HttpHeader::checkHeader(tmpBuffer)) != -1){
-                        headerFind  = 1;
-                        //parse header
-                        if(OK != parseStatus((const char *)tmpBuffer->data())){
-                            ALOGE("recv data http header %s failed",(const char *)tmpBuffer->data());
-                            return UNKNOWN_ERROR;
-                        }else{
-                            ALOGD("version %d.%d status code %d status description: %s",
-                                    mResponse->mProtoMajor,mResponse->mProtoMinor,
-                                    mResponse->mStatusCode,mResponse->mStatus.c_str());
-                        }
-                        //ALOGD("recv data http header %s ",(const char *)tmpBuffer->data());
-                        if(mResponse->mHeader.parser(tmpBuffer,&mResponse->mHeader) == NULL){
-                            ALOGE("recv data parse http header fail ");
-                            return UNKNOWN_ERROR;
-                        }else{
-                            sp<BufferUtils> debugBuffer = new BufferUtils();
-                            mResponse->mHeader.toString(*debugBuffer);
-                            ALOGD("recv data parse http header offset : %d :%s ",noffset,(const char *)debugBuffer->data());
-                            //seek to data
-                            tmpBuffer->offset(noffset,SEEK_SET);
-                            break;
-                        }
-                    }
-                    //ALOGD("recv data %p size: %zd n :%d ", tmpBuffer->data(),tmpBuffer->size(),n);
-                }else if(n < 0){
-                    ALOGD("recv data fail %p size: %zd error:%s",
-                            tmpBuffer->data(),tmpBuffer->size(),strerror(errno));
-                    mError ++;
-                    return UNKNOWN_ERROR;
-                }else{
-                    ALOGD("recv data complete %p size: %zd  error:%s",
-                            tmpBuffer->data(),tmpBuffer->size(),strerror(errno));
-                    break;
-                }
-
-            }else{
-                ALOGE("http get recv data  fail!");
-                return UNKNOWN_ERROR;
-            }
-        }else if(ret == 0){
-            ALOGE("http get recv data timeout !");
-            return TIMEOUT_ERROR;
-        }else{
-            ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
-            return UNKNOWN_ERROR;
-        }
-    }
-
-    //    301 (Moved Permanently)
-    //    302 (Found)
-    //    303 (See Other)
-    //    307 (Temporary Redirect)
-    //    308 (Permanent Redirect)
-    if(mResponse->mStatusCode == HttpHeader::StatusFound ||
-            mResponse->mStatusCode == HttpHeader::StatusSeeOther||
-            mResponse->mStatusCode == HttpHeader::StatusMovedPermanently||
-            mResponse->mStatusCode == HttpHeader::StatusTemporaryRedirect ||
-            mResponse->mStatusCode == HttpHeader::StatusPermanentRedirect 
-      ){
-        //close fd 
-        close(mFd);
-        mFd = -1;
-        //do redirect
-        if(doRelocation() != OK){
-            return UNKNOWN_ERROR;
-        }
-    }
-    
-    if(mResponse->mStatusCode >= HttpHeader::StatusBadRequest &&
-            mResponse->mStatusCode <= HttpHeader::StatusUnavailableForLegalReasons){
-        ALOGE("request format error code is %d ",mResponse->mStatusCode);
-        return BAD_VALUE;
-    }
-
-    if(mResponse->mStatusCode >= HttpHeader::StatusInternalServerError &&
-            mResponse->mStatusCode <= HttpHeader::StatusNetworkAuthenticationRequired){
-        ALOGE("server error code is %d ",mResponse->mStatusCode);
-        return UNKNOWN_ERROR;
-    }
-
-
-    if(mResponse->mStatusCode == HttpHeader::StatusSwitchingProtocols ){
-        ALOGE("don't support switch protocol code is %d ",mResponse->mStatusCode);
-        return BAD_VALUE;
-    }
-
-    //parse http head 
-    mResponse->mTransferEncoding = mResponse->mHeader.getValues(HttpHeader::transferEncodingHints); 
-    //check whether is chunked
-    if(mResponse->mTransferEncoding.empty()){
-        mResponse->mTransferEncoding = HttpHeader::encodingIdentifyHints; 
-    }
-
-    if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
-        std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
-        ALOGD(">>>len = %s",len.c_str());
-        mResponse->mContentLength = ::atoi(len.c_str()); 
-        if(mResponse->mContentLength < 0){
-            ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
-            return UNKNOWN_ERROR;
-        }
-    }if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
-        mResponse->mUncompressed =true;
-    }
-
-    //check connect header entry
-    std::string conn = mResponse->mHeader.getValues(HttpHeader::connectionHints);
-    if(conn.empty()){
-        mResponse->mClose = true;
-    }else if(conn == "Close" || conn == "close"){
-        mResponse->mClose = true;
-    }else{
-        mResponse->mClose = false;
-    }
-/*
-    if(task == NULL){
-        ALOGE("BAD_VALUE HTTP GET TRANSFER");
-        return BAD_VALUE;
-    }
-    sp<BufferUtils> recvBuffer = task->mRecvData;
-    */
-
-    sp<BufferUtils> recvBuffer = new BufferUtils();
-    /*ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
-            tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
-            */
-    if(tmpBuffer->size() > tmpBuffer->offset()){
-        recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
-    }
-
-    if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
-        return chunkedReader(recvBuffer,tv);
-    }else{
-        return identifyReader(recvBuffer,tv);
-    }
+    httpDoTransfer(req);
 }
 
 
@@ -452,16 +172,12 @@ long HttpTransfer::parseHex(const char *str,long &data){
 
 int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
     const char *data = (const char *)txd;
-    if(size < 5){
+    if(size < 7){
         return false;
     }
-    ALOGD("size is %d  ==> %s ",size,(data -10));
-
-    if(data[size -1] == '\n' && 
-            data[size -2] == '\r' &&
-            data[size -3] == '0'  &&
-            data[size -4] == '\n' && 
-            data[size -5] == '\r'){
+    //ALOGD("size is %d  ==> %s ",size,(data + size - 7));
+    const char *tmpData = data + size - 7;
+    if(strstr(tmpData,HttpChunkedEOFHints) != NULL){
         return true;
     }else{
         return false;
@@ -470,7 +186,7 @@ int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
 
 
 int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn ){
-    ALOGD("socketReader recvBuffer %s  size :%zd ",recvBuffer->data(),recvBuffer->size());
+    //ALOGD("socketReader recvBuffer %s  size :%zd ",recvBuffer->data(),recvBuffer->size());
     if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
         return OK;
     }
@@ -791,7 +507,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     ALOGD("socket fd = %d ",mFd);
 
     BufferUtils sendBuffer;
-    char tmpBuff[10]={0};
+    char tmpBuff[1024]={0};
     //create http header
     if(req->mUseProxy){
         snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
@@ -990,18 +706,18 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     //check whether is chunked
     if(mResponse->mTransferEncoding.empty()){
         mResponse->mTransferEncoding = HttpHeader::encodingIdentifyHints; 
-    }else{
-        if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
-            std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
-            ALOGD(">>>len = %s",len.c_str());
-            mResponse->mContentLength = ::atoi(len.c_str()); 
-            if(mResponse->mContentLength < 0){
-                ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
-                return UNKNOWN_ERROR;
-            }
-        }if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
-            mResponse->mUncompressed =true;
+    }
+
+    if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
+        std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
+        ALOGD(">>>len = %s",len.c_str());
+        mResponse->mContentLength = ::atoi(len.c_str()); 
+        if(mResponse->mContentLength < 0){
+            ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
+            return UNKNOWN_ERROR;
         }
+    }if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
+        mResponse->mUncompressed =true;
     }
 
     //check connect header entry
@@ -1022,18 +738,20 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     */
 
     sp<BufferUtils> recvBuffer = new BufferUtils();
-    ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
-            tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
+    //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
+    //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
     if(tmpBuffer->size() > tmpBuffer->offset()){
         recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
     }
 
+    ret = OK;
     if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
-        return chunkedReader(recvBuffer,tv);
+        ret = chunkedReader(recvBuffer,tv);
     }else{
-        return identifyReader(recvBuffer,tv);
+        ret = identifyReader(recvBuffer,tv);
     }
-    ALOGD("==> recvBuffer %s ",(const char *)recvBuffer->data());
+    //ALOGD("recvBuffer %s ",recvBuffer->data());
+    return ret;
 }
 
 
