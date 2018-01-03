@@ -180,8 +180,13 @@ struct HttpHeader{
     static const char *lineHints; 
     static const char *headerHints;
     static const char *locationHints;
+    static const char *clientRangeHints;
+    static const char *serverRangeHints;
+    static const char *acceptRangeHints;
+    static const char *etagHints;
 
     HttpHeader():mEntries(20,getStringHash){
+
     }
 
     static int checkHeader(sp<BufferUtils> &buffer);

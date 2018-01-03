@@ -19,9 +19,13 @@ const char * HttpHeader::encodingIdentifyHints = "identity";
 const char * HttpHeader::locationHints ="Location" ;
 const char * HttpHeader::lineHints= "\r\n";
 const char * HttpHeader::headerHints = "\r\n\r\n";
+const char * HttpHeader::clientRangeHints = "Range";
+const char * HttpHeader::serverRangeHints = "Content-Range";
+const char * HttpHeader::acceptRangeHints = "Accept-Ranges";
+const char * HttpHeader::etagHints = "ETag";
 
 template<> HttpHeaderEntry SimpleHash<std::string, HttpHeaderEntry>::mNullItem = HttpHeaderEntry();
-#define MAX_STRING       (1024) 
+#define MAX_STRING       (512) 
 
 int HttpHeader::checkHeader(sp<BufferUtils> &buffer){
     int size = buffer->size();

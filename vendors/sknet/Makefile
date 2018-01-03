@@ -27,6 +27,8 @@ UTILS_SRC := utils/BasicHashtable.cpp \
 	utils/Timers.cpp \
 	utils/VectorImpl.cpp \
 	utils/WorkQueue.cpp \
+	utils/FileUtils.cpp \
+	utils/RawFile.cpp \
 
 
 MODEL_SRC := model/SocketAddress.cpp \

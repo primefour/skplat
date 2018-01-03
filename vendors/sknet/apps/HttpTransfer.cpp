@@ -13,50 +13,28 @@
 #include"TaskInfo.h"
 #include<stdlib.h>
 #include"AppUtils.h"
+#include<stdarg.h>
 
 int HttpTransfer::mRelocationLimited = 11;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
-const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n\r\n";
+const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n";
 
-int HttpTransfer::doGet(const char *url){
-    //create a get request obj
-    HttpRequest *req= new HttpRequest();
-    req->mMethod = "GET";
-    if(Url::parseUrl(url,&(req->mUrl)) == NULL){
-        return BAD_VALUE;
+void HttpTransfer::setHeaderEntry(const char *entryName,const char *format,...){
+    if(mRequest != NULL){
+        va_list params;
+        va_start(params, format);
+        mRequest->mHeader.setEntry(entryName,format,params);
+        va_end(params);
     }
-    req->mProto="HTTP/1.1";
-    req->mProtoMajor = 1;
-    req->mProtoMinor = 1;
-    req->mHeader.setEntry("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
-    req->mHeader.setEntry("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
-    req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
-    //req->mHeader.setEntry("Connection","close");
-    req->mHeader.setEntry("Connection","keep-alive");
-    //req->mHeader.setEntry("Accept-Encoding","gzip, deflate");
-    //req->mHeader.setEntry("Content-Length","%d",0);
-    req->mHeader.setEntry("Referer","http://www.163.com/");
-    //set host entry
-    req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
-    req->mHeader.setEntry("Upgrade-Insecure-Requests","%d",1);
-    //req->mHeader.setEntry("Cookie","vjuids=-3dd6df54d.15e9ad44c20.0.5ce710462eea; _ntes_nnid=5fa8714d6ebdf9ab84afc38eb5322a23,1505836157990; usertrack=c+xxClnBPH6NJ66MBFFFAg==; _ntes_nuid=5fa8714d6ebdf9ab84afc38eb5322a23; UM_distinctid=15e9ad4cb11106-08a044a68e29-1c29160a-1fa400-15e9ad4cb12462; __gads=ID=b69a461dd3308690:T=1505836191:S=ALNI_MbOv77TDsxHiHEimeD1bCNsaE7O3A; mail_psc_fingerprint=d5d80616f93a7a977100394b9c21a1df; P_INFO=primefour@163.com|1511711367|0|163|00&21|shh&1511410577&163#shh&null#10#0#0|158993&0|163&mail163|primefour@163.com; CNZZDATA1271207190=485797003-1512128773-http%253A%252F%252Fnews.163.com%252F%7C1512128773; NNSSPID=0fea259fd0b646e5a83725c72757f3f9; Province=021; City=021; NTES_hp_textlink1=old; vjlast=1505836158.1514474647.11; CNZZDATA1256734798=1152423267-1511578113-http%253A%252F%252Fnews.163.com%252F%7C1514473122; CNZZDATA1256336326=1972669584-1505835976-http%253A%252F%252Fnews.163.com%252F%7C1514474288; ne_analysis_trace_id=1514474658373; s_n_f_l_n3=7d24fc61281cd9631514474658382; vinfo_n_f_l_n3=7d24fc61281cd963.1.13.1505836157998.1514117875751.1514474821367");
-
-    //set requst and response
-    mRequest = req;
-    HttpResponse *response = new HttpResponse();
-    mRequest->mResp = response;
-    mResponse = response;
-    mResponse->mRequest = req;
-    httpGet(req);
 }
 
-int HttpTransfer::doPost(const char *url,BufferUtils &buff){
-    //create a post request obj
+
+HttpRequest *HttpTransfer::createRequest(const char *url){
+    //create a get request obj
     HttpRequest *req= new HttpRequest();
-    req->mMethod = "POST";
     if(Url::parseUrl(url,&(req->mUrl)) == NULL){
-        return BAD_VALUE;
+        return NULL;
     }
     req->mProto="HTTP/1.1";
     req->mProtoMajor = 1;
@@ -64,85 +42,75 @@ int HttpTransfer::doPost(const char *url,BufferUtils &buff){
     req->mHeader.setEntry("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
     req->mHeader.setEntry("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
     req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
-    //req->mHeader.setEntry("Connection","close");
     req->mHeader.setEntry("Connection","keep-alive");
-    //req->mHeader.setEntry("Accept-Encoding","gzip, deflate");
-    //req->mHeader.setEntry("Content-Length","%d",0);
-    req->mHeader.setEntry("Referer","http://www.163.com/");
-    //set host entry
     req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
-    req->mHeader.setEntry("Upgrade-Insecure-Requests","%d",1);
-    //req->mHeader.setEntry("Cookie","vjuids=-3dd6df54d.15e9ad44c20.0.5ce710462eea; _ntes_nnid=5fa8714d6ebdf9ab84afc38eb5322a23,1505836157990; usertrack=c+xxClnBPH6NJ66MBFFFAg==; _ntes_nuid=5fa8714d6ebdf9ab84afc38eb5322a23; UM_distinctid=15e9ad4cb11106-08a044a68e29-1c29160a-1fa400-15e9ad4cb12462; __gads=ID=b69a461dd3308690:T=1505836191:S=ALNI_MbOv77TDsxHiHEimeD1bCNsaE7O3A; mail_psc_fingerprint=d5d80616f93a7a977100394b9c21a1df; P_INFO=primefour@163.com|1511711367|0|163|00&21|shh&1511410577&163#shh&null#10#0#0|158993&0|163&mail163|primefour@163.com; CNZZDATA1271207190=485797003-1512128773-http%253A%252F%252Fnews.163.com%252F%7C1512128773; NNSSPID=0fea259fd0b646e5a83725c72757f3f9; Province=021; City=021; NTES_hp_textlink1=old; vjlast=1505836158.1514474647.11; CNZZDATA1256734798=1152423267-1511578113-http%253A%252F%252Fnews.163.com%252F%7C1514473122; CNZZDATA1256336326=1972669584-1505835976-http%253A%252F%252Fnews.163.com%252F%7C1514474288; ne_analysis_trace_id=1514474658373; s_n_f_l_n3=7d24fc61281cd9631514474658382; vinfo_n_f_l_n3=7d24fc61281cd963.1.13.1505836157998.1514117875751.1514474821367");
+    return req;
+}
 
-    //set requst and response
+int HttpTransfer::doGet(const char *url){
+    HttpRequest * req = createRequest(url);
+    if(req == NULL){
+        return BAD_VALUE;
+    }
+    req->mMethod = "GET";
+    //bind request and response
     mRequest = req;
     HttpResponse *response = new HttpResponse();
     mRequest->mResp = response;
     mResponse = response;
     mResponse->mRequest = req;
-    httpPost(req);
+    //do request
+    return httpGet(req);
+}
+
+int HttpTransfer::doPost(const char *url,sp<BufferUtils> &buffer){
+    HttpRequest * req = createRequest(url);
+    //create a post request obj
+    req->mMethod = "POST";
+    ASSERT(buffer->size() > 0,"Invalidate post body");
+    if(req  == NULL ||buffer->size() <= 0){
+        return BAD_VALUE;
+    }
+    //bind request and response
+    mRequest = req;
+    HttpResponse *response = new HttpResponse();
+    mRequest->mResp = response;
+    mResponse = response;
+    mResponse->mRequest = req;
+    mRequest->mBody = buffer;
+    //post action
+    return httpPost(req);
+}
+
+
+
+int HttpTransfer::doPost(const char *url,BufferUtils &buff){
+    HttpRequest * req = createRequest(url);
+    //create a post request obj
+    req->mMethod = "POST";
+    ASSERT(buff.size() > 0,"Invalidate post body");
+    if(req  == NULL ||buff.size() <= 0){
+        return BAD_VALUE;
+    }
+    //bind request and response
+    mRequest = req;
+    HttpResponse *response = new HttpResponse();
+    mRequest->mResp = response;
+    mResponse = response;
+    mResponse->mRequest = req;
+    mRequest->mBody = new BufferUtils();
+    *(mRequest->mBody) = buff;
+    //post action
+    return httpPost(req);
 }
 
 int HttpTransfer::httpGet(HttpRequest *req){
-    httpDoTransfer(req);
+    return httpDoTransfer(req);
 }
 
-
-int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv){
-    int n = 0;
-    int ret = 0;
-    fd_set rdSet,wrSet;
-    char tmpBuff[10] ={0};
-    int nrecved = 0;
-    while(nrecved < count){
-        FD_ZERO(&rdSet);
-        FD_SET(mPipe[1],&rdSet);
-        FD_SET(mFd,&rdSet);
-        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
-        maxFd ++;
-        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
-        ALOGD("http get read wait select end");
-        if(ret > 0){
-            if(FD_ISSET(mPipe[1],&rdSet)){
-                ALOGW("http get write abort by user");
-                return ABORT_ERROR;
-            }else if(FD_ISSET(mFd,&rdSet)){
-                int rsize = count - nrecved;
-                if(rsize > sizeof(tmpBuff) -1){
-                    rsize = sizeof(tmpBuff) -1;
-                }
-                n = read(mFd,tmpBuff,rsize);
-                if(n > 0){
-                    recvBuffer->append(tmpBuff,n);
-                    nrecved += n;
-                    //check header whether is complete
-                }else if(n < 0){
-                    ALOGD("recv data fail %p size: %zd error:%s",
-                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
-                    mError ++;
-                    return UNKNOWN_ERROR;
-                }else{
-                    ALOGD("recv data complete %p size: %zd  error:%s",
-                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
-                    break;
-                }
-            }else{
-                ALOGE("http recv data fail!");
-                return UNKNOWN_ERROR;
-            }
-        }else if(ret == 0){
-            ALOGE("http recv data timeout !");
-            return TIMEOUT_ERROR;
-        }else{
-            ALOGE("http recv data  fail! ret = %d %s ",ret,strerror(errno));
-            return UNKNOWN_ERROR;
-        }
-    }
-    return OK;
-
+int HttpTransfer::httpPost(HttpRequest *req){
+    return httpDoTransfer(req);
 }
-
 
 long HttpTransfer::parseHex(const char *str,long &data){
     int i = 0;
@@ -168,8 +136,6 @@ long HttpTransfer::parseHex(const char *str,long &data){
 	return data;
 }
 
-
-
 int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
     const char *data = (const char *)txd;
     if(size < 7){
@@ -194,7 +160,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
     int n = 0;
     int ret = 0;
     fd_set rdSet,wrSet;
-    char tmpBuff[10] ={0};
+    char tmpBuff[1024] ={0};
     while(1){
         FD_ZERO(&rdSet);
         FD_SET(mPipe[1],&rdSet);
@@ -209,7 +175,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 ALOGW("http get write abort by user");
                 return ABORT_ERROR;
             }else if(FD_ISSET(mFd,&rdSet)){
-                n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
+                n = read(mFd,tmpBuff,sizeof(tmpBuff));
                 if(n > 0){
                     //ALOGD("tmpBuff = %s ",tmpBuff);
                     recvBuffer->append(tmpBuff,n);
@@ -341,7 +307,7 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 
 int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
     HttpTransfer *hobj = (HttpTransfer*)obj;
-    ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",length,hobj->mResponse->mContentLength);
+    //ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",length,hobj->mResponse->mContentLength);
     if(length >= hobj->mResponse->mContentLength){
         return true; 
     }else{
@@ -349,8 +315,6 @@ int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
     }
 
 }
-
-
 
 int HttpTransfer::identifyReader(sp<BufferUtils> &recvBuffer,struct timeval &tv){
     ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
@@ -374,13 +338,12 @@ int HttpTransfer::doRelocation(){
     mRelocationCount ++;
     ALOGD("relocation is %s ",locHost.c_str());
     mResponse->relocation(locHost.c_str());
-    //delete response
+    //delete response and rebind the new response
     mResponse->mRequest->mResp = new HttpResponse();
     mRequest->mResp->mRequest = mRequest;
     mResponse = mRequest->mResp;
     //do get requset
-    httpGet(mRequest.get());
-    return OK;
+    return httpGet(mRequest.get());
 }
 
 
@@ -457,10 +420,6 @@ int HttpTransfer::parseHttpVersion(const char *version,int &major,int &minor){
         minor = 0;
         return BAD_VALUE;
     }
-}
-
-int HttpTransfer::httpPost(HttpRequest *req){
-
 }
 
 int HttpTransfer::httpDoTransfer(HttpRequest *req){
@@ -754,55 +713,64 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     return ret;
 }
 
-
-    
-
-/*
-    void
-http_get(http_t *conn, char *lurl)
-{
-	*conn->request = 0;
-	if (conn->proxy) {
-		const char *proto = scheme_from_proto(conn->proto);
-		http_addheader(conn, "GET %s%s%s HTTP/1.0", proto, conn->host, lurl);
-	} else {
-		http_addheader(conn, "GET %s HTTP/1.0", lurl);
-		if ((conn->proto == PROTO_HTTP &&
-		     conn->port != PROTO_HTTP_PORT) ||
-		    (conn->proto == PROTO_HTTPS &&
-		     conn->port != PROTO_HTTPS_PORT))
-			http_addheader(conn, "Host: %s:%i", conn->host,
-				       conn->port);
-		else
-			http_addheader(conn, "Host: %s", conn->host);
-	}
-	if (*conn->auth)
-		http_addheader(conn, "Authorization: Basic %s", conn->auth);
-	if (*conn->proxy_auth)
-		http_addheader(conn, "Proxy-Authorization: Basic %s",
-			       conn->proxy_auth);
-	http_addheader(conn, "Accept: *//*");
-	if (conn->firstbyte) {
-		if (conn->lastbyte)
-			http_addheader(conn, "Range: bytes=%lld-%lld",
-				       conn->firstbyte, conn->lastbyte);
-		else
-			http_addheader(conn, "Range: bytes=%lld-",
-				       conn->firstbyte);
-	}
+int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv){
+    int n = 0;
+    int ret = 0;
+    fd_set rdSet,wrSet;
+    char tmpBuff[10] ={0};
+    int nrecved = 0;
+    while(nrecved < count){
+        FD_ZERO(&rdSet);
+        FD_SET(mPipe[1],&rdSet);
+        FD_SET(mFd,&rdSet);
+        int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
+        maxFd ++;
+        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ALOGD("http get read wait select end");
+        if(ret > 0){
+            if(FD_ISSET(mPipe[1],&rdSet)){
+                ALOGW("http get write abort by user");
+                return ABORT_ERROR;
+            }else if(FD_ISSET(mFd,&rdSet)){
+                int rsize = count - nrecved;
+                if(rsize > sizeof(tmpBuff) -1){
+                    rsize = sizeof(tmpBuff) -1;
+                }
+                n = read(mFd,tmpBuff,rsize);
+                if(n > 0){
+                    recvBuffer->append(tmpBuff,n);
+                    nrecved += n;
+                    //check header whether is complete
+                }else if(n < 0){
+                    ALOGD("recv data fail %p size: %zd error:%s",
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
+                    mError ++;
+                    return UNKNOWN_ERROR;
+                }else{
+                    ALOGD("recv data complete %p size: %zd  error:%s",
+                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
+                    break;
+                }
+            }else{
+                ALOGE("http recv data fail!");
+                return UNKNOWN_ERROR;
+            }
+        }else if(ret == 0){
+            ALOGE("http recv data timeout !");
+            return TIMEOUT_ERROR;
+        }else{
+            ALOGE("http recv data  fail! ret = %d %s ",ret,strerror(errno));
+            return UNKNOWN_ERROR;
+        }
+    }
+    return OK;
 }
 
-var (
-	tr = &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	client = &http.Client{Transport: tr}
-)
 
-var (
+ /*   
 	acceptRangeHeader   = "Accept-Ranges"
 	contentLengthHeader = "Content-Length"
-)
 
 type HttpDownloader struct {
 	url       string
@@ -873,7 +841,6 @@ func NewHttpDownloader(url string, par int, skipTls bool) *HttpDownloader {
 	ret.skipTls = skipTls
 	ret.parts = partCalculate(int64(par), len, url)
 	ret.resumable = resumable
-
 MultipartEntity mutiEntity = newMultipartEntity();
 File file = new File("d:/photo.jpg");
 mutiEntity.addPart("desc",new StringBody("美丽的西双版纳", Charset.forName("utf-8")));

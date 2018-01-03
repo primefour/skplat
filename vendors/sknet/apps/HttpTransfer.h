@@ -127,10 +127,11 @@ class HttpTransfer :public RefBase{
             dispose();
             init();
         }
-
+        void setHeaderEntry(const char *entryName,const char *format,...);
         int httpDoTransfer(HttpRequest *req);
         int doGet(const char *url);
         int doPost(const char *url,BufferUtils &buff);
+        int doPost(const char *url,sp<BufferUtils> &buffer);
         int httpPost(HttpRequest *req);
         int httpGet(HttpRequest *req);
         int parseHttpVersion(const char *version,int &major,int &minor);
@@ -143,6 +144,7 @@ class HttpTransfer :public RefBase{
         int chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils> &recvBuffer,int &moreData,int &leftSz);
         int socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn);
     private:
+        HttpRequest *createRequest(const char *url);
         static int chunkedEOF(void *obj,const void *data,int size);
         static int identifyBreak(void *obj,const void *data,int length);
 
