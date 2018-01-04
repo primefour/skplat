@@ -76,6 +76,19 @@
 #include<fcntl.h>
 #include"RefBase.h"
 
+struct Range{
+    long begin;
+    long end;
+};
+
+struct MutilDownload{
+    std::string filePath;
+    Vector<Range> ranges;
+};
+
+std::string getRangeFilePath(MutilDownload& md,int i){
+
+}
 
 class HttpTransfer :public RefBase{
     public:
@@ -83,6 +96,7 @@ class HttpTransfer :public RefBase{
         static const char *HttpGetHints;
         static const char *HttpPostHints;
         static const char *HttpChunkedEOFHints;
+        static const char *HttpTransfer::DownloadDefaultPath= "./";
 
         HttpTransfer(){
             init();

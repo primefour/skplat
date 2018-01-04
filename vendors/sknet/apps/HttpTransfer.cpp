@@ -22,6 +22,7 @@ int HttpTransfer::mRelocationLimited = 11;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
 const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n";
+const char *HttpTransfer::DownloadDefaultPath= "./";
 
 void HttpTransfer::setHeaderEntry(const char *entryName,const char *format,...){
     if(mRequest != NULL){
@@ -724,6 +725,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     //ALOGD("recvBuffer %s ",recvBuffer->data());
     return ret;
 }
+
+
+
 
 int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv){
     int n = 0;
