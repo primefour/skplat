@@ -483,12 +483,17 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 xpath.c_str(),req->mProto.c_str());
     }
     sendBuffer.append(tmpBuff,strlen(tmpBuff));
+
+    if(req->mMethod == HttpPostHints ){
+        if(req->mBody->size() != 0){
+            req->mHeader.setEntry(HttpHeader::contentLengthHints,"%d",req->mBody->size());
+        }
+    }
     //add http header entry
     req->mHeader.toString(sendBuffer);
     ALOGD("%s ",sendBuffer.data());
-
-    if(req->mMethod == HttpPostHints ){
-        ASSERT(req->mBody->size() <= 0,"invalidate post request ");
+    if(req->mMethod == HttpPostHints){
+        ASSERT(req->mBody->size() > 0,"invalidate post request ");
         //add post data
         sendBuffer.append(req->mBody->data(),req->mBody->size());
     }
