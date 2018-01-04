@@ -15,6 +15,9 @@
 #include"AppUtils.h"
 #include<stdarg.h>
 
+#define TRANSFER_CONNECT_TIMEOUT 15000 //ms
+#define TRANSFER_SELECT_TIMEOUT 60000 //ms
+
 int HttpTransfer::mRelocationLimited = 11;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
@@ -68,7 +71,7 @@ int HttpTransfer::doPost(const char *url,sp<BufferUtils> &buffer){
     //create a post request obj
     req->mMethod = "POST";
     ASSERT(buffer->size() > 0,"Invalidate post body");
-    if(req  == NULL ||buffer->size() <= 0){
+    if(req == NULL ||buffer->size() <= 0){
         return BAD_VALUE;
     }
     //bind request and response
@@ -168,7 +171,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ret = select(maxFd,&rdSet,NULL,NULL,&tv);
         //ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
@@ -453,7 +456,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     if(task != NULL){
         ret = connect.connect(task->mConnTimeout);
     }else{
-        ret = connect.connect();
+        ret = connect.connect(TRANSFER_CONNECT_TIMEOUT);
     }
 
     if(ret != OK){
@@ -495,9 +498,12 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     int nsended = 0;
     struct timeval tv;
 
-    if(task != NULL && task->mTaskTimeout != 0){
+    if(task != NULL){
         tv.tv_sec = task->mTaskTimeout /1000;
         tv.tv_usec = task->mTaskTimeout %1000 * 1000;
+    }else{
+        tv.tv_sec = TRANSFER_SELECT_TIMEOUT;
+        tv.tv_usec = 0;
     }
 
     while(nsended < sendBuffer.size()){
@@ -508,7 +514,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         ALOGD("http get write wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,&wrSet,NULL,mTask != NULL ?&tv:NULL);
+        ret = select(maxFd,&rdSet,&wrSet,NULL,&tv);
         ALOGD("http get write wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
@@ -559,7 +565,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ret = select(maxFd,&rdSet,NULL,NULL,&tv);
         ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
@@ -688,26 +694,27 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }else{
         mResponse->mClose = false;
     }
-/*
-    if(task == NULL){
-        ALOGE("BAD_VALUE HTTP GET TRANSFER");
-        return BAD_VALUE;
-    }
-    sp<BufferUtils> recvBuffer = task->mRecvData;
-    */
 
-    sp<BufferUtils> recvBuffer = new BufferUtils();
+    sp<BufferUtils> recvBuffer = NULL;
+    if(task != NULL){
+        recvBuffer = task->mRecvData;
+    }else{
+        ALOGW("HTTP TRANSFER NO TASK BIND");
+        mResponse->mBody = new BufferUtils();
+        recvBuffer = mResponse->mBody;
+    }
     //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
     //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
     if(tmpBuffer->size() > tmpBuffer->offset()){
         recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
     }
-
-    ret = OK;
-    if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
-        ret = chunkedReader(recvBuffer,tv);
-    }else{
-        ret = identifyReader(recvBuffer,tv);
+    if(!mIsDownload){
+        ret = OK;
+        if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
+            ret = chunkedReader(recvBuffer,tv);
+        }else{
+            ret = identifyReader(recvBuffer,tv);
+        }
     }
     //ALOGD("recvBuffer %s ",recvBuffer->data());
     return ret;
@@ -726,7 +733,7 @@ int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct time
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,mTask != NULL ?&tv:NULL);
+        ret = select(maxFd,&rdSet,NULL,NULL,&tv);
         ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){

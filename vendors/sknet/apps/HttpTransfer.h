@@ -105,6 +105,7 @@ class HttpTransfer :public RefBase{
             mError = 0;
             mTask = NULL;
             mRelocationCount = 0;
+            mIsDownload = 0;
         }
 
         void interrupt(){//may be block
@@ -127,11 +128,20 @@ class HttpTransfer :public RefBase{
             dispose();
             init();
         }
+
+        inline sp<HttpResponse> getResponse(){
+            return mResponse;
+        }
+        inline sp<HttpRequest> getRequest(){
+            return mRequest;
+        }
+
         void setHeaderEntry(const char *entryName,const char *format,...);
         int httpDoTransfer(HttpRequest *req);
         int doGet(const char *url);
         int doPost(const char *url,BufferUtils &buff);
         int doPost(const char *url,sp<BufferUtils> &buffer);
+        int doDownload(const char *url,const char *filePath);
         int httpPost(HttpRequest *req);
         int httpGet(HttpRequest *req);
         int parseHttpVersion(const char *version,int &major,int &minor);
@@ -159,6 +169,7 @@ class HttpTransfer :public RefBase{
         void *mTask;
         static int mRelocationLimited;
         int mRelocationCount;
+        int mIsDownload;
 };
 
 #endif //__HTTP_H__
