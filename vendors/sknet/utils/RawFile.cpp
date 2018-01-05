@@ -50,7 +50,7 @@ RawFile* RawFile::open(const char *filePath,int flags,int endian){
     int ret = access(filePath,F_OK);
     fileObj->mfilePath = filePath;
     fileObj->mEndianType = endian;
-    if(ret < 0 ){
+    if(ret < 0){
         if(flags & O_CREAT ){
             fileObj->mFd = ::open(filePath,flags,0666);
             fileObj->mOpenFlags = flags & ~O_CREAT;
@@ -213,6 +213,56 @@ int RawFile::writeInt32(int32_t data){
     return OK;
 }
 
+int RawFile::append(char *buff,int len){
+    if(mFd < 0){
+        ALOGW("mfd < 0 ");
+        return UNKNOWN_ERROR;
+    }
+    if(mOpenFlags & O_WRONLY != O_WRONLY){
+        ALOGE("this is read only file object");
+        return BAD_VALUE;
+    }
+    size_t pos = ::lseek(mFd,0,SEEK_CUR);
+    size_t size = ::lseek(mFd,0,SEEK_END);
+    int ret = ::write(mFd,buff,len);
+    if(ret < 0){
+        ALOGE("append failed file object %s ",strerror(errno));
+        //recover position
+        ::lseek(mFd,pos,SEEK_SET);
+        return BAD_VALUE;
+    }
+    //recover position
+    ::lseek(mFd,pos,SEEK_SET);
+    return ret;
+}
+
+int RawFile::append(BufferUtils&buffer,int writeLength){
+    if(mFd < 0){
+        ALOGW("mfd < 0 ");
+        return UNKNOWN_ERROR;
+    }
+    if(mOpenFlags & O_WRONLY != O_WRONLY){
+        ALOGE("this is read only file object");
+        return BAD_VALUE;
+    }
+    size_t pos = ::lseek(mFd,0,SEEK_CUR);
+    size_t size = ::lseek(mFd,0,SEEK_END);
+    int ret;
+    if(writeLength == -1 && buffer.size() > 0){
+        ret = ::write(mFd,buffer.data(),buffer.size());
+    }else{
+        ret = ::write(mFd,buffer.data(),writeLength);
+    }
+    if(ret < 0){
+        ALOGE("append failed file object %s ",strerror(errno));
+        //recover position
+        ::lseek(mFd,pos,SEEK_SET);
+        return BAD_VALUE;
+    }
+    return ret;
+
+}
+
 int RawFile::write(char *buff,int len){
     if(mFd < 0){
         ALOGW("mfd < 0 ");
@@ -223,6 +273,10 @@ int RawFile::write(char *buff,int len){
         return BAD_VALUE;
     }
     int ret = ::write(mFd,buff,len);
+    if(ret < 0){
+        ALOGE("write failed file object %s ",strerror(errno));
+        return BAD_VALUE;
+    }
     return ret;
 
 }
@@ -241,6 +295,10 @@ int RawFile::write(BufferUtils&buffer,int writeLength){
         ret = ::write(mFd,buffer.data(),buffer.size());
     }else{
         ret = ::write(mFd,buffer.data(),writeLength);
+    }
+    if(ret < 0){
+        ALOGE("write failed file object %s ",strerror(errno));
+        return BAD_VALUE;
     }
     return ret;
 }

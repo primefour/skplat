@@ -49,13 +49,32 @@ void Url::parseQuery(const char *query,Url *url) {
    }
 }
 
+/*
+ * schema://username:password@host:port/path?key=value#fragment
+ * \____/   \______/ \______/ \__/ \__/ \__/ \_______/ \______/
+ *   |         |        |       |    |    |      |         |
+ * schema      |     password   |   port  |    query    fragment
+ *          username          host      path
+ */
 void Url::parseReloc(const char *url){
     const char* pch = strchr(url, ':');   /* parse schema */
-    //relocate by path
     if(pch == NULL){
-        ALOGD("relocation by path: %s ",url);
-        mPath = url;
+        //relocation by path
+        const char *host = strstr(mHref.c_str(),mHost.c_str());
+        const char *path = strchr(host,'/');
+        int size = 0;
+        if(path == NULL){
+            //no path partial
+            size = mHref.size();
+        }else{
+            size = path - host + 1;
+        }
+        std::string href = std::string(mHref.c_str(),size);
+        href += url;
+        ALOGD("relocation by path: %s :href %s",url,href.c_str());
+        parseUrl(href.c_str(),this);
     }else{
+        //relocation by url
         ALOGD("relocation by url: %s ",url);
         parseUrl(url,this);
     }

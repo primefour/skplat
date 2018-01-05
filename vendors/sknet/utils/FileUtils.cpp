@@ -110,7 +110,7 @@ void FileUtils::deleteFiles(const char *filePath){
             ALOGE("delete file %s failed ",fileBuff);
         }
     }else{
-        ALOGE("file or path is not exist or need permission %s ",filePath);
+        ALOGW("file or path is not exist or need permission %s ",filePath);
     }
 }
 

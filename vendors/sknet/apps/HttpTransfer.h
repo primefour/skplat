@@ -75,20 +75,52 @@
 #include<unistd.h>
 #include<fcntl.h>
 #include"RefBase.h"
+#include"RawFile.h"
 
 struct Range{
     long begin;
     long end;
+    long total;
+    long state;
+    enum {
+        RANGE_INIT = -3,
+        RANGE_FAILED = -2,
+        RANGE_DONE = -1,
+    };
+
+    Range(long bg,long ed){
+        begin = bg;
+        end = ed;
+        state = RANGE_INIT;
+        total = begin - end > 0 ?begin - end + 1:0;
+    }
+    Range(){
+        begin = 0;
+        end=-1;
+        total = 0;
+        state = RANGE_INIT;
+    }
+    inline void setFailed(){
+        state = RANGE_FAILED ;
+    }
+
+    inline void setDone(){
+        state = RANGE_DONE;
+    }
+
+    inline void set(long st){
+        this->state  = st;
+    }
+    inline int get(){
+        return state;
+    }
+    inline bool done(){
+        return state == RANGE_DONE;
+    }
+    inline bool failed(){
+        return state == RANGE_FAILED;
+    }
 };
-
-struct MutilDownload{
-    std::string filePath;
-    Vector<Range> ranges;
-};
-
-std::string getRangeFilePath(MutilDownload& md,int i){
-
-}
 
 class HttpTransfer :public RefBase{
     public:
@@ -96,11 +128,13 @@ class HttpTransfer :public RefBase{
         static const char *HttpGetHints;
         static const char *HttpPostHints;
         static const char *HttpChunkedEOFHints;
-        static const char *HttpTransfer::DownloadDefaultPath= "./";
-
-        HttpTransfer(){
-            init();
-        }
+        static const char *downloadDefaultPath;
+        static const char *serverRangeUnits;
+        enum {
+            HTTP_NONE_DOWNLOAD,
+            HTTP_PARENT_DOWNLOAD,
+            HTTP_CHILD_DOWNLOAD,
+        };
         enum {
             HTTP_INIT,
             HTTP_CONNECTING,
@@ -111,6 +145,11 @@ class HttpTransfer :public RefBase{
             HTTP_DONE,
             HTTP_FAIL,
         };
+
+        HttpTransfer(){
+            init();
+        }
+
         void init(){
             mFd = -1;
             mState = HTTP_INIT;
@@ -119,7 +158,7 @@ class HttpTransfer :public RefBase{
             mError = 0;
             mTask = NULL;
             mRelocationCount = 0;
-            mIsDownload = 0;
+            mIsDownload = HTTP_NONE_DOWNLOAD;
         }
 
         void interrupt(){//may be block
@@ -146,6 +185,7 @@ class HttpTransfer :public RefBase{
         inline sp<HttpResponse> getResponse(){
             return mResponse;
         }
+
         inline sp<HttpRequest> getRequest(){
             return mRequest;
         }
@@ -156,17 +196,19 @@ class HttpTransfer :public RefBase{
         int doPost(const char *url,BufferUtils &buff);
         int doPost(const char *url,sp<BufferUtils> &buffer);
         int doDownload(const char *url,const char *filePath);
+        int doRangeDownload(sp<HttpRequest> &req,const char *filePath,Range &rg);
         int httpPost(HttpRequest *req);
         int httpGet(HttpRequest *req);
         int parseHttpVersion(const char *version,int &major,int &minor);
         int parseStatus(const char *buff);
         int doRelocation();
         int identifyReader(sp<BufferUtils> &recvBuffer,struct timeval &tv);
-        int commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv);
+        int commonReader(RawFile &wfile,int count,struct timeval &tv);
         int chunkedReader(sp<BufferUtils> &recvBuffer,struct timeval &tv);
         long parseHex(const char *str,long &data);
         int chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils> &recvBuffer,int &moreData,int &leftSz);
         int socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn);
+        void parseServerRange(const char *rangeStr,Range &range);
     private:
         HttpRequest *createRequest(const char *url);
         static int chunkedEOF(void *obj,const void *data,int size);
@@ -184,6 +226,8 @@ class HttpTransfer :public RefBase{
         static int mRelocationLimited;
         int mRelocationCount;
         int mIsDownload;
+        std::string mfilePath;
+        Range mPartialData;
 };
 
-#endif //__HTTP_H__
+#endif //__HTTP_TRANSFER_H__

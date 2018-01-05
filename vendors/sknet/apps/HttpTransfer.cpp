@@ -14,6 +14,8 @@
 #include<stdlib.h>
 #include"AppUtils.h"
 #include<stdarg.h>
+#include"RawFile.h"
+#include"FileUtils.h"
 
 #define TRANSFER_CONNECT_TIMEOUT 15000 //ms
 #define TRANSFER_SELECT_TIMEOUT 60000 //ms
@@ -22,7 +24,8 @@ int HttpTransfer::mRelocationLimited = 11;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
 const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n";
-const char *HttpTransfer::DownloadDefaultPath= "./";
+const char *HttpTransfer::downloadDefaultPath= "./";
+const char *HttpTransfer::serverRangeUnits = "bytes";
 
 void HttpTransfer::setHeaderEntry(const char *entryName,const char *format,...){
     if(mRequest != NULL){
@@ -49,6 +52,23 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry("Connection","keep-alive");
     req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
     return req;
+}
+
+int HttpTransfer::doRangeDownload(sp<HttpRequest> &req,const char *filePath,Range &rg){
+    mIsDownload = HTTP_CHILD_DOWNLOAD;
+    mfilePath = filePath;
+    mPartialData = rg;
+    //download by this transfer
+    RawFile rawFile(mfilePath.c_str());
+    int ret = rawFile.open(O_RDWR|O_CREAT);
+    //get offset and resume from the end of file
+    return doGet(req->mUrl.mHref.c_str());
+}
+
+int HttpTransfer::doDownload(const char *url,const char *filePath){
+    mIsDownload = HTTP_PARENT_DOWNLOAD;
+    mfilePath = filePath;
+    return doGet(url);
 }
 
 int HttpTransfer::doGet(const char *url){
@@ -709,31 +729,125 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         mResponse->mBody = new BufferUtils();
         recvBuffer = mResponse->mBody;
     }
-    //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
-    //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
-    if(tmpBuffer->size() > tmpBuffer->offset()){
-        recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
-    }
-    if(!mIsDownload){
+
+    if(mIsDownload == HTTP_NONE_DOWNLOAD){
+        //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
+        //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
+        if(tmpBuffer->size() > tmpBuffer->offset()){
+            recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+        }
         ret = OK;
         if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
             ret = chunkedReader(recvBuffer,tv);
         }else{
             ret = identifyReader(recvBuffer,tv);
         }
+    }else if(mIsDownload == HTTP_CHILD_DOWNLOAD){
+        RawFile rawFile(mfilePath.c_str());
+        int ret = rawFile.open(O_RDWR|O_CREAT);
+        if(ret < 0){
+            ALOGE("create file %s failed msg :%s ",mfilePath.c_str(),strerror(errno));
+            return BAD_VALUE;
+        }
+        //get content size 
+        //Content-Range :bytes 580-
+        //Content-Range: 1-200/300\r\n"
+        //
+        std::string serverRange = mResponse->mHeader.getValues(HttpHeader::serverRangeHints);
+        Range rg;
+        parseServerRange(serverRange.c_str(),rg);
+        int count = rg.end - rg.begin +1;
+        if(tmpBuffer->size() > tmpBuffer->offset()){
+            int downloadSize =  tmpBuffer->size() - tmpBuffer->offset();
+            count -= downloadSize;
+            rawFile.append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+            if(count <= 0){
+                return downloadSize;;
+            }
+        }
+        ret = commonReader(rawFile,count,tv);
+        if(ret < 0){
+            ALOGE("download partial file %s failed",mfilePath.c_str());
+            return UNKNOWN_ERROR;
+        }
+        return rg.end - rg.begin +1;
+    }else {
+        //create RangeDownloader to  do mutil-download
+        ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
+        //check support range download 
+        std::string rangeSupport = mResponse->mHeader.getValues(HttpHeader::acceptRangeHints);
+        ALOGD("range Support is %s ",rangeSupport.c_str());
+        if(!rangeSupport.empty() && rangeSupport == serverRangeUnits){
+            //create DownloaderManager
+
+
+        }else{
+            //remove current file and create a new one;
+            FileUtils::deleteFiles(mfilePath.c_str());
+            ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
+            //download by this transfer
+            RawFile rawFile(mfilePath.c_str());
+            int ret = rawFile.open(O_RDWR|O_CREAT);
+            if(ret < 0){
+                ALOGE("create file %s failed msg :%s ",mfilePath.c_str(),strerror(errno));
+                return BAD_VALUE;
+            }
+            int count = mResponse->mContentLength;
+            if(tmpBuffer->size() > tmpBuffer->offset()){
+                int downloadSize =  tmpBuffer->size() - tmpBuffer->offset();
+                count -= downloadSize;
+                rawFile.append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+                if(count <= 0){
+                    return downloadSize;;
+                }
+            }
+            ret = commonReader(rawFile,count,tv);
+            if(ret < 0){
+                ALOGE("download partial file %s failed",mfilePath.c_str());
+                return UNKNOWN_ERROR;
+            }
+            return mResponse->mContentLength;
+        }
     }
-    //ALOGD("recvBuffer %s ",recvBuffer->data());
     return ret;
 }
 
+/*
+ *Content-Range: 1-200/300\r\n"
+ */
+void HttpTransfer::parseServerRange(const char *range,Range &rg){
+    const char *bytes = strstr(range,serverRangeUnits);
+    if(bytes == NULL){
+        bytes = range;
+    }else{
+        bytes += strlen(serverRangeUnits);
+    }
+    while(*(bytes++) != ' ');
+    int begin = atoi(bytes);
+    int end = -1;
+    const char *split = strchr(bytes,'-');
+    const char *dash = strchr(range,'/');
+    rg.begin  = begin;
+    if(split == NULL){
+        //use input end value
+        rg.end = mPartialData.end;
+        return ;
+    }
+    end = atoi(split +1);
+    rg.end = end;
+    int total = 0;
+    if(dash != NULL){
+        total = atoi(dash+1);
+    }
+    ALOGD("begin %d - %d  total:%d ",begin,end,total);
+}
 
 
-
-int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct timeval &tv){
+int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
     int n = 0;
     int ret = 0;
     fd_set rdSet,wrSet;
-    char tmpBuff[10] ={0};
+    char tmpBuff[1024] ={0};
     int nrecved = 0;
     while(nrecved < count){
         FD_ZERO(&rdSet);
@@ -750,22 +864,18 @@ int HttpTransfer::commonReader(sp<BufferUtils> &recvBuffer,int count,struct time
                 return ABORT_ERROR;
             }else if(FD_ISSET(mFd,&rdSet)){
                 int rsize = count - nrecved;
-                if(rsize > sizeof(tmpBuff) -1){
-                    rsize = sizeof(tmpBuff) -1;
+                if(rsize > sizeof(tmpBuff)){
+                    rsize = sizeof(tmpBuff);
                 }
                 n = read(mFd,tmpBuff,rsize);
                 if(n > 0){
-                    recvBuffer->append(tmpBuff,n);
+                    wfile.append(tmpBuff,n);
                     nrecved += n;
                     //check header whether is complete
                 }else if(n < 0){
-                    ALOGD("recv data fail %p size: %zd error:%s",
-                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
                     mError ++;
                     return UNKNOWN_ERROR;
                 }else{
-                    ALOGD("recv data complete %p size: %zd  error:%s",
-                            recvBuffer->data(),recvBuffer->size(),strerror(errno));
                     break;
                 }
             }else{

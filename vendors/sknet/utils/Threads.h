@@ -16,7 +16,6 @@
 
 #ifndef _LIBS_UTILS_THREAD_H
 #define _LIBS_UTILS_THREAD_H
-//#define HAVE_PTHREADS
 
 #include <stdint.h>
 #include <sys/types.h>
