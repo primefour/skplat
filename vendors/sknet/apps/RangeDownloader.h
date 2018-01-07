@@ -14,8 +14,12 @@ class RangeDownloader:public Thread{
         inline bool isFailed(){
             return mRg.failed();
         }
-        inline std::string& filePath(){
+        inline std::string& fileSPath(){
             return mfilePath;
+        }
+
+        inline const char* filePath() const{
+            return mfilePath.c_str();
         }
     private:
         sp<HttpTransfer> mTransfer;

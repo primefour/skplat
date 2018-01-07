@@ -3,7 +3,8 @@
 #include<string>
 #include"HttpRequest.h"
 #include"HttpTransfer.h"
-#include"Vector.h"
+#include"Mutex.h"
+#include"Condition.h"
 
 class RangeDownloader;
 
@@ -11,6 +12,7 @@ class DownloaderManager{
     public:
         static const char *downloaderPartialFolder;
         DownloaderManager(sp<HttpRequest> &req,const char *filePath,long contentLength);
+        virtual ~DownloaderManager();
         class CompleteObserver{
             public:
                 CompleteObserver(DownloaderManager *mg){
@@ -18,28 +20,58 @@ class DownloaderManager{
                 }
                 inline void onComplete(Range &rg){
                     AutoMutex _l(mMng->mMutex);
-                    //scan ranges and update status
+                    mMng->mCompleteCount ++;
+                    if(mMng->mFailedCount > 0){
+                        //scan ranges and resume download
+                        mMng->recoverFailedTask();
+                        mMng->mFailedCount = 0;
+                    }
+
+                    if(mMng->mCompleteCount >= mMng->mDownloadCount){
+                        //download complete and compose all files
+                        mMng->mCond.signal();
+                    }
+
+                    if(mMng->mFailedCount + mMng->mCompleteCount >= mMng->mDownloadCount){
+                        //download failed and all download thread exit
+                        mMng->mCond.signal();
+                    }
 
                 }
+
                 inline void onFailed(Range &rg){
                     AutoMutex _l(mMng->mMutex);
+                    ALOGW("get a failed range %ld - %ld ",rg.begin,rg.end);
+                    mMng->mFailedCount ++;
 
+                    if(mMng->mFailedCount + mMng->mCompleteCount >= mMng->mDownloadCount){
+                        //download failed and all download thread exit
+                        mMng->mCond.signal();
+                    }
                 }
+
                 inline void onProgress(Range &rg){
 
                 }
             private:
                 DownloaderManager *mMng;
         };
+        int wait4Complete();
+
     private:
+        void recoverFailedTask();
         std::string getFilePathByRange(Range &rg);
         std::string mfilePath;
         void divdeContentLength(long content);
         Range *mRanges;
-        RangeDownloader *mDownloadThreads;
+        RangeDownloader **mDownloadThreads;
         sp<HttpRequest> mMainRequest;
         int mCompleteCount;
+        int mFailedCount;
+        int mDownloadCount;
         Mutex mMutex;
+        Condition mCond;
+        CompleteObserver mObserver;
 };
 
 #endif
