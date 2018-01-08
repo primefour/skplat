@@ -23,6 +23,7 @@ const char * HttpHeader::clientRangeHints = "Range";
 const char * HttpHeader::serverRangeHints = "Content-Range";
 const char * HttpHeader::acceptRangeHints = "Accept-Ranges";
 const char * HttpHeader::etagHints = "ETag";
+const char * HttpHeader::dispositionHints="Content-Disposition";
 
 template<> HttpHeaderEntry SimpleHash<std::string, HttpHeaderEntry>::mNullItem = HttpHeaderEntry();
 #define MAX_STRING       (512) 

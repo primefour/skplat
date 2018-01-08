@@ -42,6 +42,7 @@ If-Modified-Since: Thu, 28 Dec 2017 15:25:53 GMT
 
 int main(){
     ALOGD("Hello world");
+    /*
     sp<NetworkDatabase>& db = NetworkDatabase::getInstance();
     SocketAddress sockAddr1("www.baidu.com","192.168.1.23");
     sockAddr1.setPort(8080);
@@ -143,5 +144,7 @@ int main(){
     transfer.chunkedReader(oldBuffer,recvBuffer,tv);
     ALOGD("====> %s ",(const char *)recvBuffer->data());
     */
+    HttpTransfer transfer;
+    transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
     return 0;
 }

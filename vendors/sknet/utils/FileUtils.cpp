@@ -23,6 +23,7 @@
 #include "Log.h"
 
 static const char *dir_sep = "/";
+static const char *cur_dir= ".";
 /*
  * return path/prefix_offset.txt
  */
@@ -208,8 +209,10 @@ std::string FileUtils::getParent(const char *path){
 bool FileUtils::makeDir(const char *path){
     ASSERT(path != NULL,"Invalidate path");
     //check directory is all right
-    ASSERT(path[0] == dir_sep[0],"Invalidate path,should use full path");
-    if(isDir(path)){
+    //ASSERT(path[0] == dir_sep[0],"Invalidate path,should use full path");
+
+    ALOGD("mkdir path is %s ",path);
+    if(isDir(path)||strcmp(path,cur_dir) == 0){
         return true;
     }
 

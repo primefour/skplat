@@ -125,6 +125,22 @@ struct Range{
 class HttpTransfer :public RefBase{
     public:
         typedef int (*BreakFpn)(void *obj,const void *data,int size);
+        class TransferObserver:public RefBase{
+            //return false will stop this transfer or continue
+            virtual bool onConnect(){
+                return true;
+            }
+            virtual void onProgress(long bytes,long total){
+                return;
+            }
+            virtual void onCompleted(){
+                return;
+            }
+            virtual void onFailed(){
+                return;
+            }
+        };
+
         static const char *HttpGetHints;
         static const char *HttpPostHints;
         static const char *HttpChunkedEOFHints;
@@ -148,6 +164,10 @@ class HttpTransfer :public RefBase{
 
         HttpTransfer(){
             init();
+        }
+
+        ~HttpTransfer(){
+            ALOGD("%s %d ",__func__,__LINE__);
         }
 
         void init(){
@@ -210,6 +230,7 @@ class HttpTransfer :public RefBase{
         int socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn);
         void parseServerRange(const char *rangeStr,Range &range);
     private:
+        std::string getDownloadFilePath();
         HttpRequest *createRequest(const char *url);
         static int chunkedEOF(void *obj,const void *data,int size);
         static int identifyBreak(void *obj,const void *data,int length);
@@ -228,6 +249,7 @@ class HttpTransfer :public RefBase{
         int mIsDownload;
         std::string mfilePath;
         Range mPartialData;
+        sp<TransferObserver> mObserver;
 };
 
 #endif //__HTTP_TRANSFER_H__

@@ -184,6 +184,7 @@ struct HttpHeader{
     static const char *serverRangeHints;
     static const char *acceptRangeHints;
     static const char *etagHints;
+    static const char *dispositionHints;
 
     HttpHeader():mEntries(20,getStringHash){
 

@@ -11,11 +11,14 @@ RangeDownloader::RangeDownloader(sp<HttpRequest> &req,
     mReq = req;
     mfilePath = filePath;
 }
+
 void RangeDownloader::cancel(){
     mTransfer->interrupt();
 }
 
-
+RangeDownloader::~RangeDownloader(){
+    ALOGD("%s %d ",__func__,__LINE__);
+}
 
 bool RangeDownloader::threadLoop(){
     int ret = mTransfer->doRangeDownload(mReq,mfilePath.c_str(),mRg);
@@ -26,5 +29,5 @@ bool RangeDownloader::threadLoop(){
         mRg.setDone();
         mObserver.onComplete(mRg);
     }
-    return true;
+    return false;
 }

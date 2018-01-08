@@ -52,6 +52,16 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
     req->mHeader.setEntry("Connection","keep-alive");
     req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
+    if(mIsDownload == HTTP_CHILD_DOWNLOAD){
+        //download by this transfer
+        RawFile rawFile(mfilePath.c_str());
+        int ret = rawFile.open(O_RDWR|O_CREAT);
+        long size = rawFile.size();
+        ALOGD("%s file size is %ld ",mfilePath.c_str(),size);
+        //Range:bytes=554554- 
+        //Range:bytes=0-100 
+        req->mHeader.setEntry(HttpHeader::clientRangeHints,"bytes=%d-%d",mPartialData.begin,mPartialData.end);
+    }
     return req;
 }
 
@@ -59,9 +69,6 @@ int HttpTransfer::doRangeDownload(sp<HttpRequest> &req,const char *filePath,Rang
     mIsDownload = HTTP_CHILD_DOWNLOAD;
     mfilePath = filePath;
     mPartialData = rg;
-    //download by this transfer
-    RawFile rawFile(mfilePath.c_str());
-    int ret = rawFile.open(O_RDWR|O_CREAT);
     //get offset and resume from the end of file
     return doGet(req->mUrl.mHref.c_str());
 }
@@ -750,7 +757,6 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             ALOGE("create file %s failed msg :%s ",mfilePath.c_str(),strerror(errno));
             return BAD_VALUE;
         }
-        return 0;
         //get content size 
         //Content-Range :bytes 580-
         //Content-Range: 1-200/300\r\n"
@@ -779,6 +785,14 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         //check support range download 
         std::string rangeSupport = mResponse->mHeader.getValues(HttpHeader::acceptRangeHints);
         ALOGD("range Support is %s ",rangeSupport.c_str());
+        FileUtils::makeDir(DownloaderManager::downloaderFolder);
+        if(mfilePath.empty()){
+            std::string fileName = getDownloadFilePath();
+            mfilePath = DownloaderManager::downloaderFolder;
+            mfilePath += "/";
+            mfilePath += fileName;
+        }
+        ALOGD("download file path is %s ",mfilePath.c_str());
         if(!rangeSupport.empty() && rangeSupport == serverRangeUnits){
             //create DownloaderManager
             DownloaderManager  *dm = new DownloaderManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
@@ -854,15 +868,16 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
     fd_set rdSet,wrSet;
     char tmpBuff[1024] ={0};
     int nrecved = 0;
+    ALOGD("COUNT %d ",count);
     while(nrecved < count){
         FD_ZERO(&rdSet);
         FD_SET(mPipe[1],&rdSet);
         FD_SET(mFd,&rdSet);
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
-        ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
+        //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
         ret = select(maxFd,&rdSet,NULL,NULL,&tv);
-        ALOGD("http get read wait select end");
+        //ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
                 ALOGW("http get write abort by user");
@@ -896,6 +911,25 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
         }
     }
     return OK;
+}
+
+std::string HttpTransfer::getDownloadFilePath(){
+    //Content-Disposition: attachment; filename=“filename.xls”
+    std::string nameString = mResponse->mHeader.getValues(HttpHeader::dispositionHints);
+    if(nameString.empty()){
+        //get url path last segment as file name
+        return FileUtils::extractFileName(mRequest->mUrl.mPath.c_str());
+    }else{
+        const char *attachment = nameString.c_str();
+        const char *nbegin = strchr(attachment,'"');
+        const char *nend = strrchr(attachment,'"');
+        if(nend-nbegin > 0){
+            return std::string(nbegin,nend -nbegin);
+        }else{
+            ALOGE("no file name for this download");
+            return "defaultFile";
+        }
+    }
 }
 
 

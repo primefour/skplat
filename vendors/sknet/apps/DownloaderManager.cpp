@@ -13,11 +13,13 @@
 
 #define DOWNLOAD_MAX_THREADS 10
 const char *DownloaderManager::downloaderPartialFolder = "./.sknetDownload";
+const char *DownloaderManager::downloaderFolder = "./Downloader";
 
 DownloaderManager::DownloaderManager(sp<HttpRequest> &req,
         const char *filePath,long contentLength):mObserver(this){
     mMainRequest = req;
     mfilePath = filePath;
+    mFailedCount =0 ;
     mCompleteCount = 0;
     mDownloadThreads = NULL;
     mDownloadCount = 0;
@@ -48,7 +50,7 @@ void DownloaderManager::divdeContentLength(long content){
     }
 
     mRanges = new Range[mDownloadCount];
-    mDownloadThreads = new RangeDownloader*[mDownloadCount];
+    mDownloadThreads = new sp<RangeDownloader>[mDownloadCount];
     long avg = content/mDownloadCount ;
     long model = content%mDownloadCount;
     int i = 0;
@@ -63,7 +65,7 @@ void DownloaderManager::divdeContentLength(long content){
     mRanges[i-1].end += model;
     mRanges[i-1].total += model;
 
-    char xfilePath[1024]={0};
+    char xfilePath[1024];
     //create thread for downloading
     for(i = 0 ;i < mDownloadCount;i++){
         getFilePathByRange(mRanges[i],xfilePath,sizeof(xfilePath) -1);
@@ -90,18 +92,16 @@ void DownloaderManager::cancel(){
 
 int DownloaderManager::wait4Complete(){
     AutoMutex _l(mMutex);
+    ALOGD("enter mFailedCount = %d  mCompleteCount = %d  mDownloadCount = %d ",mFailedCount,mCompleteCount,mDownloadCount);
     while(mFailedCount + mCompleteCount < mDownloadCount){
         mCond.wait(mMutex);
     }
-
-    int i = 0;
-    for (i = 0 ;i < mDownloadCount ;i++){
-        const char *tfile = mDownloadThreads[i]->filePath();
-    }
-
-    if(mCompleteCount >= mDownloadCount){
-        /*
-        //int ret = allFile.open(O_RDWR|O_CREAT);
+    ALOGD("exit mFailedCount = %d  mCompleteCount = %d  mDownloadCount = %d ",mFailedCount,mCompleteCount,mDownloadCount);
+    RawFile mergeFile(mfilePath.c_str());
+    int ret = mergeFile.open(O_RDWR|O_CREAT);
+    char tmpBuff[1024]={0};
+    if(ret == OK && mCompleteCount >= mDownloadCount){
+        int i = 0;
         for (i = 0 ;i < mDownloadCount ;i++){
             const char *tfile = mDownloadThreads[i]->filePath();
             const Range rg = mDownloadThreads[i]->range();
@@ -109,17 +109,16 @@ int DownloaderManager::wait4Complete(){
             RawFile rdFile(tfile);
             rdFile.open();
             int n = 0;
+            mergeFile.lseek(rg.begin,SEEK_SET);
             while(1){
-                //n = rdFile.read(tmpBuff,sizeof(tmpBuff));
+                n = rdFile.read(tmpBuff,sizeof(tmpBuff));
                 if(n == 0 || n < 0){
                     break;
                 }else{
-                    //allFile.lseek(begin,SEEK_SET);
-                    //allFile.write(tmpBuff,n);
+                    mergeFile.write(tmpBuff,n);
                 }
             }
         }
-        */
         return OK;
     }else{
         return UNKNOWN_ERROR;
@@ -141,8 +140,6 @@ DownloaderManager::~DownloaderManager(){
     int i = 0;
     for(i = 0 ;i < mDownloadCount;i++){
         mDownloadThreads[i]->join();
-        delete mDownloadThreads[i];
-        mDownloadThreads[i] = NULL;
     }
     delete[] mRanges;
     delete[] mDownloadThreads;

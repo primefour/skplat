@@ -10,6 +10,7 @@ class RangeDownloader:public Thread{
     public:
         RangeDownloader(sp<HttpRequest> &req,
                 const char *filePath,Range &range,DownloaderManager::CompleteObserver &observer);
+        virtual ~RangeDownloader();
         virtual bool threadLoop();
         inline bool isFailed(){
             return mRg.failed();

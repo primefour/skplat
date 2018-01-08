@@ -11,6 +11,7 @@ class RangeDownloader;
 class DownloaderManager{
     public:
         static const char *downloaderPartialFolder;
+        static const char *downloaderFolder;
         DownloaderManager(sp<HttpRequest> &req,const char *filePath,long contentLength);
         virtual ~DownloaderManager();
         class CompleteObserver{
@@ -67,7 +68,7 @@ class DownloaderManager{
         std::string mfilePath;
         void divdeContentLength(long content);
         Range *mRanges;
-        RangeDownloader **mDownloadThreads;
+        sp<RangeDownloader> *mDownloadThreads;
         sp<HttpRequest> mMainRequest;
         int mCompleteCount;
         int mFailedCount;
