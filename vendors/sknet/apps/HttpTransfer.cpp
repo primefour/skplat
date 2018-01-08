@@ -179,7 +179,7 @@ int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
     if(size < 7){
         return false;
     }
-    if(hobj->mObserver != NULL){
+    if(hobj != NULL && hobj->mObserver != NULL){
         hobj->mObserver->onProgress(size,-1);
     }
     //ALOGD("size is %d  ==> %s ",size,(data + size - 7));
@@ -355,7 +355,7 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
     HttpTransfer *hobj = (HttpTransfer*)obj;
     //ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",length,hobj->mResponse->mContentLength);
-    if(hobj->mObserver != NULL){
+    if(hobj != NULL && hobj->mObserver != NULL){
         hobj->mObserver->onProgress(length,hobj->mResponse->mContentLength);
     }
     if(length >= hobj->mResponse->mContentLength){
@@ -475,8 +475,8 @@ int HttpTransfer::parseHttpVersion(const char *version,int &major,int &minor){
 int HttpTransfer::httpDoTransfer(HttpRequest *req){
     const char *host = NULL;
     const char *service = NULL;
-    if(Observer != NULL){
-        Observer->onStartConnect()
+    if(mObserver != NULL){
+        mObserver->onStartConnect();
     }
     if(req->mUseProxy){
         host = req->mProxyUrl.mHost.c_str();
@@ -623,8 +623,8 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         return UNKNOWN_ERROR;
     }
 
-    if(Observer != NULL){
-        ret = Observer->onSended();
+    if(mObserver != NULL){
+        ret = mObserver->onSended();
         if(!ret){
             ALOGW("send complete and abort by user");
             return ABORT_ERROR;

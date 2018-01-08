@@ -128,29 +128,35 @@ class HttpTransfer :public RefBase{
         class TransferObserver:public RefBase{
             public :
             virtual void onStartConnect(){
-
+                ALOGD("start connecting...");
             }
             //return false will stop this transfer or continue
             virtual bool onConnected(bool success){
+                ALOGD("connect completely...");
                 return true;
             }
 
             virtual void onSending(long bytes,long total){
+                ALOGD("send data %ld:%ld",total,bytes);
                 return ;
             }
 
             virtual bool onSended(){
+                ALOGD("send completely..."); 
                 return true;
             }
 
             virtual void onProgress(long bytes,long total){
+                ALOGD("recv data %ld:%ld",total,bytes); 
                 return;
             }
 
             virtual void onCompleted(){
+                ALOGD("recv data completely...");
                 return;
             }
             virtual void onFailed(){
+                ALOGD("http transfer failed");
                 return;
             }
         };
@@ -184,6 +190,10 @@ class HttpTransfer :public RefBase{
             ALOGD("%s %d ",__func__,__LINE__);
         }
 
+        void setObserver(sp<TransferObserver> &obs){
+            mObserver = obs;
+        }
+
         void init(){
             mFd = -1;
             mState = HTTP_INIT;
@@ -193,6 +203,11 @@ class HttpTransfer :public RefBase{
             mTask = NULL;
             mRelocationCount = 0;
             mIsDownload = HTTP_NONE_DOWNLOAD;
+
+            if(mObserver == NULL){
+                //use default observer
+                mObserver = new TransferObserver();
+            }
         }
 
         void interrupt(){//may be block
