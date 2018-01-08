@@ -30,11 +30,13 @@ class DownloaderManager{
                     if(mMng->mCompleteCount >= mMng->mDownloadCount){
                         //download complete and compose all files
                         mMng->mCond.signal();
+                        return ;
                     }
 
                     if(mMng->mFailedCount + mMng->mCompleteCount >= mMng->mDownloadCount){
                         //download failed and all download thread exit
                         mMng->mCond.signal();
+                        return;
                     }
 
                 }
@@ -57,10 +59,11 @@ class DownloaderManager{
                 DownloaderManager *mMng;
         };
         int wait4Complete();
-
+        void start();
+        void cancel();
     private:
         void recoverFailedTask();
-        std::string getFilePathByRange(Range &rg);
+        void getFilePathByRange(Range &rg,char *buff,int count);
         std::string mfilePath;
         void divdeContentLength(long content);
         Range *mRanges;

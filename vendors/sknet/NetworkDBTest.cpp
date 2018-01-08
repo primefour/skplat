@@ -123,11 +123,14 @@ int main(){
 
     HttpTransfer transfer;
     //transfer.doGet("http://www.sina.com.cn");
-    transfer.doGet("http://www.163.com");
+    //transfer.doGet("http://www.163.com");
+    transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","./Hello.download");
+    /*
     sp<HttpResponse> resp = transfer.getResponse();
     if(resp != NULL){
         ALOGD("====> %s ",(const char *)resp->mBody->data());
     }
+    */
     //transfer.doGet("http://www.baidu.com");
     //transfer.doGet("http://i.weather.com.cn/i/product/pic/m/sevp_nmc_stfc_sfer_er24_achn_l88_p9_20171228130002400.jpg");
     //transfer.doGet("http://news.163.com/17/1228/16/D6OPQNV6000189FH.html");

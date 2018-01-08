@@ -104,7 +104,7 @@ int RawFile::open(int flags,int endian){
  */
 int RawFile::read(char *buff,int len){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("file read mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     return ::read(mFd,buff,len);
@@ -115,7 +115,7 @@ int RawFile::read(char *buff,int len){
  */
 int RawFile::read(BufferUtils &buffer,int readLength){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("file read 2 mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     char buff[1024] ={0};
@@ -144,7 +144,7 @@ int RawFile::read(BufferUtils &buffer,int readLength){
  */
 int RawFile::readInt32(int32_t &data){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("read int32 mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     int32_t tmp;
@@ -163,7 +163,7 @@ int RawFile::readInt32(int32_t &data){
 
 int RawFile::readLine(char *buff,int len){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("read line mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     int ret = -1;
@@ -181,7 +181,7 @@ int RawFile::readLine(char *buff,int len){
 
 int RawFile::readLine(BufferUtils& buffer){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("mread line fd < 0 ");
         return UNKNOWN_ERROR;
     }
     int ret = -1;
@@ -197,7 +197,7 @@ int RawFile::readLine(BufferUtils& buffer){
 
 int RawFile::writeInt32(int32_t data){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("write int mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     if(mOpenFlags & O_WRONLY != O_WRONLY){
@@ -215,7 +215,7 @@ int RawFile::writeInt32(int32_t data){
 
 int RawFile::append(char *buff,int len){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("append file mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     if(mOpenFlags & O_WRONLY != O_WRONLY){
@@ -238,7 +238,7 @@ int RawFile::append(char *buff,int len){
 
 int RawFile::append(BufferUtils&buffer,int writeLength){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("mappend file fd < 0 ");
         return UNKNOWN_ERROR;
     }
     if(mOpenFlags & O_WRONLY != O_WRONLY){
@@ -265,7 +265,7 @@ int RawFile::append(BufferUtils&buffer,int writeLength){
 
 int RawFile::write(char *buff,int len){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("write file mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     if(mOpenFlags & O_WRONLY != O_WRONLY){
@@ -283,7 +283,7 @@ int RawFile::write(char *buff,int len){
  
 int RawFile::write(BufferUtils&buffer,int writeLength){
     if(mFd < 0){
-        ALOGW("mfd < 0 ");
+        ALOGW("write file 2 mfd < 0 ");
         return UNKNOWN_ERROR;
     }
     if(mOpenFlags & O_WRONLY != O_WRONLY){
@@ -304,17 +304,16 @@ int RawFile::write(BufferUtils&buffer,int writeLength){
 }
 
 size_t RawFile::lseek(int offset,int flags){
-
     if(mFd >= 0){
         return ::lseek(mFd,offset,flags);
     }else{
-        ALOGW("mfd < 0");
+        ALOGW("lseek failed mfd < 0");
         return BAD_VALUE;
     }
 }
 size_t RawFile::loffset(){
     if(mFd < 0){
-        ALOGW("mFd < 0");
+        ALOGW("loffset failed mFd < 0");
         return BAD_VALUE;
     }
     return ::lseek(mFd,0,SEEK_CUR);

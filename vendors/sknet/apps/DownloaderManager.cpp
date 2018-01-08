@@ -26,11 +26,10 @@ DownloaderManager::DownloaderManager(sp<HttpRequest> &req,
     divdeContentLength(contentLength);
 }
 
-std::string DownloaderManager::getFilePathByRange(Range &rg){
-    char filePath[PATH_MAX +1]={0};
-    snprintf(filePath,sizeof(filePath)-1,"%s.part_%ld_%ld",
-            mfilePath.c_str(),rg.begin,rg.end);
-    return filePath;
+void DownloaderManager::getFilePathByRange(Range &rg,char *buff,int count){
+    memset(buff,0,count);
+    snprintf(buff,count,"%s.part_%ld_%ld", mfilePath.c_str(),rg.begin,rg.end);
+    return ;
 }
 
 void DownloaderManager::divdeContentLength(long content){
@@ -64,12 +63,28 @@ void DownloaderManager::divdeContentLength(long content){
     mRanges[i-1].end += model;
     mRanges[i-1].total += model;
 
+    char xfilePath[1024]={0};
     //create thread for downloading
     for(i = 0 ;i < mDownloadCount;i++){
-        std::string tmpFile = getFilePathByRange(mRanges[i]);
+        getFilePathByRange(mRanges[i],xfilePath,sizeof(xfilePath) -1);
         mDownloadThreads[i] = new RangeDownloader(mMainRequest,
-                tmpFile.c_str(),mRanges[i],this->mObserver);
+                xfilePath,mRanges[i],this->mObserver);
+    }
+}
+
+void DownloaderManager::start(){
+    int i = 0;
+    //create thread for downloading
+    for(i = 0 ;i < mDownloadCount;i++){
         mDownloadThreads[i]->run();
+    }
+}
+
+void DownloaderManager::cancel(){
+    int i = 0;
+    //create thread for downloading
+    for(i = 0 ;i < mDownloadCount;i++){
+        mDownloadThreads[i]->cancel();
     }
 }
 
@@ -79,29 +94,32 @@ int DownloaderManager::wait4Complete(){
         mCond.wait(mMutex);
     }
 
+    int i = 0;
+    for (i = 0 ;i < mDownloadCount ;i++){
+        const char *tfile = mDownloadThreads[i]->filePath();
+    }
+
     if(mCompleteCount >= mDownloadCount){
-        //merge all files
-        RawFile allFile(mfilePath.c_str());
-        int ret = allFile.open(O_RDWR|O_CREAT);
-        int i = 0 ;
-        long begin = 0;
-        long end = 0;
-        char tmpBuff[PATH_MAX]={0};
+        /*
+        //int ret = allFile.open(O_RDWR|O_CREAT);
         for (i = 0 ;i < mDownloadCount ;i++){
             const char *tfile = mDownloadThreads[i]->filePath();
-            sscanf(tfile,"%s.part_%ld_%ld",tmpBuff,&begin,&end);
+            const Range rg = mDownloadThreads[i]->range();
+            ALOGD("tfile  %s %ld %ld ",tfile,rg.begin,rg.end);
             RawFile rdFile(tfile);
+            rdFile.open();
             int n = 0;
             while(1){
-                n = rdFile.read(tmpBuff,sizeof(tmpBuff));
+                //n = rdFile.read(tmpBuff,sizeof(tmpBuff));
                 if(n == 0 || n < 0){
                     break;
                 }else{
-                    allFile.lseek(begin,SEEK_SET);
-                    allFile.write(tmpBuff,n);
+                    //allFile.lseek(begin,SEEK_SET);
+                    //allFile.write(tmpBuff,n);
                 }
             }
         }
+        */
         return OK;
     }else{
         return UNKNOWN_ERROR;
@@ -124,6 +142,7 @@ DownloaderManager::~DownloaderManager(){
     for(i = 0 ;i < mDownloadCount;i++){
         mDownloadThreads[i]->join();
         delete mDownloadThreads[i];
+        mDownloadThreads[i] = NULL;
     }
     delete[] mRanges;
     delete[] mDownloadThreads;

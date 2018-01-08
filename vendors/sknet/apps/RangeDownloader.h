@@ -18,14 +18,21 @@ class RangeDownloader:public Thread{
             return mfilePath;
         }
 
-        inline const char* filePath() const{
+        inline const char* filePath(){
+            ALOGD("mfilePath %s ",mfilePath.c_str());
             return mfilePath.c_str();
         }
+
+        inline const Range& range(){
+            return mRg;
+        }
+
+        void cancel();
     private:
-        sp<HttpTransfer> mTransfer;
-        sp<HttpRequest> mReq;
         std::string mfilePath;
         Range &mRg;
+        sp<HttpTransfer> mTransfer;
+        sp<HttpRequest> mReq;
         DownloaderManager::CompleteObserver &mObserver;
 };
 #endif 

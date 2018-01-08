@@ -55,7 +55,7 @@ STORE_OBJS        := $(STORE_SRC:.cpp=.o)
 APPS_OBJS         := $(APPS_SRC:.cpp=.o)  
 
 LDFLAGS += -lpthread -lsqlite3 -ldl
-CXXFLAGS += -DHAVE_PTHREADS
+CXXFLAGS += -g -DHAVE_PTHREADS
 
 #build:$(SOURCES) $(SRCS_HEADER)
 #	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/ 

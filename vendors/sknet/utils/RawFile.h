@@ -39,9 +39,9 @@ class RawFile{
         size_t loffset();
         size_t size();
     private:
+        std::string mfilePath;
         int mEndianType;
         int mFd;
         int mOpenFlags;
-        std::string mfilePath;
 };
 #endif

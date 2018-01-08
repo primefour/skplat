@@ -16,6 +16,7 @@
 #include<stdarg.h>
 #include"RawFile.h"
 #include"FileUtils.h"
+#include"DownloaderManager.h"
 
 #define TRANSFER_CONNECT_TIMEOUT 15000 //ms
 #define TRANSFER_SELECT_TIMEOUT 60000 //ms
@@ -749,6 +750,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             ALOGE("create file %s failed msg :%s ",mfilePath.c_str(),strerror(errno));
             return BAD_VALUE;
         }
+        return 0;
         //get content size 
         //Content-Range :bytes 580-
         //Content-Range: 1-200/300\r\n"
@@ -779,8 +781,11 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         ALOGD("range Support is %s ",rangeSupport.c_str());
         if(!rangeSupport.empty() && rangeSupport == serverRangeUnits){
             //create DownloaderManager
-
-
+            DownloaderManager  *dm = new DownloaderManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
+            dm->start();
+            dm->wait4Complete();
+            delete dm;
+            return OK;
         }else{
             //remove current file and create a new one;
             FileUtils::deleteFiles(mfilePath.c_str());
