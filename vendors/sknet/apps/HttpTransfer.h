@@ -126,13 +126,27 @@ class HttpTransfer :public RefBase{
     public:
         typedef int (*BreakFpn)(void *obj,const void *data,int size);
         class TransferObserver:public RefBase{
+            public :
+            virtual void onStartConnect(){
+
+            }
             //return false will stop this transfer or continue
-            virtual bool onConnect(){
+            virtual bool onConnected(bool success){
                 return true;
             }
+
+            virtual void onSending(long bytes,long total){
+                return ;
+            }
+
+            virtual bool onSended(){
+                return true;
+            }
+
             virtual void onProgress(long bytes,long total){
                 return;
             }
+
             virtual void onCompleted(){
                 return;
             }

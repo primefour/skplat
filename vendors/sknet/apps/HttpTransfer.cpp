@@ -42,6 +42,7 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     //create a get request obj
     HttpRequest *req= new HttpRequest();
     if(Url::parseUrl(url,&(req->mUrl)) == NULL){
+        delete(req);
         return NULL;
     }
     req->mProto="HTTP/1.1";
@@ -58,9 +59,13 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
         int ret = rawFile.open(O_RDWR|O_CREAT);
         long size = rawFile.size();
         ALOGD("%s file size is %ld ",mfilePath.c_str(),size);
+        if(size > mPartialData.end - mPartialData.begin + 1){
+            delete(req);
+            return NULL;
+        }
         //Range:bytes=554554- 
         //Range:bytes=0-100 
-        req->mHeader.setEntry(HttpHeader::clientRangeHints,"bytes=%d-%d",mPartialData.begin,mPartialData.end);
+        req->mHeader.setEntry(HttpHeader::clientRangeHints,"bytes=%d-%d",mPartialData.begin + size,mPartialData.end);
     }
     return req;
 }
@@ -169,9 +174,13 @@ long HttpTransfer::parseHex(const char *str,long &data){
 }
 
 int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
+    HttpTransfer *hobj = (HttpTransfer*)obj;
     const char *data = (const char *)txd;
     if(size < 7){
         return false;
+    }
+    if(hobj->mObserver != NULL){
+        hobj->mObserver->onProgress(size,-1);
     }
     //ALOGD("size is %d  ==> %s ",size,(data + size - 7));
     const char *tmpData = data + size - 7;
@@ -186,6 +195,9 @@ int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
 int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn ){
     //ALOGD("socketReader recvBuffer %s  size :%zd ",recvBuffer->data(),recvBuffer->size());
     if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
+        if(mObserver != NULL){
+            mObserver->onCompleted();
+        }
         return OK;
     }
     //need more data
@@ -244,6 +256,9 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
 
 int HttpTransfer::chunkedReader(sp<BufferUtils> &recvBuffer,struct timeval &tv){
     if(chunkedEOF(this,recvBuffer->data(),recvBuffer->size())){
+        if(mObserver != NULL){
+            mObserver->onCompleted();
+        }
         return OK;
     }
     return socketReader(recvBuffer,tv,chunkedEOF);
@@ -340,6 +355,9 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
     HttpTransfer *hobj = (HttpTransfer*)obj;
     //ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",length,hobj->mResponse->mContentLength);
+    if(hobj->mObserver != NULL){
+        hobj->mObserver->onProgress(length,hobj->mResponse->mContentLength);
+    }
     if(length >= hobj->mResponse->mContentLength){
         return true; 
     }else{
@@ -457,6 +475,9 @@ int HttpTransfer::parseHttpVersion(const char *version,int &major,int &minor){
 int HttpTransfer::httpDoTransfer(HttpRequest *req){
     const char *host = NULL;
     const char *service = NULL;
+    if(Observer != NULL){
+        Observer->onStartConnect()
+    }
     if(req->mUseProxy){
         host = req->mProxyUrl.mHost.c_str();
         if(req->mProxyUrl.mPort.empty()){
@@ -477,7 +498,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     sp<DnsCache>& Cache = DnsCache::getInstance() ;
     //get Address
     Vector<SocketAddress> addrs = Cache->getAddrs(host,service);
-
+    
     //connect to server
     SocksConnect connect(addrs);
     int ret = 0;
@@ -490,7 +511,18 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
 
     if(ret != OK){
         ALOGD("http get connect fail ");
+        if(mObserver != NULL){
+            mObserver->onConnected(false);
+        }
         return UNKNOWN_ERROR;   
+    }else{
+        if(mObserver != NULL){
+            ret = mObserver->onConnected(true);
+            if(!ret){
+                ALOGE("abort by user");
+                return ABORT_ERROR;
+            }
+        }
     }
 
     //get validate socket fd
@@ -560,6 +592,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 if(n > 0){
                     sendBuffer.offset(n,SEEK_CUR);
                     nsended += n;
+                    if(mObserver != NULL){
+                        mObserver->onSending(nsended,sendBuffer.size());
+                    }
                 }else if(n < 0){
                     ALOGD("send data fail %p size: %zd  ret = %d err :%s ",sendBuffer.data(),sendBuffer.size(),n,strerror(errno));
                     mError ++;
@@ -586,6 +621,14 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     if(mError){
         ALOGE("UNKNOWN_ERROR HTTP DO TRANSFER");
         return UNKNOWN_ERROR;
+    }
+
+    if(Observer != NULL){
+        ret = Observer->onSended();
+        if(!ret){
+            ALOGW("send complete and abort by user");
+            return ABORT_ERROR;
+        }
     }
 
     sp<BufferUtils> tmpBuffer = new BufferUtils();
