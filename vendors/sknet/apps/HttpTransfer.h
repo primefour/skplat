@@ -82,6 +82,7 @@ struct Range{
     long end;
     long total;
     long state;
+    long idx;
     enum {
         RANGE_INIT = -3,
         RANGE_FAILED = -2,
@@ -111,6 +112,10 @@ struct Range{
     inline void set(long st){
         this->state  = st;
     }
+    inline void reset(){
+        state = RANGE_INIT;
+    }
+
     inline int get(){
         return state;
     }

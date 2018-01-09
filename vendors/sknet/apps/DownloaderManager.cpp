@@ -60,6 +60,7 @@ void DownloaderManager::divdeContentLength(long content){
         mRanges[i].begin = start ;
         mRanges[i].end = start + avg -1;
         mRanges[i].total = avg;
+        mRanges[i].idx = i;
         start = start + avg;
     }
     mRanges[i-1].end += model;
@@ -99,17 +100,18 @@ int DownloaderManager::wait4Complete(){
     ALOGD("exit mFailedCount = %d  mCompleteCount = %d  mDownloadCount = %d ",mFailedCount,mCompleteCount,mDownloadCount);
     RawFile mergeFile(mfilePath.c_str());
     int ret = mergeFile.open(O_RDWR|O_CREAT);
+
     char tmpBuff[1024]={0};
     if(ret == OK && mCompleteCount >= mDownloadCount){
         int i = 0;
         for (i = 0 ;i < mDownloadCount ;i++){
             const char *tfile = mDownloadThreads[i]->filePath();
             const Range rg = mDownloadThreads[i]->range();
-            ALOGD("tfile  %s %ld %ld ",tfile,rg.begin,rg.end);
+            ALOGD("tfile  %s %ld %ld ",tfile,mRanges[rg.idx].begin,mRanges[rg.idx].end);
             RawFile rdFile(tfile);
             rdFile.open();
             int n = 0;
-            mergeFile.lseek(rg.begin,SEEK_SET);
+            mergeFile.lseek(mRanges[rg.idx].begin,SEEK_SET);
             while(1){
                 n = rdFile.read(tmpBuff,sizeof(tmpBuff));
                 if(n == 0 || n < 0){
@@ -131,6 +133,7 @@ void DownloaderManager::recoverFailedTask(){
     for(i = 0 ;i < mDownloadCount;i++){
         //try again
         if(mDownloadThreads[i]->isFailed()){
+            mDownloadThreads[i]->reset();
             mDownloadThreads[i]->run();
         }
     }

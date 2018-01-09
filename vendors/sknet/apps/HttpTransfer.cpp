@@ -54,18 +54,9 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry("Connection","keep-alive");
     req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
     if(mIsDownload == HTTP_CHILD_DOWNLOAD){
-        //download by this transfer
-        RawFile rawFile(mfilePath.c_str());
-        int ret = rawFile.open(O_RDWR|O_CREAT);
-        long size = rawFile.size();
-        ALOGD("%s file size is %ld ",mfilePath.c_str(),size);
-        if(size > mPartialData.end - mPartialData.begin + 1){
-            delete(req);
-            return NULL;
-        }
         //Range:bytes=554554- 
         //Range:bytes=0-100 
-        req->mHeader.setEntry(HttpHeader::clientRangeHints,"bytes=%d-%d",mPartialData.begin + size,mPartialData.end);
+        req->mHeader.setEntry(HttpHeader::clientRangeHints,"bytes=%d-%d",mPartialData.begin,mPartialData.end);
     }
     return req;
 }

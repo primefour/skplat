@@ -19,6 +19,7 @@ class DownloaderManager{
                 CompleteObserver(DownloaderManager *mg){
                     mMng = mg;
                 }
+
                 inline void onComplete(Range &rg){
                     AutoMutex _l(mMng->mMutex);
                     mMng->mCompleteCount ++;
@@ -39,7 +40,6 @@ class DownloaderManager{
                         mMng->mCond.signal();
                         return;
                     }
-
                 }
 
                 inline void onFailed(Range &rg){
@@ -53,9 +53,10 @@ class DownloaderManager{
                     }
                 }
 
-                inline void onProgress(Range &rg){
-
+                inline void onProgress(int idx,int percent){
+                    ALOGD("download percent idx %d ==>  %d ",idx,percent);
                 }
+
             private:
                 DownloaderManager *mMng;
         };
