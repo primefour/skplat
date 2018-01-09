@@ -54,8 +54,9 @@ MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)
 STORE_OBJS        := $(STORE_SRC:.cpp=.o)  
 APPS_OBJS         := $(APPS_SRC:.cpp=.o)  
 
-LDFLAGS += -lpthread -lsqlite3 -ldl
-CXXFLAGS += -g -DHAVE_PTHREADS
+LDFLAGS += -lpthread -lsqlite3 -ldl -L thirdParty/mbedtls/target/lib -lmbedtls -lmbedx509 -lmbedcrypto 
+
+CXXFLAGS += -g -DHAVE_PTHREADS -I thirdParty/mbedtls/target/include/
 
 #build:$(SOURCES) $(SRCS_HEADER)
 #	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/ 
