@@ -113,7 +113,7 @@ const char* SocketAddress::getIpString(){
 }
 
 //get host
-const std::string& SocketAddress::getHostName(){
+const std::string& SocketAddress::getHostName() const{
     return mHost;
 }
 

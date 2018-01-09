@@ -31,6 +31,7 @@ class SocksConnect{
          *return fd should close by user
          */
         int getSocket();
+        std::string getHost();
     private:
         SocksConnect(const SocksConnect &connect);
         int *mFds;

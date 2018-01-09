@@ -87,7 +87,7 @@ class SocketAddress{
     //get Ip string
     const char* getIpString();
     //get host
-    const std::string& getHostName();
+    const std::string& getHostName() const;
     //get Ip string
     const std::string& getIp();
     //get server host port

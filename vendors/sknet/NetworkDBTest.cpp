@@ -9,6 +9,7 @@
 #include "Url.h"
 #include "HttpHeader.h"
 #include "HttpTransfer.h"
+#include "HttpsTransfer.h"
 
 /*
 GET 17/1228/16/D6OPQNV6000189FH.html HTTP/1.1
@@ -144,7 +145,8 @@ int main(){
     transfer.chunkedReader(oldBuffer,recvBuffer,tv);
     ALOGD("====> %s ",(const char *)recvBuffer->data());
     */
-    HttpTransfer transfer;
-    transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
+    //HttpTransfer transfer;
+    //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
+    HttpsTransfer https(1,"helloworld");
     return 0;
 }

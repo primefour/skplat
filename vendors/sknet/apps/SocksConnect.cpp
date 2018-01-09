@@ -238,3 +238,11 @@ int SocksConnect::getSocket(){
     }
 }
 
+std::string SocksConnect::getHost(){
+    if(!mError && mConnFdIdx != -1){
+        return mAddrs[mConnFdIdx].getHostName();
+    }else{
+        return "";
+    }
+}
+
