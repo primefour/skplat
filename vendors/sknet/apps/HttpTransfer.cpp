@@ -17,6 +17,7 @@
 #include"RawFile.h"
 #include"FileUtils.h"
 #include"DownloaderManager.h"
+#include"HttpChunkFilter.h"
 
 #define TRANSFER_CONNECT_TIMEOUT 15000 //ms
 #define TRANSFER_SELECT_TIMEOUT 60000 //ms
@@ -163,7 +164,7 @@ long HttpTransfer::parseHex(const char *str,long &data){
 	return data;
 }
 
-int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
+int HttpTransfer::chunkedEOF(void *obj,const char *txd,int size,sp<BufferUtils> &buffer){
     HttpTransfer *hobj = (HttpTransfer*)obj;
     const char *data = (const char *)txd;
     if(size < 7){
@@ -184,12 +185,6 @@ int HttpTransfer::chunkedEOF(void *obj,const void *txd,int size){
 
 int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn ){
     //ALOGD("socketReader recvBuffer %s  size :%zd ",recvBuffer->data(),recvBuffer->size());
-    if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
-        if(mObserver != NULL){
-            mObserver->onCompleted();
-        }
-        return OK;
-    }
     //need more data
     int n = 0;
     int ret = 0;
@@ -218,13 +213,16 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                     }
                 }
                 if(n > 0){
+                    if(breakFpn(this,recvBuffer->data(),recvBuffer->size(),recvBuffer)){
+                        return recvBuffer->size();
+                    }
                     //ALOGD("tmpBuff = %s ",tmpBuff);
-                    recvBuffer->append(tmpBuff,n);
+                    //recvBuffer->append(tmpBuff,n);
                     //check whether is complete
                     //ALOGD("n = %d ==>  %s ==> %zd ",n,recvBuffer->data(),recvBuffer->size());
-                    if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
-                        return OK;
-                    }
+                    //if(breakFpn(this,recvBuffer->data(),recvBuffer->size())){
+                    //    return OK;
+                    //}
                 }else if(n < 0){
                     ALOGD("recv data fail %p size: %zd error:%s",
                             recvBuffer->data(),recvBuffer->size(),strerror(errno));
@@ -252,12 +250,6 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
 
 
 int HttpTransfer::chunkedReader(sp<BufferUtils> &recvBuffer,struct timeval &tv){
-    if(chunkedEOF(this,recvBuffer->data(),recvBuffer->size())){
-        if(mObserver != NULL){
-            mObserver->onCompleted();
-        }
-        return OK;
-    }
     return socketReader(recvBuffer,tv,chunkedEOF);
 }
 
@@ -349,13 +341,17 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 }
 
 
-int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
+int HttpTransfer::identifyBreak(void *obj,const char *data,int length,sp<BufferUtils> &buffer){
+    //ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",buffer->size(),hobj->mResponse->mContentLength);
+    if(length < 0){
+        return true;
+    }
     HttpTransfer *hobj = (HttpTransfer*)obj;
-    //ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",length,hobj->mResponse->mContentLength);
+    buffer->append(data,length);
     if(hobj != NULL && hobj->mObserver != NULL){
         hobj->mObserver->onProgress(length,hobj->mResponse->mContentLength);
     }
-    if(length >= hobj->mResponse->mContentLength){
+    if(buffer->size() >= hobj->mResponse->mContentLength){
         return true; 
     }else{
         return false;
@@ -365,9 +361,6 @@ int HttpTransfer::identifyBreak(void *obj,const void *data,int length){
 
 int HttpTransfer::identifyReader(sp<BufferUtils> &recvBuffer,struct timeval &tv){
     ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
-    if(recvBuffer->size() >= mResponse->mContentLength){
-        return OK;
-    }
     return socketReader(recvBuffer,tv,identifyBreak);
 }
 
@@ -823,17 +816,33 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 mChunkFilter->write(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
                 while(mChunkFilter->read(recvBuffer));
             }
+
             if(!mChunkFilter->endOfFile()){
                 ret = chunkedReader(recvBuffer,tv);
+            }else{
+                if(mObserver != NULL){
+                    mObserver->onCompleted();
+                }
             }
-            if(ret > 0){
-                ret = recvBuffer.size();
+            if(ret >= 0){
+                ret = recvBuffer->size();
             }
         }else{
             if(tmpBuffer->size() > tmpBuffer->offset()){
                 recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
             }
-            ret = identifyReader(recvBuffer,tv);
+
+            if(recvBuffer->size() < mResponse->mContentLength){
+                ret = identifyReader(recvBuffer,tv);
+            }else{
+                if(mObserver != NULL){
+                    mObserver->onCompleted();
+                }
+            }
+            if(ret >= 0){
+                ret = recvBuffer->size();
+            }
+
         }
     }else if(mIsDownload == HTTP_CHILD_DOWNLOAD){
         RawFile rawFile(mfilePath.c_str());

@@ -3,7 +3,7 @@
 #include"RefBase.h"
 #include"BufferUtils.h"
 #include"Mutex.h"
-class HttpChunkFilter{
+class HttpChunkFilter:public RefBase{
     public:
         HttpChunkFilter(){
             mBufferCache = new BufferUtils();
@@ -16,7 +16,7 @@ class HttpChunkFilter{
          */
         bool checkChunk();
         int read(sp<BufferUtils> &recvBuffer);
-        inline bool endofFile(){ return mEof; }
+        inline bool endOfFile(){ return mEof; }
     private:
         //this Cache will store only one chunk size data and will reset after parser successfully
         sp<BufferUtils> mBufferCache;

@@ -77,6 +77,7 @@
 #include"RefBase.h"
 #include"RawFile.h"
 #include"HttpsTransfer.h"
+#include"HttpChunkFilter.h"
 
 struct Range{
     long begin;
@@ -130,7 +131,7 @@ struct Range{
 
 class HttpTransfer :public RefBase{
     public:
-        typedef int (*BreakFpn)(void *obj,const void *data,int size);
+        typedef int (*BreakFpn)(void *obj,const char*data,int size,sp<BufferUtils> &buff);
         class TransferObserver:public RefBase{
             public :
             virtual void onStartConnect(){
@@ -267,8 +268,8 @@ class HttpTransfer :public RefBase{
     private:
         std::string getDownloadFilePath();
         HttpRequest *createRequest(const char *url);
-        static int chunkedEOF(void *obj,const void *data,int size);
-        static int identifyBreak(void *obj,const void *data,int length);
+        static int chunkedEOF(void *obj,const char *data,int size,sp<BufferUtils> &buffer);
+        static int identifyBreak(void *obj,const char *data,int length,sp<BufferUtils> &buffer);
 
         int mFd;
         int mState;
