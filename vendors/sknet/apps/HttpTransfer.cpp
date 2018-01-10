@@ -21,7 +21,7 @@
 #define TRANSFER_CONNECT_TIMEOUT 15000 //ms
 #define TRANSFER_SELECT_TIMEOUT 60000 //ms
 
-int HttpTransfer::mRelocationLimited = 2;
+int HttpTransfer::mRelocationLimited = 3;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
 const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n";
@@ -213,6 +213,9 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                     n = read(mFd,tmpBuff,sizeof(tmpBuff));
                 }else{
                     n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff));
+                    if(n == HTTPS_WOULD_BLOCK){
+                        continue;
+                    }
                 }
                 if(n > 0){
                     //ALOGD("tmpBuff = %s ",tmpBuff);
@@ -496,35 +499,35 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     sp<DnsCache>& Cache = DnsCache::getInstance() ;
     //get Address
     Vector<SocketAddress> addrs = Cache->getAddrs(host,service);
-    
-    //connect to server
-    SocksConnect connect(addrs);
     int ret = 0;
     TaskInfo *task = (TaskInfo*)mTask;
-    if(task != NULL){
-        ret = connect.connect(task->mConnTimeout);
-    }else{
-        ret = connect.connect(TRANSFER_CONNECT_TIMEOUT);
-    }
-
-    if(ret != OK){
-        ALOGD("http get connect fail ");
-        if(mObserver != NULL){
-            mObserver->onConnected(false);
+    {
+        //connect to server
+        SocksConnect connect(addrs);
+        if(task != NULL){
+            ret = connect.connect(task->mConnTimeout);
+        }else{
+            ret = connect.connect(TRANSFER_CONNECT_TIMEOUT);
         }
-        return UNKNOWN_ERROR;   
-    }else{
-        if(mObserver != NULL){
-            ret = mObserver->onConnected(true);
-            if(!ret){
-                ALOGE("abort by user");
-                return ABORT_ERROR;
+
+        if(ret != OK){
+            ALOGD("http get connect fail ");
+            if(mObserver != NULL){
+                mObserver->onConnected(false);
+            }
+            return UNKNOWN_ERROR;   
+        }else{
+            if(mObserver != NULL){
+                ret = mObserver->onConnected(true);
+                if(!ret){
+                    ALOGE("abort by user");
+                    return ABORT_ERROR;
+                }
             }
         }
+        //get validate socket fd
+        mFd = connect.getSocket();
     }
-
-    //get validate socket fd
-    mFd = connect.getSocket();
     ALOGD("socket fd = %d ",mFd);
 
     //check is secure connect
@@ -608,6 +611,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                     n = write(mFd,sendBuffer.dataWithOffset(),sendBuffer.size() - sendBuffer.offset());
                 }else{
                     n = mHttpsSupport->write(sendBuffer.dataWithOffset(),sendBuffer.size() - sendBuffer.offset());
+                    if(n == HTTPS_WOULD_BLOCK){
+                        continue;
+                    }
                 }
                 if(n > 0){
                     sendBuffer.offset(n,SEEK_CUR);
@@ -674,6 +680,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                     n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
                 }else{
                     n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff) -1);
+                    if(n == HTTPS_WOULD_BLOCK){
+                        continue;
+                    }
                 }
 
                 if(n > 0){
@@ -768,22 +777,20 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         return BAD_VALUE;
     }
 
-    //parse http head 
-    mResponse->mTransferEncoding = mResponse->mHeader.getValues(HttpHeader::transferEncodingHints); 
-    //check whether is chunked
-    if(mResponse->mTransferEncoding.empty()){
-        mResponse->mTransferEncoding = HttpHeader::encodingIdentifyHints; 
-    }
-
-    if(mResponse->mTransferEncoding != HttpHeader::encodingChunkedHints){
-        std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
+    std::string len = mResponse->mHeader.getValues(HttpHeader::contentLengthHints);
+    if(!len.empty()){
         ALOGD(">>>len = %s",len.c_str());
         mResponse->mContentLength = ::atoi(len.c_str()); 
         if(mResponse->mContentLength < 0){
             ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
             return UNKNOWN_ERROR;
         }
-    }if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
+    }else{
+        mResponse->mContentLength = -1;
+    }
+    //parse http head 
+    mResponse->mTransferEncoding = mResponse->mHeader.getValues(HttpHeader::transferEncodingHints); 
+    if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
         mResponse->mUncompressed =true;
     }
 
@@ -813,7 +820,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
         }
         ret = OK;
-        if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints){
+        if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints || mResponse->mContentLength == -1){
             ret = chunkedReader(recvBuffer,tv);
         }else{
             ret = identifyReader(recvBuffer,tv);
@@ -960,6 +967,9 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
                     n = read(mFd,tmpBuff,rsize);
                 }else{
                     n = mHttpsSupport->read(tmpBuff,rsize);
+                    if(n == HTTPS_WOULD_BLOCK){
+                        continue;
+                    }
                 }
                 if(n > 0){
                     wfile.append(tmpBuff,n);

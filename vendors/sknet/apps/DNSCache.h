@@ -9,12 +9,12 @@
 //dns cache provides dns query and cache function
 struct HostAddress{
     const std::string& getKey() const{
-        return mHost;
+        return mKey;
     }
     HostAddress(){
         mFailedTimes = 0;
     }
-    std::string mHost;
+    std::string mKey;
     Vector<SocketAddress> mAddrs;
     int mFailedTimes;
 };

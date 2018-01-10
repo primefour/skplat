@@ -158,7 +158,7 @@ int LruCache<KEY,VALUE>::add(KEY& key,VALUE& Value){
     idx = mContain.add(mFpnhashCode(key),Value);
     ALOGD("lrc add  idx = %d ",idx);
     //make sure there is no item
-    ASSERT(idx > 0 && idx < mElapseCap && mElapses[idx] == 0,"lru add fail idx = %d",idx);
+    ASSERT(idx >= 0 && idx < mElapseCap && mElapses[idx] == 0,"lru add fail idx = %d",idx);
     mElapses[idx] = nowTime();
     mSize ++;
     return idx; 

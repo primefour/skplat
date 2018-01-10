@@ -18,6 +18,7 @@
 #include "Vector.h"
 #include "SocksConnect.h"
 #include "RefBase.h"
+#include<strings.h>
 
 static Mutex gDnsCacheMutex;
 
@@ -89,9 +90,13 @@ int DnsCache::getAddrInfo(const char *host,const char *service){
     freeaddrinfo(result); 
 
     //add key for cache hash
-    hostAddrs.mHost = host;
+    hostAddrs.mKey= host;
+
+    if(service != NULL){
+        hostAddrs.mKey += service;
+    }
     //update cache item
-    mHostCache.add(hostAddrs.mHost,hostAddrs);
+    mHostCache.add(hostAddrs.mKey,hostAddrs);
 }
 
 void DnsCache::getHostByDB(const char *host,Vector<SocketAddress> &addrs){
@@ -100,35 +105,71 @@ void DnsCache::getHostByDB(const char *host,Vector<SocketAddress> &addrs){
     ALOGD("ss = %d size addrs = %zd ",ss,addrs.size());
 }
 
-void DnsCache::addToCache(const char *host,Vector<SocketAddress> &addrs){
+void DnsCache::addToCache(const char *key,Vector<SocketAddress> &addrs){
     HostAddress hostAddrs;
-    hostAddrs.mHost = host;
+    hostAddrs.mKey = key;
     hostAddrs.mAddrs = addrs;
-    mHostCache.add(hostAddrs.mHost,hostAddrs);
+    mHostCache.add(hostAddrs.mKey,hostAddrs);
 }
 
-const Vector<SocketAddress>& DnsCache::getHostByCache(const char *host){
-    std::string xhost = host;
-    const HostAddress& tmpHost = mHostCache.get(xhost);
+const Vector<SocketAddress>& DnsCache::getHostByCache(const char *key){
+    std::string xkey = key;
+    const HostAddress& tmpHost = mHostCache.get(xkey);
     return tmpHost.mAddrs;
 }
 
 const Vector<SocketAddress>& DnsCache::getAddrs(const char *host,const char *service){
-    const Vector<SocketAddress>& addrs = getHostByCache(host);
+    std::string tmpKey = host ;
+    if(service != NULL){
+        tmpKey += service;
+    }
+
+    const Vector<SocketAddress>& addrs = getHostByCache(tmpKey.c_str());
+    ALOGD("get address info from cache items %zd ",addrs.size());
     if(addrs.size() != 0){
         //return cache address
         return addrs;
     }else {
         Vector<SocketAddress> dbAddrs; 
-        if(dbAddrs.size() == 0){
+        getHostByDB(host,dbAddrs);
+        ALOGD("get address info from dns database items %zd service:%s",dbAddrs.size(),service);
+        int size = dbAddrs.size();
+        if(size == 0){
             getAddrInfo(host,service);
         }else{
-            getHostByDB(host,dbAddrs);
-            addToCache(host,dbAddrs);
+            //set port
+            int port = 80;
+            if(service){
+                 port = atoi(service);
+                 ALOGD("%d update port as %d ",__LINE__,port);
+                 if(port == 0){
+
+                 ALOGD("%d update port as %d ",__LINE__,port);
+                     if(strncasecmp(service,"https",5) == 0){
+                 ALOGD("%d update port as %d ",__LINE__,port);
+                         port = 443;
+                     }else if(strncasecmp(service,"http",4) == 0){
+
+                 ALOGD("%d update port as %d ",__LINE__,port);
+                         port = 80;
+                     }else{
+
+                 ALOGD("%d update port as %d ",__LINE__,port);
+                         port = 80;
+                     }
+                 }
+            }
+            ALOGD("update port as %d ",port);
+            int i = 0;
+            for(i = 0;i < size ;i++){
+                dbAddrs.editItemAt(i).setPort(port);
+            }
         }
+        addToCache(tmpKey.c_str(),dbAddrs);
     }
+
     //return cache address
-    const Vector<SocketAddress>& lastaddrs =  getHostByCache(host);
+    const Vector<SocketAddress>& lastaddrs =  getHostByCache(tmpKey.c_str());
     return lastaddrs;
 }
 

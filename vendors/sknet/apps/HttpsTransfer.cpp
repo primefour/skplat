@@ -94,7 +94,7 @@ void HttpsTransfer::sslShake(){
     }
 
     //set io interface
-    mbedtls_ssl_set_bio( &mSslCtx, &mServerFd, mbedtls_net_send, mbedtls_net_recv, NULL );
+    mbedtls_ssl_set_bio(&mSslCtx, &mServerFd, mbedtls_net_send, mbedtls_net_recv, NULL );
     /*
      * 4. Handshake
      */
@@ -116,7 +116,7 @@ void HttpsTransfer::sslShake(){
         ALOGE("verify failed");
         mbedtls_x509_crt_verify_info(verifyBuff, sizeof( verifyBuff ), "  ! ", flags );
         ALOGE( "%s", verifyBuff );
-        mError = UNKNOWN_ERROR;
+        //mError = UNKNOWN_ERROR;
     } else {
         //shake completely and return
         mError = OK;
@@ -127,12 +127,13 @@ void HttpsTransfer::sslShake(){
 int HttpsTransfer::write(const char *buff,int len){
     int ret;
     if(mError != OK){
-        return UNKNOWN_ERROR;
+        ALOGW("write mError = %d ",mError);
     }
 
     ret = mbedtls_ssl_write( &mSslCtx, (const unsigned char *)buff, len ); 
     if( ret == MBEDTLS_ERR_SSL_WANT_READ && ret == MBEDTLS_ERR_SSL_WANT_WRITE ){
-        return 0;
+        ALOGD( "ssl ret %s return",ret== MBEDTLS_ERR_SSL_WANT_READ?"MBEDTLS_ERR_SSL_WANT_READ":"MBEDTLS_ERR_SSL_WANT_WRITE ");
+        return HTTPS_WOULD_BLOCK;
     }
     if(ret < 0){
         ALOGE( " failed mbedtls_ssl_write returned %d",ret );
@@ -145,12 +146,12 @@ int HttpsTransfer::write(const char *buff,int len){
 int HttpsTransfer::read(char *buff,int len){
     int ret = 0;
     if(mError != OK){
-        return UNKNOWN_ERROR;
+        ALOGW("read mError = %d ",mError);
     }
     ret = mbedtls_ssl_read( &mSslCtx, (unsigned char *)buff, len );
     if(ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE ){
-        ALOGD( "ssl MBEDTLS_ERR_SSL_WANT_READ return" );
-        return 0;
+        ALOGD( "ssl ret %s return",ret== MBEDTLS_ERR_SSL_WANT_READ?"MBEDTLS_ERR_SSL_WANT_READ":"MBEDTLS_ERR_SSL_WANT_WRITE ");
+        return HTTPS_WOULD_BLOCK;
     }
     if(ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY ){
         ALOGE( "failed MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY ");
