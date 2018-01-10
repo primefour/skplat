@@ -50,6 +50,10 @@ struct Url{
     KeyedHash<std::string,Query> mQueries;
     Url():mQueries(10,getStringHash){
     }
+    bool isSecure(){
+        ALOGD("mHref = %s mSchema is %s ",mHref.c_str(),mSchema.c_str());
+        return strcasecmp(mSchema.c_str(),"https") == 0;
+    }
     void parseReloc(const char *str);
     static void parseQuery(const char *query,Url *url);
     static std::string dupString(const char *str, int n);

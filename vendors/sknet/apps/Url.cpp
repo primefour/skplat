@@ -81,6 +81,7 @@ void Url::parseReloc(const char *url){
 }
 
 Url* Url::parseUrl(const char *str,Url *url){
+   ALOGD("parseUrl %s ",str);
    const char *pch;
    std::string query;
    if (str && str[0]) {
@@ -191,6 +192,7 @@ Url* Url::parseUrl(const char *str,Url *url){
        ALOGD("parse url fail %s ",str);
        return NULL;
    }
+   dumpUrl(url);
 }
 
 void Url::dumpUrl(Url*url) {

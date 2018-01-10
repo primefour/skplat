@@ -76,6 +76,7 @@
 #include<fcntl.h>
 #include"RefBase.h"
 #include"RawFile.h"
+#include"HttpsTransfer.h"
 
 struct Range{
     long begin;
@@ -284,6 +285,8 @@ class HttpTransfer :public RefBase{
         std::string mfilePath;
         Range mPartialData;
         sp<TransferObserver> mObserver;
+        sp<HttpsTransfer> mHttpsSupport;
+        bool mIsSeucre;
 };
 
 #endif //__HTTP_TRANSFER_H__

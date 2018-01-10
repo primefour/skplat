@@ -147,6 +147,12 @@ int main(){
     */
     //HttpTransfer transfer;
     //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
-    HttpsTransfer https(1,"helloworld");
+    HttpTransfer transfer;
+    transfer.doGet("http://www.baidu.com");
+    sp<HttpResponse> resp = transfer.getResponse();
+    if(resp != NULL){
+        ALOGD("====> %s ",(const char *)resp->mBody->data());
+    }
+
     return 0;
 }

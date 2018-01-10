@@ -21,7 +21,7 @@
 #define TRANSFER_CONNECT_TIMEOUT 15000 //ms
 #define TRANSFER_SELECT_TIMEOUT 60000 //ms
 
-int HttpTransfer::mRelocationLimited = 11;
+int HttpTransfer::mRelocationLimited = 2;
 const char *HttpTransfer::HttpGetHints = "GET";
 const char *HttpTransfer::HttpPostHints = "POST";
 const char *HttpTransfer::HttpChunkedEOFHints = "\r\n0\r\n";
@@ -51,7 +51,6 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
     req->mHeader.setEntry("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
     req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
-    req->mHeader.setEntry("Connection","keep-alive");
     req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
     if(mIsDownload == HTTP_CHILD_DOWNLOAD){
         //Range:bytes=554554- 
@@ -210,7 +209,11 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 ALOGW("http get write abort by user");
                 return ABORT_ERROR;
             }else if(FD_ISSET(mFd,&rdSet)){
-                n = read(mFd,tmpBuff,sizeof(tmpBuff));
+                if(!mIsSeucre){
+                    n = read(mFd,tmpBuff,sizeof(tmpBuff));
+                }else{
+                    n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff));
+                }
                 if(n > 0){
                     //ALOGD("tmpBuff = %s ",tmpBuff);
                     recvBuffer->append(tmpBuff,n);
@@ -466,9 +469,11 @@ int HttpTransfer::parseHttpVersion(const char *version,int &major,int &minor){
 int HttpTransfer::httpDoTransfer(HttpRequest *req){
     const char *host = NULL;
     const char *service = NULL;
+    bool isSecure = false;
     if(mObserver != NULL){
         mObserver->onStartConnect();
     }
+
     if(req->mUseProxy){
         host = req->mProxyUrl.mHost.c_str();
         if(req->mProxyUrl.mPort.empty()){
@@ -476,6 +481,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         }else{
             service = req->mProxyUrl.mPort.c_str();
         }
+        isSecure  = req->mProxyUrl.isSecure();
     }else{
         host = req->mUrl.mHost.c_str();
         if(req->mUrl.mPort.empty()){
@@ -483,8 +489,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         }else{
             service = req->mUrl.mPort.c_str();
         }
+        isSecure  = req->mUrl.isSecure();
     }
-
+    mIsSeucre = isSecure;
     //get address using dns cache
     sp<DnsCache>& Cache = DnsCache::getInstance() ;
     //get Address
@@ -520,12 +527,27 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     mFd = connect.getSocket();
     ALOGD("socket fd = %d ",mFd);
 
+    //check is secure connect
+    if(mIsSeucre){
+        mHttpsSupport = new HttpsTransfer(mFd,host);
+        //do https shake 
+        //note:for lack of root cert,we will ignore the verify result of web cert now
+        //fix me
+        mHttpsSupport->sslShake();
+    }
+
     BufferUtils sendBuffer;
     char tmpBuff[1024]={0};
     //create http header
     if(req->mUseProxy){
+        /*
+         * GET http://www.example.com/ HTTP/1.1
+         * Host: www.example.com
+         * Proxy-Connection: keep-alive
+         */
         snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s \r\n",req->mMethod.c_str(),
                 req->mUrl.mHref.c_str(),req->mProto.c_str());
+        req->mHeader.setEntry("Proxy-Connection","keep-alive");
     }else{
         std::string xpath = "/";
         if(!req->mUrl.mPath.empty()){
@@ -533,14 +555,17 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         }
         snprintf(tmpBuff,sizeof(tmpBuff),"%s %s %s\r\n",req->mMethod.c_str(), 
                 xpath.c_str(),req->mProto.c_str());
+        req->mHeader.setEntry("Connection","keep-alive");
     }
+
     sendBuffer.append(tmpBuff,strlen(tmpBuff));
 
-    if(req->mMethod == HttpPostHints ){
+    if(req->mMethod == HttpPostHints){
         if(req->mBody->size() != 0){
             req->mHeader.setEntry(HttpHeader::contentLengthHints,"%d",req->mBody->size());
         }
     }
+
     //add http header entry
     req->mHeader.toString(sendBuffer);
     ALOGD("%s ",sendBuffer.data());
@@ -579,7 +604,11 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 mError ++;
                 return ABORT_ERROR;
             }else if (FD_ISSET(mFd,&wrSet)){
-                n = write(mFd,sendBuffer.dataWithOffset(),sendBuffer.size() - sendBuffer.offset());
+                if(!mIsSeucre){
+                    n = write(mFd,sendBuffer.dataWithOffset(),sendBuffer.size() - sendBuffer.offset());
+                }else{
+                    n = mHttpsSupport->write(sendBuffer.dataWithOffset(),sendBuffer.size() - sendBuffer.offset());
+                }
                 if(n > 0){
                     sendBuffer.offset(n,SEEK_CUR);
                     nsended += n;
@@ -641,7 +670,12 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 return ABORT_ERROR;
             }else if(FD_ISSET(mFd,&rdSet)){
                 memset(tmpBuff,0,sizeof(tmpBuff));
-                n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
+                if(!mIsSeucre){
+                    n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
+                }else{
+                    n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff) -1);
+                }
+
                 if(n > 0){
                     tmpBuffer->append(tmpBuff,n);
                     nrecved += n;
@@ -921,7 +955,12 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
                 if(rsize > sizeof(tmpBuff)){
                     rsize = sizeof(tmpBuff);
                 }
-                n = read(mFd,tmpBuff,rsize);
+
+                if(!mIsSeucre){
+                    n = read(mFd,tmpBuff,rsize);
+                }else{
+                    n = mHttpsSupport->read(tmpBuff,rsize);
+                }
                 if(n > 0){
                     wfile.append(tmpBuff,n);
                     nrecved += n;

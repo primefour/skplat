@@ -27,9 +27,10 @@
 #include "mbedtls/certs.h"
 #include <string.h>
 #include "Log.h"
+#include "RefBase.h"
 #include<string>
 
-class HttpsTransfer{
+class HttpsTransfer:public RefBase{
     public:
         //random custom seed
         static const char* entropyCustomSeed; 
@@ -42,6 +43,7 @@ class HttpsTransfer{
         void sslShake();
         int write(const char *buff,int len);
         int read(char *buff,int len);
+        int getSocket() const;
     private:
         mbedtls_net_context mServerFd;
         mbedtls_entropy_context mEntropy;

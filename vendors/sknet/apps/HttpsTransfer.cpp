@@ -15,7 +15,8 @@ HttpsTransfer::HttpsTransfer(int fd,std::string &host):mHost(host){
     mbedtls_x509_crt_init(&mRootCert);
     mbedtls_ctr_drbg_init(&mCtrDrbg);
     mbedtls_entropy_init(&mEntropy);
-    mServerFd.fd = dup(fd);
+    mServerFd.fd = fd;
+    mError = OK;
 }
 
 HttpsTransfer::HttpsTransfer(int fd,const char *host):mHost(host){
@@ -24,7 +25,8 @@ HttpsTransfer::HttpsTransfer(int fd,const char *host):mHost(host){
     mbedtls_x509_crt_init(&mRootCert);
     mbedtls_ctr_drbg_init(&mCtrDrbg);
     mbedtls_entropy_init(&mEntropy);
-    mServerFd.fd = dup(fd);
+    mServerFd.fd = fd;
+    mError = OK;
 }
 
 //mbedtls errstring implements
@@ -36,7 +38,6 @@ void HttpsTransfer::errString(int errNum){
 }
 
 HttpsTransfer::~HttpsTransfer(){
-    mbedtls_net_free(&mServerFd);
     mbedtls_x509_crt_free(&mRootCert);
     mbedtls_ssl_free(&mSslCtx);
     mbedtls_ssl_config_free(&mSslConfig);
@@ -52,7 +53,7 @@ void HttpsTransfer::sslShake(){
                     mbedtls_entropy_func,&mEntropy, 
                     (const unsigned char *)entropyCustomSeed, strlen(entropyCustomSeed))) != 0 ){
         ALOGE("create random number failed ");
-        mError = ret;
+        mError = UNKNOWN_ERROR;
         return ;
     }
 
@@ -71,7 +72,7 @@ void HttpsTransfer::sslShake(){
                     MBEDTLS_SSL_TRANSPORT_STREAM,
                     MBEDTLS_SSL_PRESET_DEFAULT )) != 0 ){
         ALOGE( " failed  mbedtls_ssl_config_defaults returned %d", ret );
-        mError = ret;
+        mError = UNKNOWN_ERROR;
         return;
     }
     /* OPTIONAL is not optimal for security,
@@ -82,13 +83,13 @@ void HttpsTransfer::sslShake(){
 
     if( ( ret = mbedtls_ssl_setup( &mSslCtx, &mSslConfig) ) != 0 ) {
         ALOGE( " failed mbedtls_ssl_setup returned %d", ret );
-        mError = ret;
+        mError = UNKNOWN_ERROR;
         return;
     }
 
     if((ret = mbedtls_ssl_set_hostname(&mSslCtx,mHost.c_str())) != 0 ){
         ALOGE(" failed mbedtls_ssl_set_hostname returned %d", ret );
-        mError = ret;
+        mError = UNKNOWN_ERROR;
         return;
     }
 
@@ -101,7 +102,7 @@ void HttpsTransfer::sslShake(){
     while( ( ret = mbedtls_ssl_handshake( &mSslCtx) ) != 0 ) {
         if( ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE ) {
             ALOGE( " failed mbedtls_ssl_handshake returned -0x%x", -ret );
-            mError = ret;
+            mError = UNKNOWN_ERROR;
             return;
         }
     }
@@ -115,7 +116,7 @@ void HttpsTransfer::sslShake(){
         ALOGE("verify failed");
         mbedtls_x509_crt_verify_info(verifyBuff, sizeof( verifyBuff ), "  ! ", flags );
         ALOGE( "%s", verifyBuff );
-        mError = flags;
+        mError = UNKNOWN_ERROR;
     } else {
         //shake completely and return
         mError = OK;
@@ -125,12 +126,17 @@ void HttpsTransfer::sslShake(){
 
 int HttpsTransfer::write(const char *buff,int len){
     int ret;
+    if(mError != OK){
+        return UNKNOWN_ERROR;
+    }
+
     ret = mbedtls_ssl_write( &mSslCtx, (const unsigned char *)buff, len ); 
     if( ret == MBEDTLS_ERR_SSL_WANT_READ && ret == MBEDTLS_ERR_SSL_WANT_WRITE ){
         return 0;
     }
     if(ret < 0){
         ALOGE( " failed mbedtls_ssl_write returned %d",ret );
+        mError = ret;
         return UNKNOWN_ERROR;
     }
     return ret;
@@ -138,6 +144,9 @@ int HttpsTransfer::write(const char *buff,int len){
 
 int HttpsTransfer::read(char *buff,int len){
     int ret = 0;
+    if(mError != OK){
+        return UNKNOWN_ERROR;
+    }
     ret = mbedtls_ssl_read( &mSslCtx, (unsigned char *)buff, len );
     if(ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE ){
         ALOGD( "ssl MBEDTLS_ERR_SSL_WANT_READ return" );
@@ -145,16 +154,27 @@ int HttpsTransfer::read(char *buff,int len){
     }
     if(ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY ){
         ALOGE( "failed MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY ");
+        mError = ret;
         return UNKNOWN_ERROR;
     }
     if(ret < 0 ) {
         ALOGE( "failed mbedtls_ssl_read returned %d", ret );
+        mError = ret;
         return UNKNOWN_ERROR;
     }
     if(ret == 0 ){
         ALOGD( "ssl EOF" );
+        mError = OK;
         return 0;
     }
     return ret;
+}
+
+int HttpsTransfer::getSocket() const{
+    if(mError != OK){
+        return UNKNOWN_ERROR;
+    }else{
+        return mServerFd.fd;
+    }
 }
 
