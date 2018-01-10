@@ -9,14 +9,12 @@ class HttpChunkFilter:public RefBase{
             mBufferCache = new BufferUtils();
             mEof = false;
         }
-        int write(char *buff,int count);
-        /*
-         * input should xxx\r\njljjkl 
-         * or \r\nxxx\r\njslfjafj
-         */
-        bool checkChunk();
+        int write(const char *buff,int count);
         int read(sp<BufferUtils> &recvBuffer);
         inline bool endOfFile(){ return mEof; }
+        long size(){
+            return mBufferCache->size();
+        }
     private:
         //this Cache will store only one chunk size data and will reset after parser successfully
         sp<BufferUtils> mBufferCache;

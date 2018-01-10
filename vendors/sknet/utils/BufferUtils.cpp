@@ -137,10 +137,11 @@ size_t BufferUtils::consume(long size){
     if(size > mSize){
         mSize = 0;
         mOffset = 0;
+        memset((char*)mBuffer+mSize,0,mCapacity - mSize);
         return 0;
     }
     mSize -= size;
-    int count = (size +3)/4;
+    int count = (mSize+3)/4;
     int i = 0;
     uint32_t *dataBegin = (uint32_t *)mBuffer;
     uint32_t *tmpBegin = (uint32_t *)((char*)mBuffer + size);

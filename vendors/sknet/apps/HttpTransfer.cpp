@@ -167,19 +167,25 @@ long HttpTransfer::parseHex(const char *str,long &data){
 int HttpTransfer::chunkedEOF(void *obj,const char *txd,int size,sp<BufferUtils> &buffer){
     HttpTransfer *hobj = (HttpTransfer*)obj;
     const char *data = (const char *)txd;
-    if(size < 7){
-        return false;
+
+    if(size >= 0){
+        hobj->mChunkFilter->write(txd,size);
+        while(hobj->mChunkFilter->read(buffer));
     }
+
     if(hobj != NULL && hobj->mObserver != NULL){
-        hobj->mObserver->onProgress(size,-1);
+        ALOGD("%s %d ",__func__,__LINE__);
+        hobj->mObserver->onProgress(hobj->mChunkFilter->size() + buffer->size(),-1);
+        ALOGD("%s %d ",__func__,__LINE__);
     }
-    //ALOGD("size is %d  ==> %s ",size,(data + size - 7));
-    const char *tmpData = data + size - 7;
-    if(strstr(tmpData,HttpChunkedEOFHints) != NULL){
+    if(hobj->mChunkFilter->endOfFile()){
+        ALOGD("%s %d ",__func__,__LINE__);
         return true;
     }else{
+        ALOGD("%s %d ",__func__,__LINE__);
         return false;
     }
+
 }
 
 
@@ -213,7 +219,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                     }
                 }
                 if(n > 0){
-                    if(breakFpn(this,recvBuffer->data(),recvBuffer->size(),recvBuffer)){
+                    if(breakFpn(this,tmpBuff,n,recvBuffer)){
                         return recvBuffer->size();
                     }
                     //ALOGD("tmpBuff = %s ",tmpBuff);
@@ -342,15 +348,16 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 
 
 int HttpTransfer::identifyBreak(void *obj,const char *data,int length,sp<BufferUtils> &buffer){
-    //ALOGD("xxx length  = %d hobj->mResponse->mContentLength %ld ",buffer->size(),hobj->mResponse->mContentLength);
+    HttpTransfer *hobj = (HttpTransfer*)obj;
+    ALOGD("xxx length  = %ld hobj->mResponse->mContentLength %ld ",buffer->size(),hobj->mResponse->mContentLength);
     if(length < 0){
         return true;
     }
-    HttpTransfer *hobj = (HttpTransfer*)obj;
     buffer->append(data,length);
     if(hobj != NULL && hobj->mObserver != NULL){
         hobj->mObserver->onProgress(length,hobj->mResponse->mContentLength);
     }
+
     if(buffer->size() >= hobj->mResponse->mContentLength){
         return true; 
     }else{
