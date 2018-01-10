@@ -286,6 +286,7 @@ class HttpTransfer :public RefBase{
         Range mPartialData;
         sp<TransferObserver> mObserver;
         sp<HttpsTransfer> mHttpsSupport;
+        sp<HttpChunkFilter> mChunkFilter;
         bool mIsSeucre;
 };
 

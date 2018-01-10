@@ -91,3 +91,4 @@ std::string trim(const char *s){
     std::string ret(s+i,n-i);
 	return ret; 
 }
+

@@ -813,16 +813,26 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         recvBuffer = mResponse->mBody;
     }
 
+    //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
+    //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
     if(mIsDownload == HTTP_NONE_DOWNLOAD){
-        //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
-        //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
-        if(tmpBuffer->size() > tmpBuffer->offset()){
-            recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
-        }
         ret = OK;
         if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints || mResponse->mContentLength == -1){
-            ret = chunkedReader(recvBuffer,tv);
+            mChunkFilter = new HttpChunkFilter();
+            if(tmpBuffer->size() > tmpBuffer->offset()){
+                mChunkFilter->write(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+                while(mChunkFilter->read(recvBuffer));
+            }
+            if(!mChunkFilter->endOfFile()){
+                ret = chunkedReader(recvBuffer,tv);
+            }
+            if(ret > 0){
+                ret = recvBuffer.size();
+            }
         }else{
+            if(tmpBuffer->size() > tmpBuffer->offset()){
+                recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+            }
             ret = identifyReader(recvBuffer,tv);
         }
     }else if(mIsDownload == HTTP_CHILD_DOWNLOAD){

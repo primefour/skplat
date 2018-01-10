@@ -90,3 +90,28 @@ std::string trim(const char *s){
     std::string ret(s+i,n-i);
 	return ret; 
 }
+
+long parseHex(const char *str,long &data){
+    int i = 0;
+    if(str == NULL){
+        data = 0;
+        return 0;
+    }
+    int size = strlen(str);
+    for(i = 0 ;i < size ;i++){
+        int tmp = 0;
+        if(str[i] >= '0' && str[i] <='9'){
+            tmp = str[i] - '0' ;
+        }else if(str[i] >= 'a' && str[i] <= 'f'){
+            tmp = str[i] -'a' + 10;
+        }else if(str[i] >= 'A' && str[i] <= 'F'){
+            tmp = str[i] -'A' + 10;
+        }else{
+            break;
+        }
+        data <<= 4;
+        data |= tmp;
+    }
+	return data;
+}
+

@@ -24,6 +24,7 @@ class BufferUtils :public RefBase{
         void release();
         BufferUtils(const BufferUtils &a);
         void operator=(const  BufferUtils&a );
+        size_t consume(long size);
     private:
         //storage to save data
         void* mBuffer; //this is sharedBuffer buffer

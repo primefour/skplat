@@ -128,6 +128,29 @@ size_t BufferUtils::append(BufferUtils& buffer){
     return append(buffer.data(),buffer.size());
 }
 
+/*
+ * remove size data from the begin of buffer
+ * and reset offset,update buffer size; 
+ */
+size_t BufferUtils::consume(long size){
+    ASSERT(size >= 0,"invalidate parameters");
+    if(size > mSize){
+        mSize = 0;
+        mOffset = 0;
+        return 0;
+    }
+    mSize -= size;
+    int count = (size +3)/4;
+    int i = 0;
+    uint32_t *dataBegin = (uint32_t *)mBuffer;
+    uint32_t *tmpBegin = (uint32_t *)((char*)mBuffer + size);
+    for(i = 0 ;i < count ;i ++){
+        *(dataBegin +i) = *(tmpBegin +i);
+    }
+    memset((char*)mBuffer+mSize,0,mCapacity - mSize);
+    return mSize;
+}
+
 const char *BufferUtils::dataWithOffset()const{
     return (char *)mBuffer + mOffset;
 }
