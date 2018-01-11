@@ -1068,14 +1068,14 @@ std::string HttpTransfer::getDownloadFilePath(){
 void HttpTransfer::installFilters(){
     if(mGzipFilter != NULL){
         mBufferFilter = new BufferFilter(); 
-        mBufferFilter->setFilterHeader(mGzipFilter);
+        mBufferFilter->setFilterHeader((ReadFilterNode *)mGzipFilter.get());
         if(mChunkFilter != NULL){
-            mGzipFilter->setChild(mChunkFilter)
+            mGzipFilter->setChild((ReadFilterNode *)mChunkFilter.get());
         }
         return;
     }else if(mBufferFilter != NULL){
         mBufferFilter = new BufferFilter(); 
-        mBufferFilter->setFilterHeader(mBufferFilter);
+        mBufferFilter->setFilterHeader((ReadFilterNode *)mBufferFilter.get());
     }
 }
 

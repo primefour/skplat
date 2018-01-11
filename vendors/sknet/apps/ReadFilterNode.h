@@ -71,7 +71,7 @@ class ReadFilterNode:public RefBase{
             }
         }
 
-        inline void setChild(sp<ReadFilterNode> &filter){
+        inline void setChild(ReadFilterNode *filter){
             mChild = filter;
         }
         inline void setEof(bool eof){

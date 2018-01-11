@@ -39,7 +39,7 @@ class BufferFilter:public RefBase{
             }
         }
 
-        void setFilterHeader(sp<ReadFilterNode> &filter){
+        void setFilterHeader(ReadFilterNode *filter){
             mFiltersHeader = filter;
         }
 
