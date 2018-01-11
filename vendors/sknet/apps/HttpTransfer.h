@@ -78,6 +78,8 @@
 #include"RawFile.h"
 #include"HttpsTransfer.h"
 #include"HttpChunkFilter.h"
+#include"GzipDecodeFilter.h"
+#include"BufferFilter.h"
 
 struct Range{
     long begin;
@@ -266,6 +268,7 @@ class HttpTransfer :public RefBase{
         int socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,BreakFpn breakFpn);
         void parseServerRange(const char *rangeStr,Range &range);
     private:
+        void installFilters();
         std::string getDownloadFilePath();
         HttpRequest *createRequest(const char *url);
         static int chunkedEOF(void *obj,const char *data,int size,sp<BufferUtils> &buffer);
@@ -288,6 +291,8 @@ class HttpTransfer :public RefBase{
         sp<TransferObserver> mObserver;
         sp<HttpsTransfer> mHttpsSupport;
         sp<HttpChunkFilter> mChunkFilter;
+        sp<GzipDecodeFilter> mGzipFilter;
+        sp<BufferFilter> mBufferFilter;
         bool mIsSeucre;
 };
 

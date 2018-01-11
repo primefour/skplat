@@ -18,6 +18,7 @@
 #include"FileUtils.h"
 #include"DownloaderManager.h"
 #include"HttpChunkFilter.h"
+#include"GzipDecodeFilter.h"
 
 #define TRANSFER_CONNECT_TIMEOUT 15000 //ms
 #define TRANSFER_SELECT_TIMEOUT 60000 //ms
@@ -49,10 +50,11 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mProto="HTTP/1.1";
     req->mProtoMajor = 1;
     req->mProtoMinor = 1;
-    req->mHeader.setEntry("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
-    req->mHeader.setEntry("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
-    req->mHeader.setEntry("Accept-Language","zh-CN,zh;q=0.9");
-    req->mHeader.setEntry("Host",req->mUrl.mHost.c_str());
+    req->mHeader.setEntry(HttpHeader::acceptHints,"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
+    req->mHeader.setEntry(HttpHeader::userAgentHints,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
+    req->mHeader.setEntry(HttpHeader::acceptLanguageHints,"zh-CN,zh;q=0.9");
+    req->mHeader.setEntry(HttpHeader::acceptEncodingHints,"gzip,deflate");
+    req->mHeader.setEntry(HttpHeader::hostHints,req->mUrl.mHost.c_str());
     if(mIsDownload == HTTP_CHILD_DOWNLOAD){
         //Range:bytes=554554- 
         //Range:bytes=0-100 
@@ -169,16 +171,16 @@ int HttpTransfer::chunkedEOF(void *obj,const char *txd,int size,sp<BufferUtils> 
     const char *data = (const char *)txd;
 
     if(size >= 0){
-        hobj->mChunkFilter->write(txd,size);
-        while(hobj->mChunkFilter->read(buffer));
+        hobj->mBufferFilter->write(txd,size);
+        while(hobj->mBufferFilter->read(buffer));
     }
 
     if(hobj != NULL && hobj->mObserver != NULL){
         ALOGD("%s %d ",__func__,__LINE__);
-        hobj->mObserver->onProgress(hobj->mChunkFilter->size() + buffer->size(),-1);
+        hobj->mObserver->onProgress(hobj->mBufferFilter->size(),-1);
         ALOGD("%s %d ",__func__,__LINE__);
     }
-    if(hobj->mChunkFilter->endOfFile()){
+    if(hobj->mBufferFilter->endOfFile()){
         ALOGD("%s %d ",__func__,__LINE__);
         return true;
     }else{
@@ -788,10 +790,30 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }else{
         mResponse->mContentLength = -1;
     }
+
     //parse http head 
+    std::string contentEncoding = mResponse->mHeader.getValues(HttpHeader::contentEncodingHints);
+    if(!contentEncoding.empty()){
+        if(strcasestr(contentEncoding.c_str(),"gzip")){
+            mResponse->mUncompressed =false;
+        }else if(strcasestr(contentEncoding.c_str(),"deflate")){
+            mResponse->mUncompressed =false;
+        }else{
+            ALOGE("content encode is %s not support",contentEncoding.c_str());
+            return UNKNOWN_ERROR;
+        }
+        mGzipFilter = new GzipDecodeFilter();
+    }
+
     mResponse->mTransferEncoding = mResponse->mHeader.getValues(HttpHeader::transferEncodingHints); 
     if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
         mResponse->mUncompressed =true;
+    }else if(mResponse->mTransferEncoding == "gzip"){
+        mResponse->mUncompressed =false;
+        mGzipFilter = new GzipDecodeFilter();
+    }if(mResponse->mTransferEncoding == "deflate"){
+        mResponse->mUncompressed =false;
+        mGzipFilter = new GzipDecodeFilter();
     }
 
     //check connect header entry
@@ -819,12 +841,13 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         ret = OK;
         if(mResponse->mTransferEncoding == HttpHeader::encodingChunkedHints || mResponse->mContentLength == -1){
             mChunkFilter = new HttpChunkFilter();
+            installFilters();
             if(tmpBuffer->size() > tmpBuffer->offset()){
-                mChunkFilter->write(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
-                while(mChunkFilter->read(recvBuffer));
+                mBufferFilter->write(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+                while(mBufferFilter->read(recvBuffer));
             }
 
-            if(!mChunkFilter->endOfFile()){
+            if(!mBufferFilter->endOfFile()){
                 ret = chunkedReader(recvBuffer,tv);
             }else{
                 if(mObserver != NULL){
@@ -1038,6 +1061,21 @@ std::string HttpTransfer::getDownloadFilePath(){
             ALOGE("no file name for this download");
             return "defaultFile";
         }
+    }
+}
+
+
+void HttpTransfer::installFilters(){
+    if(mGzipFilter != NULL){
+        mBufferFilter = new BufferFilter(); 
+        mBufferFilter->setFilterHeader(mGzipFilter);
+        if(mChunkFilter != NULL){
+            mGzipFilter->setChild(mChunkFilter)
+        }
+        return;
+    }else if(mBufferFilter != NULL){
+        mBufferFilter = new BufferFilter(); 
+        mBufferFilter->setFilterHeader(mBufferFilter);
     }
 }
 

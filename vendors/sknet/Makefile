@@ -49,6 +49,7 @@ APPS_SRC := apps/SocksConnect.cpp \
 	apps/RangeDownloader.cpp \
 	apps/HttpsTransfer.cpp \
 	apps/HttpChunkFilter.cpp \
+	apps/GzipDecodeFilter.cpp \
 
 
 UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)  
@@ -56,7 +57,7 @@ MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)
 STORE_OBJS        := $(STORE_SRC:.cpp=.o)  
 APPS_OBJS         := $(APPS_SRC:.cpp=.o)  
 
-LDFLAGS += -lpthread -lsqlite3 -ldl -L thirdParty/mbedtls/target/lib -lmbedtls -lmbedx509 -lmbedcrypto 
+LDFLAGS += -lpthread -lsqlite3 -ldl -L thirdParty/mbedtls/target/lib -lmbedtls -lmbedx509 -lmbedcrypto  -lz
 
 CXXFLAGS += -g -DHAVE_PTHREADS -I thirdParty/mbedtls/target/include/
 

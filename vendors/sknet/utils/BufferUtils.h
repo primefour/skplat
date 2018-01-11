@@ -22,6 +22,7 @@ class BufferUtils :public RefBase{
         size_t size() const;
         size_t capacity() const;
         void release();
+        void reset();
         BufferUtils(const BufferUtils &a);
         void operator=(const  BufferUtils&a );
         size_t consume(long size);

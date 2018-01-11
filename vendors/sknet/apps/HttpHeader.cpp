@@ -24,6 +24,12 @@ const char * HttpHeader::serverRangeHints = "Content-Range";
 const char * HttpHeader::acceptRangeHints = "Accept-Ranges";
 const char * HttpHeader::etagHints = "ETag";
 const char * HttpHeader::dispositionHints="Content-Disposition";
+const char * HttpHeader::acceptHints = "Accept";
+const char * HttpHeader::acceptLanguageHints = "Accept-Language";
+const char * HttpHeader::acceptEncodingHints = "Accept-Encoding";
+const char * HttpHeader::contentTypeHints = "Content-Type";
+const char * HttpHeader::contentEncodingHints = "Content-Encoding";
+
 
 template<> HttpHeaderEntry SimpleHash<std::string, HttpHeaderEntry>::mNullItem = HttpHeaderEntry();
 #define MAX_STRING       (512) 

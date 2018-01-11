@@ -77,6 +77,12 @@ int BufferUtils::write(const char *buff,size_t size){
     return size;
 }
 
+void BufferUtils::reset(){
+    mOffset = 0;
+    mSize = 0;
+    memset(mBuffer,0,mCapacity);
+}
+
 size_t BufferUtils::offset(int offset,int seekWhere){
     if(seekWhere == SEEK_SET){
         mOffset = offset;

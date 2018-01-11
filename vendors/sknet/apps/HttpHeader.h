@@ -185,6 +185,12 @@ struct HttpHeader{
     static const char *acceptRangeHints;
     static const char *etagHints;
     static const char *dispositionHints;
+    static const char *acceptHints;
+    static const char *acceptLanguageHints;
+    static const char *acceptEncodingHints;
+    static const char *contentTypeHints;
+    static const char *contentEncodingHints;
+
 
     HttpHeader():mEntries(20,getStringHash){
 
