@@ -95,6 +95,8 @@ int DnsCache::getAddrInfo(const char *host,const char *service){
     if(service != NULL){
         hostAddrs.mKey += service;
     }
+
+    ALOGD("mHostCache.add %s items %zd ",hostAddrs.mKey.c_str(),hostAddrs.mAddrs.size());
     //update cache item
     mHostCache.add(hostAddrs.mKey,hostAddrs);
 }
@@ -164,12 +166,14 @@ const Vector<SocketAddress>& DnsCache::getAddrs(const char *host,const char *ser
             for(i = 0;i < size ;i++){
                 dbAddrs.editItemAt(i).setPort(port);
             }
+            ALOGD("tmpKey.c_str() = %s  size %zd ",tmpKey.c_str(),dbAddrs.size());
+            addToCache(tmpKey.c_str(),dbAddrs);
         }
-        addToCache(tmpKey.c_str(),dbAddrs);
     }
 
     //return cache address
     const Vector<SocketAddress>& lastaddrs =  getHostByCache(tmpKey.c_str());
+    ALOGD("tmpKey.c_str() = %s  size %zd ",tmpKey.c_str(),lastaddrs.size());
     return lastaddrs;
 }
 
