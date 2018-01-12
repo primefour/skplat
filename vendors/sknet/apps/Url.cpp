@@ -193,6 +193,7 @@ Url* Url::parseUrl(const char *str,Url *url){
        return NULL;
    }
    dumpUrl(url);
+   return url;
 }
 
 void Url::dumpUrl(Url*url) {

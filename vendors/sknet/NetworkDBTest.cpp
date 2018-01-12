@@ -43,7 +43,6 @@ If-Modified-Since: Thu, 28 Dec 2017 15:25:53 GMT
 
 int main(){
     ALOGD("Hello world");
-    /*
     sp<NetworkDatabase>& db = NetworkDatabase::getInstance();
     SocketAddress sockAddr1("www.baidu.com","192.168.1.23");
     sockAddr1.setPort(8080);
@@ -123,10 +122,10 @@ int main(){
     //set host entry
     //req->mHeader.setEntry("Cookie","vjuids=-3dd6df54d.15e9ad44c20.0.5ce710462eea; _ntes_nnid=5fa8714d6ebdf9ab84afc38eb5322a23,1505836157990; usertrack=c+xxClnBPH6NJ66MBFFFAg==; _ntes_nuid=5fa8714d6ebdf9ab84afc38eb5322a23; UM_distinctid=15e9ad4cb11106-08a044a68e29-1c29160a-1fa400-15e9ad4cb12462; __gads=ID=b69a461dd3308690:T=1505836191:S=ALNI_MbOv77TDsxHiHEimeD1bCNsaE7O3A; mail_psc_fingerprint=d5d80616f93a7a977100394b9c21a1df; P_INFO=primefour@163.com|1511711367|0|163|00&21|shh&1511410577&163#shh&null#10#0#0|158993&0|163&mail163|primefour@163.com; CNZZDATA1271207190=485797003-1512128773-http%253A%252F%252Fnews.163.com%252F%7C1512128773; NNSSPID=0fea259fd0b646e5a83725c72757f3f9; Province=021; City=021; NTES_hp_textlink1=old; vjlast=1505836158.1514474647.11; CNZZDATA1256734798=1152423267-1511578113-http%253A%252F%252Fnews.163.com%252F%7C1514473122; CNZZDATA1256336326=1972669584-1505835976-http%253A%252F%252Fnews.163.com%252F%7C1514474288; ne_analysis_trace_id=1514474658373; s_n_f_l_n3=7d24fc61281cd9631514474658382; vinfo_n_f_l_n3=7d24fc61281cd963.1.13.1505836157998.1514117875751.1514474821367");
 
-    HttpTransfer transfer;
+    //HttpTransfer transfer;
     //transfer.doGet("http://www.sina.com.cn");
     //transfer.doGet("http://www.163.com");
-    transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","./Hello.download");
+    //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","./Hello.download");
     /*
     sp<HttpResponse> resp = transfer.getResponse();
     if(resp != NULL){
@@ -148,10 +147,10 @@ int main(){
     //HttpTransfer transfer;
     //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
     HttpTransfer transfer;
-    transfer.doGet("http://www.163.com");
+    transfer.doGet("http://cms-bucket.nosdn.127.net/e30ef02fbf6f4791af287c00b9fa49a720180112110836.png?imageView&thumbnail=140y88&quality=85");
     sp<HttpResponse> resp = transfer.getResponse();
     if(resp != NULL && resp->mBody != NULL){
-        ALOGD("====> %s ",(const char *)resp->mBody->data());
+        ALOGD("====> %s ",(const char *)resp->mBody->size());
     }
 
     return 0;
