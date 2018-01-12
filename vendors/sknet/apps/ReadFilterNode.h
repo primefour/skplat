@@ -23,10 +23,15 @@ class ReadFilterNode:public RefBase{
         }
 
         int errors(){ return mErrors; }
-        //do nothing transcode
+
+        //transcode should return the actual data size after transcoding 
+        //or return 0 if end of file or buffer
+        //or return error number if there is an error
         virtual int transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &outputBuffer){
+            int ret = inputBuffer->size();
             outputBuffer->append(inputBuffer->data(),inputBuffer->size());
             inputBuffer->consume(inputBuffer->size());
+            return ret;
         }
 
         int read(sp<BufferUtils> &recvBuffer){
@@ -42,33 +47,33 @@ class ReadFilterNode:public RefBase{
             int count = mBufferCache->size();
             if(count > 0){
                 if(mChild != NULL){
+                    //transcode and send data to child
                     ret = transcode(mBufferCache,mChild->mBufferCache);
-                    if(ret  < 0){
+                    if(ret < 0){
                         ALOGE("transcode failed ");
                         mErrors = UNKNOWN_ERROR;
                     }
                     if(mChild->mBufferCache->size() > 0){
                         ret = mChild->read(recvBuffer);
-                        if(ret < 0){
+                        if(ret <= 0){
                             ALOGE("transcode failed ");
                             mErrors = UNKNOWN_ERROR;
+                            mEof = mChild->endOfFile();
                         }
                     }
                 }else{
-                    if(mBufferCache->size() > 0){
-                        //copy mBufferCache to recvbuffer;
-                        recvBuffer->append(mBufferCache->data(),mBufferCache->size());
-                        recvBuffer->consume(mBufferCache->size());
+                    //transcode and send data to child
+                    ret = transcode(mBufferCache,recvBuffer);
+                    if(ret < 0){
+                        ALOGE("transcode failed ");
+                        mErrors = UNKNOWN_ERROR;
                     }
                 }
+            }else{
+                ret = 0;
             }
             //send out data and the eof or error while detecte by the next time
-            count = recvBuffer->size();
-            if(count > 0){
-                return count;
-            }else {
-                return ret;
-            }
+            return ret;
         }
 
         inline void setChild(ReadFilterNode *filter){

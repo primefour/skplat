@@ -4,7 +4,7 @@
 #include "BufferUtils.h"
 class BufferFilter:public RefBase{
     public:
-        BufferFilter(){}
+        BufferFilter(){mFiltersHeader = NULL;}
         virtual ~BufferFilter(){ } 
         //send source buffer to filters
         int write(const char *buff,int count){
@@ -30,13 +30,7 @@ class BufferFilter:public RefBase{
             if(mFiltersHeader != NULL){
                 ret = mFiltersHeader->read(recvBuffer);
             }
-
-            int count = recvBuffer->size();
-            if(count > 0){
-                return count;
-            }else{
-                return ret;
-            }
+            return ret;
         }
 
         void setFilterHeader(ReadFilterNode *filter){

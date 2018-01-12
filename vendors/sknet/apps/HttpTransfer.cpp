@@ -53,7 +53,7 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry(HttpHeader::acceptHints,"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
     req->mHeader.setEntry(HttpHeader::userAgentHints,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
     req->mHeader.setEntry(HttpHeader::acceptLanguageHints,"zh-CN,zh;q=0.9");
-    req->mHeader.setEntry(HttpHeader::acceptEncodingHints,"gzip,deflate");
+    //req->mHeader.setEntry(HttpHeader::acceptEncodingHints,"gzip,deflate");
     req->mHeader.setEntry(HttpHeader::hostHints,req->mUrl.mHost.c_str());
     if(mIsDownload == HTTP_CHILD_DOWNLOAD){
         //Range:bytes=554554- 
@@ -176,15 +176,11 @@ int HttpTransfer::chunkedEOF(void *obj,const char *txd,int size,sp<BufferUtils> 
     }
 
     if(hobj != NULL && hobj->mObserver != NULL){
-        ALOGD("%s %d ",__func__,__LINE__);
         hobj->mObserver->onProgress(hobj->mBufferFilter->size(),-1);
-        ALOGD("%s %d ",__func__,__LINE__);
     }
     if(hobj->mBufferFilter->endOfFile()){
-        ALOGD("%s %d ",__func__,__LINE__);
         return true;
     }else{
-        ALOGD("%s %d ",__func__,__LINE__);
         return false;
     }
 
@@ -1068,14 +1064,14 @@ std::string HttpTransfer::getDownloadFilePath(){
 void HttpTransfer::installFilters(){
     if(mGzipFilter != NULL){
         mBufferFilter = new BufferFilter(); 
-        mBufferFilter->setFilterHeader((ReadFilterNode *)mGzipFilter.get());
+        mBufferFilter->setFilterHeader(mGzipFilter.get());
         if(mChunkFilter != NULL){
-            mGzipFilter->setChild((ReadFilterNode *)mChunkFilter.get());
+            mGzipFilter->setChild(mChunkFilter.get());
         }
         return;
-    }else if(mBufferFilter != NULL){
+    }else if(mChunkFilter != NULL){
         mBufferFilter = new BufferFilter(); 
-        mBufferFilter->setFilterHeader((ReadFilterNode *)mBufferFilter.get());
+        mBufferFilter->setFilterHeader(mChunkFilter.get());
     }
 }
 
