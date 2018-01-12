@@ -148,11 +148,12 @@ int HttpsTransfer::read(char *buff,int len){
     if(mError != OK){
         ALOGW("read mError = %d ",mError);
     }
-    ret = mbedtls_ssl_read( &mSslCtx, (unsigned char *)buff, len );
+    ret = mbedtls_ssl_read( &mSslCtx, (unsigned char *)buff,len);
     if(ret == MBEDTLS_ERR_SSL_WANT_READ || ret == MBEDTLS_ERR_SSL_WANT_WRITE ){
         ALOGD( "ssl ret %s return",ret== MBEDTLS_ERR_SSL_WANT_READ?"MBEDTLS_ERR_SSL_WANT_READ":"MBEDTLS_ERR_SSL_WANT_WRITE ");
         return HTTPS_WOULD_BLOCK;
     }
+
     if(ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY ){
         ALOGE( "failed MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY ");
         mError = ret;
@@ -163,9 +164,11 @@ int HttpsTransfer::read(char *buff,int len){
         mError = ret;
         return UNKNOWN_ERROR;
     }
+
     if(ret == 0 ){
         ALOGD( "ssl EOF" );
         mError = OK;
+        mbedtls_ssl_close_notify(&mSslCtx);
         return 0;
     }
     return ret;
