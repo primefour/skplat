@@ -106,9 +106,9 @@ void FileUtils::deleteFiles(const char *filePath){
         }
         closedir(dp); 
     }else if (isRegularFile(filePath)){
-        ret = remove(fileBuff);
+        ret = remove(filePath);
         if(ret < 0){
-            ALOGE("delete file %s failed ",fileBuff);
+            ALOGE("delete file %s failed ",filePath);
         }
     }else{
         ALOGW("file or path is not exist or need permission %s ",filePath);

@@ -918,6 +918,8 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             mfilePath += fileName;
         }
         ALOGD("download file path is %s ",mfilePath.c_str());
+        //remove the old file and create a new one;
+        FileUtils::deleteFiles(mfilePath.c_str());
         if(!rangeSupport.empty() && rangeSupport == serverRangeUnits){
             //create DownloaderManager
             DownloaderManager  *dm = new DownloaderManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
@@ -926,8 +928,6 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             delete dm;
             return OK;
         }else{
-            //remove current file and create a new one;
-            FileUtils::deleteFiles(mfilePath.c_str());
             ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
             //download by this transfer
             RawFile rawFile(mfilePath.c_str());

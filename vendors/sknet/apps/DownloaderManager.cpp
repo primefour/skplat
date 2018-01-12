@@ -10,6 +10,7 @@
 #include <string.h>  
 #include <sys/stat.h>  
 #include "RangeDownloader.h"
+#include "FileUtils.h"
 
 #define DOWNLOAD_MAX_THREADS 10
 const char *DownloaderManager::downloaderPartialFolder = "./.sknetDownload";
@@ -108,18 +109,21 @@ int DownloaderManager::wait4Complete(){
             const char *tfile = mDownloadThreads[i]->filePath();
             const Range rg = mDownloadThreads[i]->range();
             ALOGD("tfile  %s %ld %ld ",tfile,mRanges[rg.idx].begin,mRanges[rg.idx].end);
-            RawFile rdFile(tfile);
-            rdFile.open();
-            int n = 0;
-            mergeFile.lseek(mRanges[rg.idx].begin,SEEK_SET);
-            while(1){
-                n = rdFile.read(tmpBuff,sizeof(tmpBuff));
-                if(n == 0 || n < 0){
-                    break;
-                }else{
-                    mergeFile.write(tmpBuff,n);
+            {
+                RawFile rdFile(tfile);
+                rdFile.open();
+                int n = 0;
+                mergeFile.lseek(mRanges[rg.idx].begin,SEEK_SET);
+                while(1){
+                    n = rdFile.read(tmpBuff,sizeof(tmpBuff));
+                    if(n == 0 || n < 0){
+                        break;
+                    }else{
+                        mergeFile.write(tmpBuff,n);
+                    }
                 }
             }
+            FileUtils::deleteFiles(tfile);
         }
         return OK;
     }else{
