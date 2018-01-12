@@ -4,14 +4,18 @@
 #include "BufferUtils.h"
 class BufferFilter:public RefBase{
     public:
-        BufferFilter(){mFiltersHeader = NULL;}
+        BufferFilter(){
+            mFiltersHeader = NULL;
+            mDataSize = 0;
+        }
+
         virtual ~BufferFilter(){ } 
         //send source buffer to filters
         int write(const char *buff,int count){
-            if(mFiltersHeader == NULL){
-                return 0;
+            mDataSize += count;
+            if(mFiltersHeader == NULL && mRecvBuffer != NULL){
+                return mRecvBuffer->append(buff,count);
             }else{
-                mDataSize += count;
                 return mFiltersHeader->write(buff,count);
             }
         }
@@ -29,6 +33,18 @@ class BufferFilter:public RefBase{
 
             if(mFiltersHeader != NULL){
                 ret = mFiltersHeader->read(recvBuffer);
+            }else{
+                if(recvBuffer != mRecvBuffer){
+                    int count = mRecvBuffer->size();
+                    if(count > 0){
+                        recvBuffer->append(mRecvBuffer->data(),count);
+                        mRecvBuffer->consume(count);
+                    }
+                    return count;
+                }else{
+                    //already in the recvBuffer
+                    return 0;
+                }
             }
             return ret;
         }
@@ -37,11 +53,19 @@ class BufferFilter:public RefBase{
             mFiltersHeader = filter;
         }
 
-        inline long size(){ return mDataSize; }
+        inline long size(){ 
+            return mDataSize; 
+        }
+
+        void setRecvBuffer(sp<BufferUtils> &recvBuffer){
+            mRecvBuffer = recvBuffer;
+        }
+
         inline int error(){ return mFiltersHeader->errors(); }
         inline void setEof(bool eof){ mFiltersHeader->setEof(eof); }
         inline bool endOfFile(){ return mFiltersHeader->endOfFile(); }
         sp<ReadFilterNode> mFiltersHeader;
+        sp<BufferUtils> mRecvBuffer;
         long mDataSize;
 };
 

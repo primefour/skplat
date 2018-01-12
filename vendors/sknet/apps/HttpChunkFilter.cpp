@@ -37,7 +37,8 @@ int HttpChunkFilter::transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &out
     }
     actualData += 2;
     if(count <= srcSize - (actualData - srcData)){
-        outputBuffer->append(srcData,srcSize);
+        ALOGD("srcData :%s ",actualData);
+        outputBuffer->append(actualData,count);
         inputBuffer->consume(actualData + count - srcData);
         return count;
     }else{

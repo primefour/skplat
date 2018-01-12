@@ -9,6 +9,7 @@ class GzipDecodeFilter :public ReadFilterNode{
     public:
         GzipDecodeFilter(){
             mGzipStreamer = NULL;
+            reset();
         }
 
         virtual ~GzipDecodeFilter(){

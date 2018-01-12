@@ -56,7 +56,10 @@ int GzipDecodeFilter::transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &ou
             break;
         }
         size_t availData = sizeof(outbuf)- mGzipStreamer->avail_out;
-        outputBuffer->append((const char *)outbuf,availData);
+        if(availData > 0 ){
+            outputBuffer->append((const char *)outbuf,availData);
+            //ALOGD("outputBuffer = %s ",outputBuffer->data());
+        }
         if(mGzipStreamer->avail_out > 0) {
             break;
             ret = 0;
@@ -65,6 +68,7 @@ int GzipDecodeFilter::transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &ou
     inputBuffer->consume(srcSize - mGzipStreamer->avail_in);
     return ret;
 }
+
 /*
 int GzipDecodeFilter::read(sp<BufferUtils> &recvBuffer){
     AutoMutex _l(mMutex);

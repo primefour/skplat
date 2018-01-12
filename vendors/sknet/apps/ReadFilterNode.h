@@ -55,10 +55,14 @@ class ReadFilterNode:public RefBase{
                     }
                     if(mChild->mBufferCache->size() > 0){
                         ret = mChild->read(recvBuffer);
-                        if(ret <= 0){
+                        if(ret < 0){
                             ALOGE("transcode failed ");
                             mErrors = UNKNOWN_ERROR;
-                            mEof = mChild->endOfFile();
+                        }else if(ret == 0 ){
+                            //check child whether detect end of stream
+                            if(!mEof){
+                                mEof = mChild->endOfFile();
+                            }
                         }
                     }
                 }else{

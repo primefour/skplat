@@ -53,7 +53,7 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry(HttpHeader::acceptHints,"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/* q=0.8");
     req->mHeader.setEntry(HttpHeader::userAgentHints,"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36");
     req->mHeader.setEntry(HttpHeader::acceptLanguageHints,"zh-CN,zh;q=0.9");
-    //req->mHeader.setEntry(HttpHeader::acceptEncodingHints,"gzip,deflate");
+    req->mHeader.setEntry(HttpHeader::acceptEncodingHints,"gzip,deflate");
     req->mHeader.setEntry(HttpHeader::hostHints,req->mUrl.mHost.c_str());
     if(mIsDownload == HTTP_CHILD_DOWNLOAD){
         //Range:bytes=554554- 
@@ -175,15 +175,15 @@ int HttpTransfer::chunkedEOF(void *obj,const char *txd,int size,sp<BufferUtils> 
         while(hobj->mBufferFilter->read(buffer));
     }
 
-    if(hobj != NULL && hobj->mObserver != NULL){
+    if(hobj->mObserver != NULL){
         hobj->mObserver->onProgress(hobj->mBufferFilter->size(),-1);
     }
+
     if(hobj->mBufferFilter->endOfFile()){
         return true;
     }else{
         return false;
     }
-
 }
 
 
@@ -351,9 +351,12 @@ int HttpTransfer::identifyBreak(void *obj,const char *data,int length,sp<BufferU
     if(length < 0){
         return true;
     }
-    buffer->append(data,length);
-    if(hobj != NULL && hobj->mObserver != NULL){
-        hobj->mObserver->onProgress(length,hobj->mResponse->mContentLength);
+
+    hobj->mBufferFilter->write(data,length);
+    while(hobj->mBufferFilter->read(buffer));
+    
+    if(hobj->mObserver != NULL){
+        hobj->mObserver->onProgress(hobj->mBufferFilter->size(),hobj->mResponse->mContentLength);
     }
 
     if(buffer->size() >= hobj->mResponse->mContentLength){
@@ -361,7 +364,6 @@ int HttpTransfer::identifyBreak(void *obj,const char *data,int length,sp<BufferU
     }else{
         return false;
     }
-
 }
 
 int HttpTransfer::identifyReader(sp<BufferUtils> &recvBuffer,struct timeval &tv){
@@ -831,6 +833,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         recvBuffer = mResponse->mBody;
     }
 
+    mBufferFilter = new BufferFilter(); 
+    mBufferFilter->setRecvBuffer(recvBuffer);
+
     //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
     //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
     if(mIsDownload == HTTP_NONE_DOWNLOAD){
@@ -854,8 +859,10 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 ret = recvBuffer->size();
             }
         }else{
+            installFilters();
             if(tmpBuffer->size() > tmpBuffer->offset()){
-                recvBuffer->append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+                mBufferFilter->write(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
+                while(mBufferFilter->read(recvBuffer));
             }
 
             if(recvBuffer->size() < mResponse->mContentLength){
@@ -1062,16 +1069,14 @@ std::string HttpTransfer::getDownloadFilePath(){
 
 
 void HttpTransfer::installFilters(){
-    if(mGzipFilter != NULL){
-        mBufferFilter = new BufferFilter(); 
-        mBufferFilter->setFilterHeader(mGzipFilter.get());
-        if(mChunkFilter != NULL){
-            mGzipFilter->setChild(mChunkFilter.get());
-        }
-        return;
-    }else if(mChunkFilter != NULL){
-        mBufferFilter = new BufferFilter(); 
+    if(mChunkFilter != NULL){
         mBufferFilter->setFilterHeader(mChunkFilter.get());
+        if(mGzipFilter != NULL){
+            mChunkFilter->setChild(mGzipFilter.get());
+        }
+    }else if(mGzipFilter != NULL){
+        mBufferFilter->setFilterHeader(mGzipFilter.get());
+        return;
     }
 }
 
