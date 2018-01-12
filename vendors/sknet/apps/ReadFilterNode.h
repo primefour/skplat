@@ -38,6 +38,7 @@ class ReadFilterNode:public RefBase{
             int ret = 0;
             //check whether is end of file
             if(mEof){
+                ALOGD("end of file cache size is %zd ",mBufferCache->size());
                 return 0;
             }
             //check whether there is error?
@@ -53,6 +54,7 @@ class ReadFilterNode:public RefBase{
                         ALOGE("transcode failed ");
                         mErrors = UNKNOWN_ERROR;
                     }
+                    
                     if(mChild->mBufferCache->size() > 0){
                         ret = mChild->read(recvBuffer);
                         if(ret < 0){
@@ -86,7 +88,12 @@ class ReadFilterNode:public RefBase{
         inline void setEof(bool eof){
             mEof = eof;
         }
-        inline bool endOfFile(){ return mEof; }
+        inline bool endOfFile(){ 
+            if(mEof){
+                ALOGD("xxxx end of file cache size is %zd ",mBufferCache->size());
+            }
+            return mEof; 
+        }
         //mEof will set at transcode or by the parents
         sp<ReadFilterNode> mChild;
         sp<BufferUtils> mBufferCache;

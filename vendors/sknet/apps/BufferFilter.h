@@ -7,9 +7,12 @@ class BufferFilter:public RefBase{
         BufferFilter(){
             mFiltersHeader = NULL;
             mDataSize = 0;
+            mContentLength  = -1;
         }
 
-        virtual ~BufferFilter(){ } 
+        virtual ~BufferFilter(){
+            ALOGD("%s %d ",__func__,__LINE__);
+        } 
         //send source buffer to filters
         int write(const char *buff,int count){
             mDataSize += count;
@@ -57,16 +60,27 @@ class BufferFilter:public RefBase{
             return mDataSize; 
         }
 
-        void setRecvBuffer(sp<BufferUtils> &recvBuffer){
+        void setRecvBuffer(sp<BufferUtils> &recvBuffer,long content = -1){
             mRecvBuffer = recvBuffer;
+            mContentLength = content;
         }
 
-        inline int error(){ return mFiltersHeader->errors(); }
-        inline void setEof(bool eof){ mFiltersHeader->setEof(eof); }
-        inline bool endOfFile(){ return mFiltersHeader->endOfFile(); }
+        inline int error(){ return mFiltersHeader != NULL ? mFiltersHeader->errors():0; }
+
+        inline bool endOfFile(){ 
+            if(mFiltersHeader != NULL){
+                return mFiltersHeader->endOfFile();
+            }else if(mContentLength != -1){
+                return mDataSize >= mContentLength;
+            }else{
+                return false;
+            }
+        }
+
         sp<ReadFilterNode> mFiltersHeader;
         sp<BufferUtils> mRecvBuffer;
         long mDataSize;
+        long mContentLength;
 };
 
 #endif

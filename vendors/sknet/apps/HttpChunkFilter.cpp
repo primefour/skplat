@@ -29,7 +29,7 @@ int HttpChunkFilter::transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &out
     }
     const char *actualCount = srcData +i;
     count = parseHex(actualCount,count);
-    ALOGD("count is = %ld ",count);
+    //ALOGD("count is = %ld ",count);
     //check eof 
     if(count <= 0){
         mEof = true;
@@ -37,7 +37,7 @@ int HttpChunkFilter::transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &out
     }
     actualData += 2;
     if(count <= srcSize - (actualData - srcData)){
-        ALOGD("srcData :%s ",actualData);
+        //ALOGD("srcData :%s ",actualData);
         outputBuffer->append(actualData,count);
         inputBuffer->consume(actualData + count - srcData);
         return count;

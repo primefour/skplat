@@ -347,19 +347,20 @@ int HttpTransfer::chunkedParser(const char *srcData,int srcSize ,sp<BufferUtils>
 
 int HttpTransfer::identifyBreak(void *obj,const char *data,int length,sp<BufferUtils> &buffer){
     HttpTransfer *hobj = (HttpTransfer*)obj;
-    ALOGD("xxx length  = %ld hobj->mResponse->mContentLength %ld ",buffer->size(),hobj->mResponse->mContentLength);
+    //ALOGD("xxx length  = %ld hobj->mResponse->mContentLength %ld ",buffer->size(),hobj->mResponse->mContentLength);
     if(length < 0){
         return true;
     }
 
     hobj->mBufferFilter->write(data,length);
     while(hobj->mBufferFilter->read(buffer));
-    
+
     if(hobj->mObserver != NULL){
         hobj->mObserver->onProgress(hobj->mBufferFilter->size(),hobj->mResponse->mContentLength);
     }
 
-    if(buffer->size() >= hobj->mResponse->mContentLength){
+    if(hobj->mBufferFilter->endOfFile()){
+        //buffer->size() >= hobj->mResponse->mContentLength){
         return true; 
     }else{
         return false;
@@ -788,7 +789,6 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }else{
         mResponse->mContentLength = -1;
     }
-
     //parse http head 
     std::string contentEncoding = mResponse->mHeader.getValues(HttpHeader::contentEncodingHints);
     if(!contentEncoding.empty()){
@@ -802,7 +802,6 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         }
         mGzipFilter = new GzipDecodeFilter();
     }
-
     mResponse->mTransferEncoding = mResponse->mHeader.getValues(HttpHeader::transferEncodingHints); 
     if(mResponse->mTransferEncoding == HttpHeader::encodingIdentifyHints){
         mResponse->mUncompressed =true;
@@ -834,7 +833,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }
 
     mBufferFilter = new BufferFilter(); 
-    mBufferFilter->setRecvBuffer(recvBuffer);
+    mBufferFilter->setRecvBuffer(recvBuffer,mResponse->mContentLength);
 
     //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
     //        tmpBuffer->dataWithOffset(),tmpBuffer->size(),tmpBuffer->offset());
@@ -864,7 +863,6 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 mBufferFilter->write(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
                 while(mBufferFilter->read(recvBuffer));
             }
-
             if(recvBuffer->size() < mResponse->mContentLength){
                 ret = identifyReader(recvBuffer,tv);
             }else{

@@ -40,29 +40,30 @@ int GzipDecodeFilter::transcode(sp<BufferUtils> &inputBuffer,sp<BufferUtils> &ou
     }
     mGzipStreamer->avail_in = srcSize;
     mGzipStreamer->next_in = (unsigned char*) const_cast<char*>(srcData);
-    unsigned char outbuf[1024];
+    unsigned char outbuf[1024] ={0};
+    int buffSz = sizeof(outbuf) -1;
     int ret = 0;
     while (1) {
-        mGzipStreamer->avail_out = sizeof(outbuf);
+        mGzipStreamer->avail_out = buffSz;
         mGzipStreamer->next_out = outbuf;
         int ret = ::inflate(mGzipStreamer, Z_NO_FLUSH);
         if (ret == Z_STREAM_END) {
             mEof= true;
-            break;
+            ret = 0;
         } else if (ret != Z_OK && ret != Z_BUF_ERROR) {
             ALOGE("libz::inflate() failed. cause:%s", mGzipStreamer->msg);
             mErrors = UNKNOWN_ERROR;
             ret = mErrors;
-            break;
         }
-        size_t availData = sizeof(outbuf)- mGzipStreamer->avail_out;
-        if(availData > 0 ){
+        size_t availData = buffSz - mGzipStreamer->avail_out;
+        if(availData > 0){
             outputBuffer->append((const char *)outbuf,availData);
-            //ALOGD("outputBuffer = %s ",outputBuffer->data());
+            //ALOGD("==> output Buffer = %s ",outbuf);
         }
+
         if(mGzipStreamer->avail_out > 0) {
-            break;
             ret = 0;
+            break;
         }
     }
     inputBuffer->consume(srcSize - mGzipStreamer->avail_in);

@@ -147,11 +147,12 @@ int main(){
     //HttpTransfer transfer;
     //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
     HttpTransfer transfer;
-    transfer.doGet("http://cms-bucket.nosdn.127.net/e30ef02fbf6f4791af287c00b9fa49a720180112110836.png?imageView&thumbnail=140y88&quality=85");
+    //transfer.doGet("http://cms-bucket.nosdn.127.net/e30ef02fbf6f4791af287c00b9fa49a720180112110836.png?imageView&thumbnail=140y88&quality=85");
+    transfer.doGet("http://www.163.com");
     sp<HttpResponse> resp = transfer.getResponse();
     if(resp != NULL && resp->mBody != NULL){
-        ALOGD("====> %s ",(const char *)resp->mBody->size());
+        ALOGD("====> %zd ",resp->mBody->size());
+        //ALOGD("====> %s ",resp->mBody->data());
     }
-
     return 0;
 }
