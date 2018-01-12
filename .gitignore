@@ -6,3 +6,4 @@ cscope*
 tags
 *.swo
 build/
+bin/
