@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_x509write.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -561,9 +561,9 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_PEM_WRITE_C
 #ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_MD_MD5" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION" ) == 0 )
     {
-        *value = ( MBEDTLS_MD_MD5 );
+        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_PEM_WRITE_C
@@ -571,9 +571,9 @@ int verify_int( char *str, int *value )
 #ifdef MBEDTLS_PEM_WRITE_C
 #ifdef MBEDTLS_X509_CRT_WRITE_C
 #ifdef MBEDTLS_SHA1_C
-    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT );
+        *value = ( MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_PEM_WRITE_C
@@ -581,9 +581,27 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_SHA1_C
 #ifdef MBEDTLS_PEM_WRITE_C
 #ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT );
+        *value = ( MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CSR_WRITE_C
+    if( strcmp( str, "MBEDTLS_MD_SHA384" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA384 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CSR_WRITE_C
+    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA256 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_PEM_WRITE_C
@@ -593,6 +611,24 @@ int verify_int( char *str, int *value )
     if( strcmp( str, "MBEDTLS_MD_SHA512" ) == 0 )
     {
         *value = ( MBEDTLS_MD_SHA512 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CSR_WRITE_C
+    if( strcmp( str, "MBEDTLS_MD_MD4" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_MD4 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CSR_WRITE_C
+    if( strcmp( str, "MBEDTLS_MD_MD5" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_MD5 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_PEM_WRITE_C
@@ -617,93 +653,6 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_X509_CREATE_C
 #endif // MBEDTLS_X509_USE_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CSR_WRITE_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CRT_WRITE_C
-#ifdef MBEDTLS_SHA1_C
-    if( strcmp( str, "MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_NS_CERT_TYPE_SSL_SERVER );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CRT_WRITE_C
-#endif // MBEDTLS_SHA1_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CRT_WRITE_C
-#ifdef MBEDTLS_SHA1_C
-    if( strcmp( str, "MBEDTLS_X509_CRT_VERSION_1" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_CRT_VERSION_1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CRT_WRITE_C
-#endif // MBEDTLS_SHA1_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_MD_MD4" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_MD4 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CSR_WRITE_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_MD_SHA384" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA384 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CSR_WRITE_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CSR_WRITE_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CRT_WRITE_C
-#ifdef MBEDTLS_SHA1_C
-    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CRT_WRITE_C
-#endif // MBEDTLS_SHA1_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CSR_WRITE_C
-#ifdef MBEDTLS_PEM_WRITE_C
-#ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_MD_SHA224" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA224 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_WRITE_C
-#endif // MBEDTLS_X509_CSR_WRITE_C
 #ifdef MBEDTLS_X509_CREATE_C
 #ifdef MBEDTLS_X509_USE_C
     if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_OID" ) == 0 )
@@ -715,13 +664,64 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_X509_USE_C
 #ifdef MBEDTLS_PEM_WRITE_C
 #ifdef MBEDTLS_X509_CSR_WRITE_C
-    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD_SHA224" ) == 0 )
     {
-        *value = ( MBEDTLS_MD_SHA256 );
+        *value = ( MBEDTLS_MD_SHA224 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_PEM_WRITE_C
 #endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CSR_WRITE_C
+    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CRT_WRITE_C
+#ifdef MBEDTLS_SHA1_C
+    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CRT_WRITE_C
+#endif // MBEDTLS_SHA1_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CRT_WRITE_C
+#ifdef MBEDTLS_SHA1_C
+    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CRT_WRITE_C
+#endif // MBEDTLS_SHA1_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CSR_WRITE_C
+    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE | MBEDTLS_X509_KU_NON_REPUDIATION | MBEDTLS_X509_KU_KEY_ENCIPHERMENT );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CSR_WRITE_C
+#ifdef MBEDTLS_PEM_WRITE_C
+#ifdef MBEDTLS_X509_CRT_WRITE_C
+#ifdef MBEDTLS_SHA1_C
+    if( strcmp( str, "MBEDTLS_X509_CRT_VERSION_1" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_CRT_VERSION_1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_WRITE_C
+#endif // MBEDTLS_X509_CRT_WRITE_C
+#endif // MBEDTLS_SHA1_C
 
 
     mbedtls_fprintf( stderr,
@@ -735,7 +735,7 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_PEM_WRITE_C
 #ifdef MBEDTLS_X509_CSR_WRITE_C
-#line 38 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.function"
+#line 38 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.function"
 void test_suite_x509_csr_check( char *key_file, char *cert_req_check_file,
                      int md_type, int key_usage, int cert_type )
 {
@@ -799,7 +799,7 @@ exit:
 #ifdef MBEDTLS_PEM_WRITE_C
 #ifdef MBEDTLS_X509_CRT_WRITE_C
 #ifdef MBEDTLS_SHA1_C
-#line 98 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.function"
+#line 98 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.function"
 void test_suite_x509_crt_check( char *subject_key_file, char *subject_pwd,
                      char *subject_name, char *issuer_key_file,
                      char *issuer_pwd, char *issuer_name,
@@ -913,7 +913,7 @@ exit:
 
 #ifdef MBEDTLS_X509_CREATE_C
 #ifdef MBEDTLS_X509_USE_C
-#line 208 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.function"
+#line 208 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.function"
 void test_suite_mbedtls_x509_string_to_names( char *name, char *parsed_name, int result )
 {
     int ret;
@@ -976,30 +976,6 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "MBEDTLS_RSA_C" ) == 0 )
-    {
-#if defined(MBEDTLS_RSA_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_DES_C" ) == 0 )
-    {
-#if defined(MBEDTLS_DES_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
     if( strcmp( str, "MBEDTLS_SHA512_C" ) == 0 )
     {
 #if defined(MBEDTLS_SHA512_C)
@@ -1008,17 +984,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_PKCS1_V15" ) == 0 )
     {
-#if defined(MBEDTLS_SHA1_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
-    {
-#if defined(MBEDTLS_MD4_C)
+#if defined(MBEDTLS_PKCS1_V15)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1048,9 +1016,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_PKCS1_V15" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_PKCS1_V15)
+#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1064,9 +1032,41 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
+    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
+    {
+#if defined(MBEDTLS_SHA1_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_RSA_C" ) == 0 )
+    {
+#if defined(MBEDTLS_RSA_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
     if( strcmp( str, "MBEDTLS_CIPHER_MODE_CBC" ) == 0 )
     {
 #if defined(MBEDTLS_CIPHER_MODE_CBC)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_DES_C" ) == 0 )
+    {
+#if defined(MBEDTLS_DES_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
+    {
+#if defined(MBEDTLS_MD4_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1234,7 +1234,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1360,7 +1360,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509write.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509write.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

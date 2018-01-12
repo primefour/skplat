@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_timing.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -583,7 +583,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 57 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function"
+#line 57 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function"
 void test_suite_timing_timer_simple( )
 {
     struct mbedtls_timing_hr_time timer;
@@ -627,7 +627,7 @@ exit:
                      iterations );
 }
 
-#line 102 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function"
+#line 102 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function"
 void test_suite_timing_timer_reset( )
 {
     struct mbedtls_timing_hr_time timer;
@@ -664,7 +664,7 @@ exit:
                          iterations );
 }
 
-#line 140 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function"
+#line 140 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function"
 void test_suite_timing_two_timers( int delta )
 {
     struct mbedtls_timing_hr_time timer1, timer2;
@@ -714,7 +714,7 @@ exit:
                          millis2, mbedtls_timing_get_timer( &timer2, 0 ) );
 }
 
-#line 191 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function"
+#line 191 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function"
 void test_suite_timing_alarm( int seconds )
 {
     struct mbedtls_timing_hr_time timer;
@@ -777,7 +777,7 @@ exit:
     mbedtls_timing_alarmed = 0;
 }
 
-#line 255 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function"
+#line 255 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function"
 void test_suite_timing_delay( int int_ms, int fin_ms )
 {
     /* This function assumes that if int_ms is nonzero then it is large
@@ -880,7 +880,7 @@ exit:
         mbedtls_fprintf( stdout, "  Inconclusive test, try running it on a less heavily loaded machine.\n" );
  }
 
-#line 359 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.function"
+#line 359 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.function"
 void test_suite_timing_hardclock( )
 {
     /* We make very few guarantees about mbedtls_timing_hardclock: its rate is
@@ -1100,7 +1100,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1226,7 +1226,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_timing.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_timing.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

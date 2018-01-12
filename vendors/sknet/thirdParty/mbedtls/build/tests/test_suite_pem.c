@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_pem.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pem.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pem.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pem.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pem.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -531,39 +531,24 @@ int verify_int( char *str, int *value )
 #ifdef MBEDTLS_DES_C
 #ifdef MBEDTLS_MD5_C
 #ifdef MBEDTLS_CIPHER_MODE_CBC
-    if( strcmp( str, "MBEDTLS_ERR_DES_INVALID_INPUT_LENGTH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_DES_INVALID_INPUT_LENGTH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_PARSE_C
-#endif // MBEDTLS_AES_C
-#endif // MBEDTLS_DES_C
-#endif // MBEDTLS_MD5_C
-#endif // MBEDTLS_CIPHER_MODE_CBC
-#ifdef MBEDTLS_PEM_PARSE_C
-#ifdef MBEDTLS_AES_C
-#ifdef MBEDTLS_DES_C
-#ifdef MBEDTLS_MD5_C
-#ifdef MBEDTLS_CIPHER_MODE_CBC
-    if( strcmp( str, "MBEDTLS_ERR_PEM_INVALID_ENC_IV" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PEM_INVALID_ENC_IV );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_PEM_PARSE_C
-#endif // MBEDTLS_AES_C
-#endif // MBEDTLS_DES_C
-#endif // MBEDTLS_MD5_C
-#endif // MBEDTLS_CIPHER_MODE_CBC
-#ifdef MBEDTLS_PEM_PARSE_C
-#ifdef MBEDTLS_AES_C
-#ifdef MBEDTLS_DES_C
-#ifdef MBEDTLS_MD5_C
-#ifdef MBEDTLS_CIPHER_MODE_CBC
     if( strcmp( str, "MBEDTLS_ERR_PEM_UNKNOWN_ENC_ALG" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_PEM_UNKNOWN_ENC_ALG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_PARSE_C
+#endif // MBEDTLS_AES_C
+#endif // MBEDTLS_DES_C
+#endif // MBEDTLS_MD5_C
+#endif // MBEDTLS_CIPHER_MODE_CBC
+#ifdef MBEDTLS_PEM_PARSE_C
+#ifdef MBEDTLS_AES_C
+#ifdef MBEDTLS_DES_C
+#ifdef MBEDTLS_MD5_C
+#ifdef MBEDTLS_CIPHER_MODE_CBC
+    if( strcmp( str, "MBEDTLS_ERR_DES_INVALID_INPUT_LENGTH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_DES_INVALID_INPUT_LENGTH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_PEM_PARSE_C
@@ -586,6 +571,21 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_DES_C
 #endif // MBEDTLS_MD5_C
 #endif // MBEDTLS_CIPHER_MODE_CBC
+#ifdef MBEDTLS_PEM_PARSE_C
+#ifdef MBEDTLS_AES_C
+#ifdef MBEDTLS_DES_C
+#ifdef MBEDTLS_MD5_C
+#ifdef MBEDTLS_CIPHER_MODE_CBC
+    if( strcmp( str, "MBEDTLS_ERR_PEM_INVALID_ENC_IV" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PEM_INVALID_ENC_IV );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_PEM_PARSE_C
+#endif // MBEDTLS_AES_C
+#endif // MBEDTLS_DES_C
+#endif // MBEDTLS_MD5_C
+#endif // MBEDTLS_CIPHER_MODE_CBC
 
 
     mbedtls_fprintf( stderr,
@@ -598,7 +598,7 @@ int verify_int( char *str, int *value )
 /* Test Case code */
 
 #ifdef MBEDTLS_PEM_WRITE_C
-#line 9 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pem.function"
+#line 9 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pem.function"
 void test_suite_mbedtls_pem_write_buffer( char *start, char *end, char *buf_str, char *result_str )
 {
     unsigned char buf[5000];
@@ -634,7 +634,7 @@ exit:
 #ifdef MBEDTLS_DES_C
 #ifdef MBEDTLS_MD5_C
 #ifdef MBEDTLS_CIPHER_MODE_CBC
-#line 40 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pem.function"
+#line 40 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pem.function"
 void test_suite_mbedtls_pem_read_buffer( char *header, char *footer, char *data,
                               char *pwd, int res )
 {
@@ -809,7 +809,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pem.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pem.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -935,7 +935,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pem.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pem.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

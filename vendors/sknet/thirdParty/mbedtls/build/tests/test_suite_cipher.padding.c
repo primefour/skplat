@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_cipher.padding.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.padding.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.padding.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -530,27 +530,20 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-#ifdef MBEDTLS_CIPHER_MODE_CBC
-    if( strcmp( str, "MBEDTLS_PADDING_ZEROS_AND_LEN" ) == 0 )
+#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
+    if( strcmp( str, "MBEDTLS_ERR_CIPHER_FEATURE_UNAVAILABLE" ) == 0 )
     {
-        *value = ( MBEDTLS_PADDING_ZEROS_AND_LEN );
+        *value = ( MBEDTLS_ERR_CIPHER_FEATURE_UNAVAILABLE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
+#ifdef MBEDTLS_CIPHER_MODE_CBC
+    if( strcmp( str, "MBEDTLS_ERR_CIPHER_INVALID_PADDING" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_CIPHER_INVALID_PADDING );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_CBC
-#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_CAMELLIA_128_CFB128" ) == 0 )
-    {
-        *value = ( MBEDTLS_CIPHER_CAMELLIA_128_CFB128 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
-#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_DES_CBC" ) == 0 )
-    {
-        *value = ( MBEDTLS_CIPHER_DES_CBC );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
     if( strcmp( str, "MBEDTLS_CIPHER_BLOWFISH_CFB64" ) == 0 )
     {
@@ -566,16 +559,23 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_CIPHER_MODE_CBC
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_AES_128_CTR" ) == 0 )
+    if( strcmp( str, "MBEDTLS_CIPHER_NULL" ) == 0 )
     {
-        *value = ( MBEDTLS_CIPHER_AES_128_CTR );
+        *value = ( MBEDTLS_CIPHER_NULL );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
+#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
+    if( strcmp( str, "MBEDTLS_CIPHER_BLOWFISH_CTR" ) == 0 )
+    {
+        *value = ( MBEDTLS_CIPHER_BLOWFISH_CTR );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
 #ifdef MBEDTLS_CIPHER_MODE_CBC
-    if( strcmp( str, "MBEDTLS_PADDING_ONE_AND_ZEROS" ) == 0 )
+    if( strcmp( str, "MBEDTLS_PADDING_ZEROS_AND_LEN" ) == 0 )
     {
-        *value = ( MBEDTLS_PADDING_ONE_AND_ZEROS );
+        *value = ( MBEDTLS_PADDING_ZEROS_AND_LEN );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_CBC
@@ -587,23 +587,23 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_NULL" ) == 0 )
+    if( strcmp( str, "MBEDTLS_PADDING_PKCS7" ) == 0 )
     {
-        *value = ( MBEDTLS_CIPHER_NULL );
+        *value = ( MBEDTLS_PADDING_PKCS7 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
-#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_ERR_CIPHER_FEATURE_UNAVAILABLE" ) == 0 )
+#ifdef MBEDTLS_CIPHER_MODE_CBC
+    if( strcmp( str, "MBEDTLS_PADDING_PKCS7" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_CIPHER_FEATURE_UNAVAILABLE );
+        *value = ( MBEDTLS_PADDING_PKCS7 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
+#endif // MBEDTLS_CIPHER_MODE_CBC
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA" ) == 0 )
+    if( strcmp( str, "-1" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA );
+        *value = ( -1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
@@ -615,6 +615,27 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_CIPHER_MODE_CBC
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
+    if( strcmp( str, "MBEDTLS_CIPHER_CAMELLIA_128_CTR" ) == 0 )
+    {
+        *value = ( MBEDTLS_CIPHER_CAMELLIA_128_CTR );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
+#ifdef MBEDTLS_CIPHER_MODE_CBC
+    if( strcmp( str, "MBEDTLS_PADDING_ONE_AND_ZEROS" ) == 0 )
+    {
+        *value = ( MBEDTLS_PADDING_ONE_AND_ZEROS );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_CIPHER_MODE_CBC
+#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
+    if( strcmp( str, "MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
+#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
     if( strcmp( str, "MBEDTLS_CIPHER_CAMELLIA_128_CBC" ) == 0 )
     {
         *value = ( MBEDTLS_CIPHER_CAMELLIA_128_CBC );
@@ -622,37 +643,9 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_BLOWFISH_CTR" ) == 0 )
+    if( strcmp( str, "MBEDTLS_CIPHER_DES_CBC" ) == 0 )
     {
-        *value = ( MBEDTLS_CIPHER_BLOWFISH_CTR );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
-#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_AES_128_CFB128" ) == 0 )
-    {
-        *value = ( MBEDTLS_CIPHER_AES_128_CFB128 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
-#ifdef MBEDTLS_CIPHER_MODE_CBC
-    if( strcmp( str, "MBEDTLS_ERR_CIPHER_INVALID_PADDING" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_CIPHER_INVALID_PADDING );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_CIPHER_MODE_CBC
-#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "-1" ) == 0 )
-    {
-        *value = ( -1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
-#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_CIPHER_CAMELLIA_128_CTR" ) == 0 )
-    {
-        *value = ( MBEDTLS_CIPHER_CAMELLIA_128_CTR );
+        *value = ( MBEDTLS_CIPHER_DES_CBC );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
@@ -664,19 +657,26 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-    if( strcmp( str, "MBEDTLS_PADDING_PKCS7" ) == 0 )
+    if( strcmp( str, "MBEDTLS_CIPHER_CAMELLIA_128_CFB128" ) == 0 )
     {
-        *value = ( MBEDTLS_PADDING_PKCS7 );
+        *value = ( MBEDTLS_CIPHER_CAMELLIA_128_CFB128 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
-#ifdef MBEDTLS_CIPHER_MODE_CBC
-    if( strcmp( str, "MBEDTLS_PADDING_PKCS7" ) == 0 )
+#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
+    if( strcmp( str, "MBEDTLS_CIPHER_AES_128_CTR" ) == 0 )
     {
-        *value = ( MBEDTLS_PADDING_PKCS7 );
+        *value = ( MBEDTLS_CIPHER_AES_128_CTR );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-#endif // MBEDTLS_CIPHER_MODE_CBC
+#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
+#ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
+    if( strcmp( str, "MBEDTLS_CIPHER_AES_128_CFB128" ) == 0 )
+    {
+        *value = ( MBEDTLS_CIPHER_AES_128_CFB128 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_CIPHER_MODE_WITH_PADDING
 
 
     mbedtls_fprintf( stderr,
@@ -688,7 +688,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 15 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 15 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_mbedtls_cipher_list( )
 {
     const int *cipher_type;
@@ -700,7 +700,7 @@ exit:
     return;
 }
 
-#line 25 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 25 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_cipher_null_args( )
 {
     mbedtls_cipher_context_t ctx;
@@ -773,7 +773,7 @@ exit:
 }
 
 #ifdef MBEDTLS_AES_C
-#line 95 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 95 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_cipher_special_behaviours( )
 {
     const mbedtls_cipher_info_t *cipher_info;
@@ -811,7 +811,7 @@ exit:
 }
 #endif /* MBEDTLS_AES_C */
 
-#line 133 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 133 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_enc_dec_buf( int cipher_id, char *cipher_string, int key_len,
                   int length_val, int pad_mode )
 {
@@ -935,7 +935,7 @@ exit:
     mbedtls_cipher_free( &ctx_enc );
 }
 
-#line 258 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 258 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_enc_fail( int cipher_id, int pad_mode, int key_len,
                int length_val, int ret )
 {
@@ -986,7 +986,7 @@ exit:
     mbedtls_cipher_free( &ctx );
 }
 
-#line 310 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 310 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_dec_empty_buf()
 {
     unsigned char key[32];
@@ -1035,7 +1035,7 @@ exit:
     mbedtls_cipher_free( &ctx_dec );
 }
 
-#line 360 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 360 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_enc_dec_buf_multipart( int cipher_id, int key_len, int first_length_val,
                             int second_length_val )
 {
@@ -1129,7 +1129,7 @@ exit:
     mbedtls_cipher_free( &ctx_enc );
 }
 
-#line 455 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 455 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_decrypt_test_vec( int cipher_id, int pad_mode,
                        char *hex_key, char *hex_iv,
                        char *hex_cipher, char *hex_clear,
@@ -1211,7 +1211,7 @@ exit:
 }
 
 #ifdef MBEDTLS_CIPHER_MODE_AEAD
-#line 537 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 537 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_auth_crypt_tv( int cipher_id, char *hex_key, char *hex_iv,
                     char *hex_ad, char *hex_cipher,
                     char *hex_tag, char *hex_clear )
@@ -1299,7 +1299,7 @@ exit:
 }
 #endif /* MBEDTLS_CIPHER_MODE_AEAD */
 
-#line 625 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 625 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_test_vec_ecb( int cipher_id, int operation, char *hex_key,
                    char *hex_input, char *hex_result,
                    int finish_result )
@@ -1349,7 +1349,7 @@ exit:
 }
 
 #ifdef MBEDTLS_CIPHER_MODE_WITH_PADDING
-#line 675 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 675 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_set_padding( int cipher_id, int pad_mode, int ret )
 {
     const mbedtls_cipher_info_t *cipher_info;
@@ -1369,7 +1369,7 @@ exit:
 #endif /* MBEDTLS_CIPHER_MODE_WITH_PADDING */
 
 #ifdef MBEDTLS_CIPHER_MODE_CBC
-#line 694 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.function"
+#line 694 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.function"
 void test_suite_check_padding( int pad_mode, char *input_str, int ret, int dlen_check )
 {
     mbedtls_cipher_info_t cipher_info;
@@ -1410,25 +1410,9 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "MBEDTLS_DES_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_CIPHER_MODE_CBC" ) == 0 )
     {
-#if defined(MBEDTLS_DES_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_CIPHER_NULL_CIPHER" ) == 0 )
-    {
-#if defined(MBEDTLS_CIPHER_NULL_CIPHER)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_ZEROS" ) == 0 )
-    {
-#if defined(MBEDTLS_CIPHER_PADDING_ZEROS)
+#if defined(MBEDTLS_CIPHER_MODE_CBC)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1442,9 +1426,17 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN" ) == 0 )
+    if( strcmp( str, "MBEDTLS_DES_C" ) == 0 )
     {
-#if defined(MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN)
+#if defined(MBEDTLS_DES_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_CIPHER_MODE_CTR" ) == 0 )
+    {
+#if defined(MBEDTLS_CIPHER_MODE_CTR)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1458,9 +1450,33 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_CIPHER_MODE_CBC" ) == 0 )
+    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_ZEROS" ) == 0 )
     {
-#if defined(MBEDTLS_CIPHER_MODE_CBC)
+#if defined(MBEDTLS_CIPHER_PADDING_ZEROS)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_CIPHER_NULL_CIPHER" ) == 0 )
+    {
+#if defined(MBEDTLS_CIPHER_NULL_CIPHER)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN" ) == 0 )
+    {
+#if defined(MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_ONE_AND_ZEROS" ) == 0 )
+    {
+#if defined(MBEDTLS_CIPHER_PADDING_ONE_AND_ZEROS)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1485,22 +1501,6 @@ int dep_check( char *str )
     if( strcmp( str, "MBEDTLS_CAMELLIA_C" ) == 0 )
     {
 #if defined(MBEDTLS_CAMELLIA_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_ONE_AND_ZEROS" ) == 0 )
-    {
-#if defined(MBEDTLS_CIPHER_PADDING_ONE_AND_ZEROS)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_CIPHER_MODE_CTR" ) == 0 )
-    {
-#if defined(MBEDTLS_CIPHER_MODE_CTR)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1855,7 +1855,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.padding.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.padding.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1981,7 +1981,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_cipher.padding.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_cipher.padding.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

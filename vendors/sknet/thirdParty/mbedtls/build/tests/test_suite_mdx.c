@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_mdx.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -538,7 +538,7 @@ int verify_int( char *str, int *value )
 /* Test Case code */
 
 #ifdef MBEDTLS_MD2_C
-#line 9 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 9 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_md2_text( char *text_src_string, char *hex_hash_string )
 {
     unsigned char src_str[100];
@@ -562,7 +562,7 @@ exit:
 #endif /* MBEDTLS_MD2_C */
 
 #ifdef MBEDTLS_MD4_C
-#line 29 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 29 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_md4_text( char *text_src_string, char *hex_hash_string )
 {
     unsigned char src_str[100];
@@ -586,7 +586,7 @@ exit:
 #endif /* MBEDTLS_MD4_C */
 
 #ifdef MBEDTLS_MD5_C
-#line 49 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 49 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_md5_text( char *text_src_string, char *hex_hash_string )
 {
     unsigned char src_str[100];
@@ -610,7 +610,7 @@ exit:
 #endif /* MBEDTLS_MD5_C */
 
 #ifdef MBEDTLS_RIPEMD160_C
-#line 69 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 69 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_ripemd160_text( char *text_src_string, char *hex_hash_string )
 {
     unsigned char src_str[100];
@@ -635,7 +635,7 @@ exit:
 
 #ifdef MBEDTLS_MD2_C
 #ifdef MBEDTLS_SELF_TEST
-#line 89 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 89 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_md2_selftest()
 {
     TEST_ASSERT( mbedtls_md2_self_test( 1 ) == 0 );
@@ -648,7 +648,7 @@ exit:
 
 #ifdef MBEDTLS_MD4_C
 #ifdef MBEDTLS_SELF_TEST
-#line 96 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 96 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_md4_selftest()
 {
     TEST_ASSERT( mbedtls_md4_self_test( 1 ) == 0 );
@@ -661,7 +661,7 @@ exit:
 
 #ifdef MBEDTLS_MD5_C
 #ifdef MBEDTLS_SELF_TEST
-#line 103 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 103 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_md5_selftest()
 {
     TEST_ASSERT( mbedtls_md5_self_test( 1 ) == 0 );
@@ -674,7 +674,7 @@ exit:
 
 #ifdef MBEDTLS_RIPEMD160_C
 #ifdef MBEDTLS_SELF_TEST
-#line 110 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.function"
+#line 110 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.function"
 void test_suite_ripemd160_selftest()
 {
     TEST_ASSERT( mbedtls_ripemd160_self_test( 1 ) == 0 );
@@ -924,7 +924,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1050,7 +1050,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mdx.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mdx.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

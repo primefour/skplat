@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_gcm.aes256_en.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.aes256_en.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.aes256_en.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -526,6 +526,11 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
+    if( strcmp( str, "MBEDTLS_CIPHER_ID_AES" ) == 0 )
+    {
+        *value = ( MBEDTLS_CIPHER_ID_AES );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
     if( strcmp( str, "MBEDTLS_ERR_GCM_BAD_INPUT" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_GCM_BAD_INPUT );
@@ -534,11 +539,6 @@ int verify_int( char *str, int *value )
     if( strcmp( str, "MBEDTLS_GCM_DECRYPT" ) == 0 )
     {
         *value = ( MBEDTLS_GCM_DECRYPT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_CIPHER_ID_AES" ) == 0 )
-    {
-        *value = ( MBEDTLS_CIPHER_ID_AES );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 
@@ -552,7 +552,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.function"
+#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.function"
 void test_suite_gcm_bad_parameters( int cipher_id, int direction,
                          char *hex_key_string, char *hex_src_string,
                          char *hex_iv_string, char *hex_add_string,
@@ -594,7 +594,7 @@ exit:
     mbedtls_gcm_free( &ctx );
 }
 
-#line 54 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.function"
+#line 54 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.function"
 void test_suite_gcm_encrypt_and_tag( int cipher_id,
                           char *hex_key_string, char *hex_src_string,
                           char *hex_iv_string, char *hex_add_string,
@@ -644,7 +644,7 @@ exit:
     mbedtls_gcm_free( &ctx );
 }
 
-#line 105 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.function"
+#line 105 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.function"
 void test_suite_gcm_decrypt_and_verify( int cipher_id,
                              char *hex_key_string, char *hex_src_string,
                              char *hex_iv_string, char *hex_add_string,
@@ -702,7 +702,7 @@ exit:
 }
 
 #ifdef MBEDTLS_SELF_TEST
-#line 163 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.function"
+#line 163 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.function"
 void test_suite_gcm_selftest()
 {
     TEST_ASSERT( mbedtls_gcm_self_test( 1 ) == 0 );
@@ -906,7 +906,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.aes256_en.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.aes256_en.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1032,7 +1032,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_gcm.aes256_en.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_gcm.aes256_en.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

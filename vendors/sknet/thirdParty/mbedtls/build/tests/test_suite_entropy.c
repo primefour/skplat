@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_entropy.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -642,6 +642,13 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
+#ifdef ENTROPY_HAVE_STRONG
+    if( strcmp( str, "MBEDTLS_ERR_ENTROPY_SOURCE_FAILED" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // ENTROPY_HAVE_STRONG
 #ifdef MBEDTLS_ENTROPY_NV_SEED
 #ifdef MBEDTLS_FS_IO
     if( strcmp( str, "MBEDTLS_ERR_ENTROPY_FILE_IO_ERROR" ) == 0 )
@@ -651,13 +658,6 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_ENTROPY_NV_SEED
 #endif // MBEDTLS_FS_IO
-#ifdef ENTROPY_HAVE_STRONG
-    if( strcmp( str, "MBEDTLS_ERR_ENTROPY_SOURCE_FAILED" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // ENTROPY_HAVE_STRONG
 
 
     mbedtls_fprintf( stderr,
@@ -671,7 +671,7 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_ENTROPY_NV_SEED
 #ifdef MBEDTLS_FS_IO
-#line 127 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 127 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_seed_file( char *path, int ret )
 {
     mbedtls_entropy_context ctx;
@@ -687,7 +687,7 @@ exit:
 #endif /* MBEDTLS_ENTROPY_NV_SEED */
 #endif /* MBEDTLS_FS_IO */
 
-#line 142 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 142 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_too_many_sources( )
 {
     mbedtls_entropy_context ctx;
@@ -712,7 +712,7 @@ exit:
 }
 
 #ifdef ENTROPY_HAVE_STRONG
-#line 167 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 167 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_func_len( int len, int ret )
 {
     mbedtls_entropy_context ctx;
@@ -744,7 +744,7 @@ exit:
 }
 #endif /* ENTROPY_HAVE_STRONG */
 
-#line 196 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 196 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_source_fail( char *path )
 {
     mbedtls_entropy_context ctx;
@@ -776,7 +776,7 @@ exit:
 }
 
 #ifdef ENTROPY_HAVE_STRONG
-#line 228 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 228 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_threshold( int threshold, int chunk_size, int result )
 {
     mbedtls_entropy_context ctx;
@@ -813,7 +813,7 @@ exit:
 
 #ifdef MBEDTLS_ENTROPY_NV_SEED
 #ifdef MBEDTLS_FS_IO
-#line 263 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 263 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_nv_seed_file_create()
 {
     unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
@@ -831,7 +831,7 @@ exit:
 #ifdef MBEDTLS_ENTROPY_NV_SEED
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_PLATFORM_NV_SEED_ALT
-#line 274 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 274 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_nv_seed_std_io()
 {
     unsigned char io_seed[MBEDTLS_ENTROPY_BLOCK_SIZE];
@@ -869,7 +869,7 @@ exit:
 #ifdef MBEDTLS_ENTROPY_NV_SEED
 #ifdef MBEDTLS_PLATFORM_NV_SEED_ALT
 #ifdef MBEDTLS_ENTROPY_SHA512_ACCUMULATOR
-#line 304 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 304 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_nv_seed( char *read_seed_str )
 {
     mbedtls_sha512_context accumulator;
@@ -953,7 +953,7 @@ exit:
 
 #ifdef ENTROPY_HAVE_STRONG
 #ifdef MBEDTLS_SELF_TEST
-#line 381 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.function"
+#line 381 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.function"
 void test_suite_entropy_selftest( int result )
 {
     TEST_ASSERT( mbedtls_entropy_self_test( 1 ) == result );
@@ -1245,7 +1245,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1371,7 +1371,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_entropy.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_entropy.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

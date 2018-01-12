@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls
+CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build
+CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/programs/aes/CMakeFiles/progress.marks
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/programs/aes/CMakeFiles/progress.marks
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/clean
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 programs/aes/CMakeFiles/crypt_and_hash.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/CMakeFiles/crypt_and_hash.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/CMakeFiles/crypt_and_hash.dir/rule
 .PHONY : programs/aes/CMakeFiles/crypt_and_hash.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ crypt_and_hash: programs/aes/CMakeFiles/crypt_and_hash.dir/rule
 
 # fast build rule for target.
 crypt_and_hash/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/build
 .PHONY : crypt_and_hash/fast
 
 # Convenience name for target.
 programs/aes/CMakeFiles/aescrypt2.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/CMakeFiles/aescrypt2.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/aes/CMakeFiles/aescrypt2.dir/rule
 .PHONY : programs/aes/CMakeFiles/aescrypt2.dir/rule
 
 # Convenience name for target.
@@ -194,7 +194,7 @@ aescrypt2: programs/aes/CMakeFiles/aescrypt2.dir/rule
 
 # fast build rule for target.
 aescrypt2/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/build
 .PHONY : aescrypt2/fast
 
 aescrypt2.o: aescrypt2.c.o
@@ -203,7 +203,7 @@ aescrypt2.o: aescrypt2.c.o
 
 # target to build an object file
 aescrypt2.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/aescrypt2.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/aescrypt2.c.o
 .PHONY : aescrypt2.c.o
 
 aescrypt2.i: aescrypt2.c.i
@@ -212,7 +212,7 @@ aescrypt2.i: aescrypt2.c.i
 
 # target to preprocess a source file
 aescrypt2.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/aescrypt2.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/aescrypt2.c.i
 .PHONY : aescrypt2.c.i
 
 aescrypt2.s: aescrypt2.c.s
@@ -221,7 +221,7 @@ aescrypt2.s: aescrypt2.c.s
 
 # target to generate assembly for a file
 aescrypt2.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/aescrypt2.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/aescrypt2.dir/build.make programs/aes/CMakeFiles/aescrypt2.dir/aescrypt2.c.s
 .PHONY : aescrypt2.c.s
 
 crypt_and_hash.o: crypt_and_hash.c.o
@@ -230,7 +230,7 @@ crypt_and_hash.o: crypt_and_hash.c.o
 
 # target to build an object file
 crypt_and_hash.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/crypt_and_hash.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/crypt_and_hash.c.o
 .PHONY : crypt_and_hash.c.o
 
 crypt_and_hash.i: crypt_and_hash.c.i
@@ -239,7 +239,7 @@ crypt_and_hash.i: crypt_and_hash.c.i
 
 # target to preprocess a source file
 crypt_and_hash.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/crypt_and_hash.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/crypt_and_hash.c.i
 .PHONY : crypt_and_hash.c.i
 
 crypt_and_hash.s: crypt_and_hash.c.s
@@ -248,7 +248,7 @@ crypt_and_hash.s: crypt_and_hash.c.s
 
 # target to generate assembly for a file
 crypt_and_hash.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/crypt_and_hash.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/aes/CMakeFiles/crypt_and_hash.dir/build.make programs/aes/CMakeFiles/crypt_and_hash.dir/crypt_and_hash.c.s
 .PHONY : crypt_and_hash.c.s
 
 # Help Target
@@ -283,6 +283,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

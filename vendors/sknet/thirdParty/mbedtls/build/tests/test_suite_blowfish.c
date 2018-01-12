@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_blowfish.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -526,11 +526,6 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-    if( strcmp( str, "MBEDTLS_ERR_BLOWFISH_INVALID_KEY_LENGTH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_BLOWFISH_INVALID_KEY_LENGTH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
 #ifdef MBEDTLS_CIPHER_MODE_CBC
     if( strcmp( str, "MBEDTLS_ERR_BLOWFISH_INVALID_INPUT_LENGTH" ) == 0 )
     {
@@ -538,6 +533,11 @@ int verify_int( char *str, int *value )
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_CIPHER_MODE_CBC
+    if( strcmp( str, "MBEDTLS_ERR_BLOWFISH_INVALID_KEY_LENGTH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_BLOWFISH_INVALID_KEY_LENGTH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
 
 
     mbedtls_fprintf( stderr,
@@ -549,7 +549,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_encrypt_ecb( char *hex_key_string, char *hex_src_string,
                            char *hex_dst_string, int setkey_result )
 {
@@ -582,7 +582,7 @@ exit:
     mbedtls_blowfish_free( &ctx );
 }
 
-#line 45 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 45 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_decrypt_ecb( char *hex_key_string, char *hex_src_string,
                            char *hex_dst_string, int setkey_result )
 {
@@ -616,7 +616,7 @@ exit:
 }
 
 #ifdef MBEDTLS_CIPHER_MODE_CBC
-#line 79 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 79 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_encrypt_cbc( char *hex_key_string, char *hex_iv_string,
                            char *hex_src_string, char *hex_dst_string,
                            int cbc_result )
@@ -656,7 +656,7 @@ exit:
 #endif /* MBEDTLS_CIPHER_MODE_CBC */
 
 #ifdef MBEDTLS_CIPHER_MODE_CBC
-#line 118 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 118 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_decrypt_cbc( char *hex_key_string, char *hex_iv_string,
                            char *hex_src_string, char *hex_dst_string,
                            int cbc_result )
@@ -695,7 +695,7 @@ exit:
 #endif /* MBEDTLS_CIPHER_MODE_CBC */
 
 #ifdef MBEDTLS_CIPHER_MODE_CFB
-#line 156 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 156 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_encrypt_cfb64( char *hex_key_string, char *hex_iv_string,
                              char *hex_src_string, char *hex_dst_string )
 {
@@ -731,7 +731,7 @@ exit:
 #endif /* MBEDTLS_CIPHER_MODE_CFB */
 
 #ifdef MBEDTLS_CIPHER_MODE_CFB
-#line 191 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 191 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_decrypt_cfb64( char *hex_key_string, char *hex_iv_string,
                              char *hex_src_string, char *hex_dst_string )
 {
@@ -767,7 +767,7 @@ exit:
 #endif /* MBEDTLS_CIPHER_MODE_CFB */
 
 #ifdef MBEDTLS_CIPHER_MODE_CTR
-#line 226 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.function"
+#line 226 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.function"
 void test_suite_blowfish_encrypt_ctr( char *hex_key_string, char *hex_iv_string,
                            char *hex_src_string, char *hex_dst_string )
 {
@@ -1057,7 +1057,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1183,7 +1183,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_blowfish.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_blowfish.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

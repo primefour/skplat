@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls
+CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build
+CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ install/local/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/programs/test/CMakeFiles/progress.marks
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/programs/test/CMakeFiles/progress.marks
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/clean
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 programs/test/CMakeFiles/selftest.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/selftest.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/selftest.dir/rule
 .PHONY : programs/test/CMakeFiles/selftest.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ selftest: programs/test/CMakeFiles/selftest.dir/rule
 
 # fast build rule for target.
 selftest/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/build
 .PHONY : selftest/fast
 
 # Convenience name for target.
 programs/test/CMakeFiles/udp_proxy.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/udp_proxy.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/udp_proxy.dir/rule
 .PHONY : programs/test/CMakeFiles/udp_proxy.dir/rule
 
 # Convenience name for target.
@@ -194,12 +194,12 @@ udp_proxy: programs/test/CMakeFiles/udp_proxy.dir/rule
 
 # fast build rule for target.
 udp_proxy/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/build
 .PHONY : udp_proxy/fast
 
 # Convenience name for target.
 programs/test/CMakeFiles/ssl_cert_test.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/ssl_cert_test.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/ssl_cert_test.dir/rule
 .PHONY : programs/test/CMakeFiles/ssl_cert_test.dir/rule
 
 # Convenience name for target.
@@ -209,12 +209,12 @@ ssl_cert_test: programs/test/CMakeFiles/ssl_cert_test.dir/rule
 
 # fast build rule for target.
 ssl_cert_test/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/build
 .PHONY : ssl_cert_test/fast
 
 # Convenience name for target.
 programs/test/CMakeFiles/benchmark.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/benchmark.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/test/CMakeFiles/benchmark.dir/rule
 .PHONY : programs/test/CMakeFiles/benchmark.dir/rule
 
 # Convenience name for target.
@@ -224,7 +224,7 @@ benchmark: programs/test/CMakeFiles/benchmark.dir/rule
 
 # fast build rule for target.
 benchmark/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/build
 .PHONY : benchmark/fast
 
 benchmark.o: benchmark.c.o
@@ -233,7 +233,7 @@ benchmark.o: benchmark.c.o
 
 # target to build an object file
 benchmark.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/benchmark.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/benchmark.c.o
 .PHONY : benchmark.c.o
 
 benchmark.i: benchmark.c.i
@@ -242,7 +242,7 @@ benchmark.i: benchmark.c.i
 
 # target to preprocess a source file
 benchmark.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/benchmark.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/benchmark.c.i
 .PHONY : benchmark.c.i
 
 benchmark.s: benchmark.c.s
@@ -251,7 +251,7 @@ benchmark.s: benchmark.c.s
 
 # target to generate assembly for a file
 benchmark.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/benchmark.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/benchmark.dir/build.make programs/test/CMakeFiles/benchmark.dir/benchmark.c.s
 .PHONY : benchmark.c.s
 
 selftest.o: selftest.c.o
@@ -260,7 +260,7 @@ selftest.o: selftest.c.o
 
 # target to build an object file
 selftest.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/selftest.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/selftest.c.o
 .PHONY : selftest.c.o
 
 selftest.i: selftest.c.i
@@ -269,7 +269,7 @@ selftest.i: selftest.c.i
 
 # target to preprocess a source file
 selftest.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/selftest.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/selftest.c.i
 .PHONY : selftest.c.i
 
 selftest.s: selftest.c.s
@@ -278,7 +278,7 @@ selftest.s: selftest.c.s
 
 # target to generate assembly for a file
 selftest.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/selftest.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/selftest.dir/build.make programs/test/CMakeFiles/selftest.dir/selftest.c.s
 .PHONY : selftest.c.s
 
 ssl_cert_test.o: ssl_cert_test.c.o
@@ -287,7 +287,7 @@ ssl_cert_test.o: ssl_cert_test.c.o
 
 # target to build an object file
 ssl_cert_test.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/ssl_cert_test.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/ssl_cert_test.c.o
 .PHONY : ssl_cert_test.c.o
 
 ssl_cert_test.i: ssl_cert_test.c.i
@@ -296,7 +296,7 @@ ssl_cert_test.i: ssl_cert_test.c.i
 
 # target to preprocess a source file
 ssl_cert_test.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/ssl_cert_test.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/ssl_cert_test.c.i
 .PHONY : ssl_cert_test.c.i
 
 ssl_cert_test.s: ssl_cert_test.c.s
@@ -305,7 +305,7 @@ ssl_cert_test.s: ssl_cert_test.c.s
 
 # target to generate assembly for a file
 ssl_cert_test.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/ssl_cert_test.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/ssl_cert_test.dir/build.make programs/test/CMakeFiles/ssl_cert_test.dir/ssl_cert_test.c.s
 .PHONY : ssl_cert_test.c.s
 
 udp_proxy.o: udp_proxy.c.o
@@ -314,7 +314,7 @@ udp_proxy.o: udp_proxy.c.o
 
 # target to build an object file
 udp_proxy.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/udp_proxy.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/udp_proxy.c.o
 .PHONY : udp_proxy.c.o
 
 udp_proxy.i: udp_proxy.c.i
@@ -323,7 +323,7 @@ udp_proxy.i: udp_proxy.c.i
 
 # target to preprocess a source file
 udp_proxy.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/udp_proxy.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/udp_proxy.c.i
 .PHONY : udp_proxy.c.i
 
 udp_proxy.s: udp_proxy.c.s
@@ -332,7 +332,7 @@ udp_proxy.s: udp_proxy.c.s
 
 # target to generate assembly for a file
 udp_proxy.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/udp_proxy.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/test/CMakeFiles/udp_proxy.dir/build.make programs/test/CMakeFiles/udp_proxy.dir/udp_proxy.c.s
 .PHONY : udp_proxy.c.s
 
 # Help Target
@@ -375,6 +375,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

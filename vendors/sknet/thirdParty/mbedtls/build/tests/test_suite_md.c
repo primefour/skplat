@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_md.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -526,19 +526,9 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-    if( strcmp( str, "MBEDTLS_MD_SHA384" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD_MD4" ) == 0 )
     {
-        *value = ( MBEDTLS_MD_SHA384 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA256 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_MD5" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_MD5 );
+        *value = ( MBEDTLS_MD_MD4 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
@@ -546,19 +536,9 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_MD_SHA1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_MD_SHA512" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD_MD2" ) == 0 )
     {
-        *value = ( MBEDTLS_MD_SHA512 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_RIPEMD160" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_RIPEMD160 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_MD4" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_MD4 );
+        *value = ( MBEDTLS_MD_MD2 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_MD_SHA224" ) == 0 )
@@ -566,9 +546,29 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_MD_SHA224 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_MD_MD2" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD_SHA384" ) == 0 )
     {
-        *value = ( MBEDTLS_MD_MD2 );
+        *value = ( MBEDTLS_MD_SHA384 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_RIPEMD160" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_RIPEMD160 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_MD5" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_MD5 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA256 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_SHA512" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA512 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 
@@ -582,7 +582,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_mbedtls_md_process( )
 {
     const int *md_type_ptr;
@@ -613,7 +613,7 @@ exit:
     mbedtls_md_free( &ctx );
 }
 
-#line 43 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 43 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_null_args( )
 {
     mbedtls_md_context_t ctx;
@@ -678,7 +678,7 @@ exit:
     return;
 }
 
-#line 106 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 106 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_info( int md_type, char *md_name, int md_size )
 {
     const mbedtls_md_info_t *md_info;
@@ -703,7 +703,7 @@ exit:
     return;
 }
 
-#line 129 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 129 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_text( char *text_md_name, char *text_src_string, char *hex_hash_string )
 {
     char md_name[100];
@@ -731,7 +731,7 @@ exit:
     return;
 }
 
-#line 155 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 155 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_hex( char *text_md_name, char *hex_src_string, char *hex_hash_string )
 {
     char md_name[100];
@@ -761,7 +761,7 @@ exit:
     return;
 }
 
-#line 183 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 183 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_text_multi( char *text_md_name, char *text_src_string,
                     char *hex_hash_string )
 {
@@ -816,7 +816,7 @@ exit:
     mbedtls_md_free( &ctx_copy );
 }
 
-#line 239 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 239 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_hex_multi( char *text_md_name, char *hex_src_string,
                    char *hex_hash_string )
 {
@@ -869,7 +869,7 @@ exit:
     mbedtls_md_free( &ctx_copy );
 }
 
-#line 293 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 293 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_mbedtls_md_hmac( char *text_md_name, int trunc_size, char *hex_key_string,
               char *hex_src_string, char *hex_hash_string )
 {
@@ -903,7 +903,7 @@ exit:
     return;
 }
 
-#line 325 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 325 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_md_hmac_multi( char *text_md_name, int trunc_size, char *hex_key_string,
                     char *hex_src_string, char *hex_hash_string )
 {
@@ -959,7 +959,7 @@ exit:
 }
 
 #ifdef MBEDTLS_FS_IO
-#line 381 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.function"
+#line 381 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.function"
 void test_suite_mbedtls_md_file( char *text_md_name, char *filename, char *hex_hash_string )
 {
     char md_name[100];
@@ -1000,14 +1000,6 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
-    {
-#if defined(MBEDTLS_SHA1_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
     if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
     {
 #if defined(MBEDTLS_MD5_C)
@@ -1016,9 +1008,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD2_C" ) == 0 )
     {
-#if defined(MBEDTLS_MD4_C)
+#if defined(MBEDTLS_MD2_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1048,6 +1040,14 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
+    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
+    {
+#if defined(MBEDTLS_SHA1_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
     if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
     {
 #if defined(MBEDTLS_SHA256_C)
@@ -1056,9 +1056,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_MD2_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
     {
-#if defined(MBEDTLS_MD2_C)
+#if defined(MBEDTLS_MD4_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1341,7 +1341,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1467,7 +1467,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_md.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_md.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

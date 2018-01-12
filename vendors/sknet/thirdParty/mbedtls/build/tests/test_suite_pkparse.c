@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_pkparse.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -549,18 +549,18 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_RSA_C
 #ifdef MBEDTLS_RSA_C
 #ifdef MBEDTLS_FS_IO
-    if( strcmp( str, "MBEDTLS_ERR_PK_PASSWORD_REQUIRED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_PK_PASSWORD_MISMATCH" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_PK_PASSWORD_REQUIRED );
+        *value = ( MBEDTLS_ERR_PK_PASSWORD_MISMATCH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_RSA_C
 #endif // MBEDTLS_FS_IO
 #ifdef MBEDTLS_RSA_C
 #ifdef MBEDTLS_FS_IO
-    if( strcmp( str, "MBEDTLS_ERR_PK_PASSWORD_MISMATCH" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_PK_PASSWORD_REQUIRED" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_PK_PASSWORD_MISMATCH );
+        *value = ( MBEDTLS_ERR_PK_PASSWORD_REQUIRED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_RSA_C
@@ -578,7 +578,7 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_RSA_C
 #ifdef MBEDTLS_FS_IO
-#line 13 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.function"
+#line 13 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.function"
 void test_suite_pk_parse_keyfile_rsa( char *key_file, char *password, int result )
 {
     mbedtls_pk_context ctx;
@@ -610,7 +610,7 @@ exit:
 
 #ifdef MBEDTLS_RSA_C
 #ifdef MBEDTLS_FS_IO
-#line 42 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.function"
+#line 42 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.function"
 void test_suite_pk_parse_public_keyfile_rsa( char *key_file, int result )
 {
     mbedtls_pk_context ctx;
@@ -638,7 +638,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_ECP_C
-#line 67 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.function"
+#line 67 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.function"
 void test_suite_pk_parse_public_keyfile_ec( char *key_file, int result )
 {
     mbedtls_pk_context ctx;
@@ -666,7 +666,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_ECP_C
-#line 92 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.function"
+#line 92 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.function"
 void test_suite_pk_parse_keyfile_ec( char *key_file, char *password, int result )
 {
     mbedtls_pk_context ctx;
@@ -693,7 +693,7 @@ exit:
 #endif /* MBEDTLS_ECP_C */
 
 #ifdef MBEDTLS_RSA_C
-#line 117 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.function"
+#line 117 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.function"
 void test_suite_pk_parse_key_rsa( char *key_data, char *result_str, int result )
 {
     mbedtls_pk_context pk;
@@ -736,41 +736,9 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "POLARSSL_ECP_C" ) == 0 )
-    {
-#if defined(POLARSSL_ECP_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_PK_PARSE_EC_EXTENDED" ) == 0 )
-    {
-#if defined(MBEDTLS_PK_PARSE_EC_EXTENDED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
-    {
-#if defined(MBEDTLS_SHA1_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
     if( strcmp( str, "POLARSSL_PEM_PARSE_C" ) == 0 )
     {
 #if defined(POLARSSL_PEM_PARSE_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_PKCS7" ) == 0 )
-    {
-#if defined(MBEDTLS_CIPHER_PADDING_PKCS7)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -784,25 +752,49 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_AES_C" ) == 0 )
+    if( strcmp( str, "POLARSSL_ECP_DP_SECP256R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_AES_C)
+#if defined(POLARSSL_ECP_DP_SECP256R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP384R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
+#if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP256R1_ENABLED" ) == 0 )
+    if( strcmp( str, "POLARSSL_ECP_C" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
+#if defined(POLARSSL_ECP_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP384R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_SECP224R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_CIPHER_PADDING_PKCS7" ) == 0 )
+    {
+#if defined(MBEDTLS_CIPHER_PADDING_PKCS7)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -816,17 +808,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_PEM_PARSE_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
     {
-#if defined(MBEDTLS_PEM_PARSE_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_C" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_C)
+#if defined(MBEDTLS_SHA1_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -840,25 +824,17 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_PK_PARSE_EC_EXTENDED" ) == 0 )
     {
-#if defined(MBEDTLS_MD5_C)
+#if defined(MBEDTLS_PK_PARSE_EC_EXTENDED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP512R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_AES_C" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP384R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED)
+#if defined(MBEDTLS_AES_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -880,25 +856,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256K1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_SECP256K1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "POLARSSL_ECP_DP_SECP256R1_ENABLED" ) == 0 )
-    {
-#if defined(POLARSSL_ECP_DP_SECP256R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP224R1_ENABLED)
+#if defined(MBEDTLS_MD5_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -912,9 +872,41 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP384R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
+#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256K1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_SECP256K1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP512R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_PEM_PARSE_C" ) == 0 )
+    {
+#if defined(MBEDTLS_PEM_PARSE_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_C" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -923,6 +915,14 @@ int dep_check( char *str )
     if( strcmp( str, "MBEDTLS_DES_C" ) == 0 )
     {
 #if defined(MBEDTLS_DES_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP256R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1106,7 +1106,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1232,7 +1232,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_pkparse.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_pkparse.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

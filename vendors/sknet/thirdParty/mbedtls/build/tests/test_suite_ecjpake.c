@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_ecjpake.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -619,18 +619,18 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-    if( strcmp( str, "MBEDTLS_ERR_ECP_VERIFY_FAILED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECJPAKE_CLIENT" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_ECP_VERIFY_FAILED );
+        *value = ( MBEDTLS_ECJPAKE_CLIENT );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #endif // MBEDTLS_SHA256_C
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-    if( strcmp( str, "MBEDTLS_ERR_ECP_BAD_INPUT_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ECP_INVALID_KEY" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
+        *value = ( MBEDTLS_ERR_ECP_INVALID_KEY );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_ECP_DP_SECP256R1_ENABLED
@@ -646,15 +646,6 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_SHA256_C
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-    if( strcmp( str, "MBEDTLS_ECJPAKE_CLIENT" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECJPAKE_CLIENT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_ECP_DP_SECP256R1_ENABLED
-#endif // MBEDTLS_SHA256_C
-#ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
-#ifdef MBEDTLS_SHA256_C
     if( strcmp( str, "MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
@@ -664,9 +655,18 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_SHA256_C
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-    if( strcmp( str, "MBEDTLS_ERR_ECP_INVALID_KEY" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ECP_BAD_INPUT_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_ECP_INVALID_KEY );
+        *value = ( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_ECP_DP_SECP256R1_ENABLED
+#endif // MBEDTLS_SHA256_C
+#ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
+#ifdef MBEDTLS_SHA256_C
+    if( strcmp( str, "MBEDTLS_ERR_ECP_VERIFY_FAILED" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_ECP_VERIFY_FAILED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_ECP_DP_SECP256R1_ENABLED
@@ -683,7 +683,7 @@ int verify_int( char *str, int *value )
 /* Test Case code */
 
 #ifdef MBEDTLS_SELF_TEST
-#line 102 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.function"
+#line 102 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.function"
 void test_suite_ecjpake_selftest()
 {
     TEST_ASSERT( mbedtls_ecjpake_self_test( 1 ) == 0 );
@@ -695,7 +695,7 @@ exit:
 
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-#line 109 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.function"
+#line 109 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.function"
 void test_suite_read_round_one( int role, char *data, int ref_ret )
 {
     mbedtls_ecjpake_context ctx;
@@ -725,7 +725,7 @@ exit:
 
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-#line 136 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.function"
+#line 136 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.function"
 void test_suite_read_round_two_cli( char *data, int ref_ret )
 {
     mbedtls_ecjpake_context ctx;
@@ -761,7 +761,7 @@ exit:
 
 #ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #ifdef MBEDTLS_SHA256_C
-#line 169 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.function"
+#line 169 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.function"
 void test_suite_read_round_two_srv( char *data, int ref_ret )
 {
     mbedtls_ecjpake_context ctx;
@@ -955,7 +955,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1081,7 +1081,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecjpake.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecjpake.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

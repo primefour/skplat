@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_mpi.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -526,66 +526,14 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-    if( strcmp( str, "MBEDTLS_ERR_MPI_NEGATIVE_VALUE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_MPI_NEGATIVE_VALUE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "-9871232" ) == 0 )
-    {
-        *value = ( -9871232 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ERR_MPI_BUFFER_TOO_SMALL" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_MPI_BUFFER_TOO_SMALL );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
     if( strcmp( str, "-3" ) == 0 )
     {
         *value = ( -3 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "+1" ) == 0 )
-    {
-        *value = ( +1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
     if( strcmp( str, "MBEDTLS_ERR_MPI_BAD_INPUT_DATA" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "-1" ) == 0 )
-    {
-        *value = ( -1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "-2" ) == 0 )
-    {
-        *value = ( -2 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#ifdef MBEDTLS_FS_IO
-    if( strcmp( str, "MBEDTLS_ERR_MPI_FILE_IO_ERROR" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_MPI_FILE_IO_ERROR );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-    if( strcmp( str, "-34" ) == 0 )
-    {
-        *value = ( -34 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "-13" ) == 0 )
-    {
-        *value = ( -13 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ERR_MPI_NOT_ACCEPTABLE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_MPI_NOT_ACCEPTABLE );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ERR_MPI_INVALID_CHARACTER" ) == 0 )
@@ -596,6 +544,58 @@ int verify_int( char *str, int *value )
     if( strcmp( str, "MBEDTLS_ERR_MPI_DIVISION_BY_ZERO" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_MPI_DIVISION_BY_ZERO );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "-2" ) == 0 )
+    {
+        *value = ( -2 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "+1" ) == 0 )
+    {
+        *value = ( +1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ERR_MPI_BUFFER_TOO_SMALL" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_MPI_BUFFER_TOO_SMALL );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "-13" ) == 0 )
+    {
+        *value = ( -13 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#ifdef MBEDTLS_FS_IO
+    if( strcmp( str, "MBEDTLS_ERR_MPI_FILE_IO_ERROR" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_MPI_FILE_IO_ERROR );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+    if( strcmp( str, "MBEDTLS_ERR_MPI_NOT_ACCEPTABLE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_MPI_NOT_ACCEPTABLE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "-1" ) == 0 )
+    {
+        *value = ( -1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ERR_MPI_NEGATIVE_VALUE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_MPI_NEGATIVE_VALUE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "-34" ) == 0 )
+    {
+        *value = ( -34 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "-9871232" ) == 0 )
+    {
+        *value = ( -9871232 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 
@@ -609,7 +609,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mpi_null( )
 {
     mbedtls_mpi X, Y, Z;
@@ -627,7 +627,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 30 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 30 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mpi_read_write_string( int radix_X, char *input_X, int radix_A,
                             char *input_A, int output_size, int result_read,
                             int result_write )
@@ -652,7 +652,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 56 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 56 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_read_binary( char *input_X, int radix_A, char *input_A )
 {
     mbedtls_mpi X;
@@ -673,7 +673,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 78 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 78 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_write_binary( int radix_X, char *input_X, char *input_A,
                        int output_size, int result )
 {
@@ -706,7 +706,7 @@ exit:
 }
 
 #ifdef MBEDTLS_FS_IO
-#line 111 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 111 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_read_file( int radix_X, char *input_file, char *input_A,
                     int result )
 {
@@ -744,7 +744,7 @@ exit:
 #endif /* MBEDTLS_FS_IO */
 
 #ifdef MBEDTLS_FS_IO
-#line 148 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 148 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_write_file( int radix_X, char *input_X, int output_radix,
                      char *output_file )
 {
@@ -775,7 +775,7 @@ exit:
 }
 #endif /* MBEDTLS_FS_IO */
 
-#line 179 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 179 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_get_bit( int radix_X, char *input_X, int pos, int val )
 {
     mbedtls_mpi X;
@@ -787,7 +787,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 192 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 192 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_set_bit( int radix_X, char *input_X, int pos, int val,
                           int radix_Y, char *output_Y, int result )
 {
@@ -807,7 +807,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y );
 }
 
-#line 213 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 213 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_lsb( int radix_X, char *input_X, int nr_bits )
 {
     mbedtls_mpi X;
@@ -820,7 +820,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 227 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 227 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_bitlen( int radix_X, char *input_X, int nr_bits )
 {
     mbedtls_mpi X;
@@ -833,7 +833,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 241 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 241 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_gcd( int radix_X, char *input_X, int radix_Y, char *input_Y,
               int radix_A, char *input_A )
 {
@@ -850,7 +850,7 @@ exit:
     mbedtls_mpi_free( &A ); mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z );
 }
 
-#line 259 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 259 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_cmp_int( int input_X, int input_A, int result_CMP )
 {
     mbedtls_mpi X;
@@ -863,7 +863,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 273 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 273 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_cmp_mpi( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int input_A )
 {
@@ -878,7 +878,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y );
 }
 
-#line 289 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 289 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_cmp_abs( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int input_A )
 {
@@ -893,7 +893,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y );
 }
 
-#line 305 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 305 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_copy( int input_X, int input_A )
 {
     mbedtls_mpi X, Y, A;
@@ -912,7 +912,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &A );
 }
 
-#line 325 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 325 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mpi_copy_self( int input_X )
 {
     mbedtls_mpi X;
@@ -926,7 +926,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 340 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 340 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_shrink( int before, int used, int min, int after )
 {
     mbedtls_mpi X;
@@ -942,7 +942,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 357 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 357 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_safe_cond_assign( int x_sign, char *x_str,
                            int y_sign, char *y_str )
 {
@@ -965,7 +965,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &XX );
 }
 
-#line 381 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 381 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_safe_cond_swap( int x_sign, char *x_str,
                          int y_sign, char *y_str )
 {
@@ -995,7 +995,7 @@ exit:
     mbedtls_mpi_free( &XX ); mbedtls_mpi_free( &YY );
 }
 
-#line 412 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 412 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_swap( int input_X,  int input_Y )
 {
     mbedtls_mpi X, Y, A;
@@ -1014,7 +1014,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &A );
 }
 
-#line 432 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 432 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_add_mpi( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A )
 {
@@ -1031,7 +1031,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 450 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 450 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_add_mpi_inplace( int radix_X, char *input_X, int radix_A, char *input_A )
 {
     mbedtls_mpi X, A;
@@ -1055,7 +1055,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &A );
 }
 
-#line 476 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 476 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_add_abs( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A )
 {
@@ -1072,7 +1072,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 494 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 494 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mpi_add_abs_add_first( int radix_X, char *input_X, int radix_Y,
                             char *input_Y, int radix_A, char *input_A )
 {
@@ -1089,7 +1089,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &A );
 }
 
-#line 512 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 512 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mpi_add_abs_add_second( int radix_X, char *input_X, int radix_Y,
                              char *input_Y, int radix_A, char *input_A )
 {
@@ -1106,7 +1106,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &A );
 }
 
-#line 530 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 530 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_add_int( int radix_X, char *input_X, int input_Y, int radix_A,
                   char *input_A )
 {
@@ -1122,7 +1122,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 547 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 547 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_sub_mpi( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A )
 {
@@ -1139,7 +1139,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 565 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 565 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_sub_abs( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A, int sub_result )
 {
@@ -1160,7 +1160,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 587 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 587 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_sub_int( int radix_X, char *input_X, int input_Y, int radix_A,
                   char *input_A )
 {
@@ -1176,7 +1176,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 604 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 604 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_mul_mpi( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A )
 {
@@ -1193,7 +1193,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 622 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 622 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_mul_int( int radix_X, char *input_X, int input_Y, int radix_A,
                   char *input_A, char *result_comparison )
 {
@@ -1214,7 +1214,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &A );
 }
 
-#line 644 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 644 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_div_mpi( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A, int radix_B, char *input_B,
                   int div_result )
@@ -1241,7 +1241,7 @@ exit:
     mbedtls_mpi_free( &A ); mbedtls_mpi_free( &B );
 }
 
-#line 672 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 672 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_div_int( int radix_X, char *input_X, int input_Y, int radix_A,
                   char *input_A, int radix_B, char *input_B, int div_result )
 {
@@ -1266,7 +1266,7 @@ exit:
     mbedtls_mpi_free( &B );
 }
 
-#line 698 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 698 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_mod_mpi( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A, int div_result )
 {
@@ -1288,7 +1288,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &A );
 }
 
-#line 721 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 721 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_mod_int( int radix_X, char *input_X, int input_Y, int input_A,
                   int div_result )
 {
@@ -1309,7 +1309,7 @@ exit:
     mbedtls_mpi_free( &X );
 }
 
-#line 743 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 743 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_exp_mod( int radix_A, char *input_A, int radix_E, char *input_E,
                   int radix_N, char *input_N, int radix_RR, char *input_RR,
                   int radix_X, char *input_X, int div_result )
@@ -1339,7 +1339,7 @@ exit:
     mbedtls_mpi_free( &RR ); mbedtls_mpi_free( &Z ); mbedtls_mpi_free( &X );
 }
 
-#line 774 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 774 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_inv_mod( int radix_X, char *input_X, int radix_Y, char *input_Y,
                   int radix_A, char *input_A, int div_result )
 {
@@ -1362,7 +1362,7 @@ exit:
 }
 
 #ifdef MBEDTLS_GENPRIME
-#line 797 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 797 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_is_prime( int radix_X, char *input_X, int div_result )
 {
     mbedtls_mpi X;
@@ -1379,7 +1379,7 @@ exit:
 #endif /* MBEDTLS_GENPRIME */
 
 #ifdef MBEDTLS_GENPRIME
-#line 813 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 813 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_gen_prime( int bits, int safe, int ref_ret )
 {
     mbedtls_mpi X;
@@ -1410,7 +1410,7 @@ exit:
 }
 #endif /* MBEDTLS_GENPRIME */
 
-#line 844 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 844 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_shift_l( int radix_X, char *input_X, int shift_X, int radix_A,
                   char *input_A)
 {
@@ -1426,7 +1426,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &A );
 }
 
-#line 861 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 861 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mbedtls_mpi_shift_r( int radix_X, char *input_X, int shift_X, int radix_A,
                   char *input_A )
 {
@@ -1443,7 +1443,7 @@ exit:
 }
 
 #ifdef MBEDTLS_SELF_TEST
-#line 878 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.function"
+#line 878 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.function"
 void test_suite_mpi_selftest()
 {
     TEST_ASSERT( mbedtls_mpi_self_test( 1 ) == 0 );
@@ -2661,7 +2661,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -2787,7 +2787,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_mpi.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_mpi.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

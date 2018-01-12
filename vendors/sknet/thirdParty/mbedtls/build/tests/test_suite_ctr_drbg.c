@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_ctr_drbg.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -553,7 +553,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 20 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function"
+#line 20 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function"
 void test_suite_ctr_drbg_special_behaviours( )
 {
     mbedtls_ctr_drbg_context ctx;
@@ -585,7 +585,7 @@ exit:
     mbedtls_ctr_drbg_free( &ctx );
 }
 
-#line 53 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function"
+#line 53 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function"
 void test_suite_ctr_drbg_validate_pr( char *add_init_string, char *entropy_string,
                            char *add1_string, char *add2_string,
                            char *result_str )
@@ -620,7 +620,7 @@ exit:
     mbedtls_ctr_drbg_free( &ctx );
 }
 
-#line 89 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function"
+#line 89 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function"
 void test_suite_ctr_drbg_validate_nopr( char *add_init_string, char *entropy_string,
                              char *add1_string, char *add_reseed_string,
                              char *add2_string, char *result_str )
@@ -657,7 +657,7 @@ exit:
     mbedtls_ctr_drbg_free( &ctx );
 }
 
-#line 127 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function"
+#line 127 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function"
 void test_suite_ctr_drbg_entropy_usage( )
 {
     unsigned char out[16];
@@ -736,7 +736,7 @@ exit:
 }
 
 #ifdef MBEDTLS_FS_IO
-#line 206 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function"
+#line 206 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function"
 void test_suite_ctr_drbg_seed_file( char *path, int ret )
 {
     mbedtls_ctr_drbg_context ctx;
@@ -753,7 +753,7 @@ exit:
 #endif /* MBEDTLS_FS_IO */
 
 #ifdef MBEDTLS_SELF_TEST
-#line 222 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.function"
+#line 222 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.function"
 void test_suite_ctr_drbg_selftest( )
 {
     TEST_ASSERT( mbedtls_ctr_drbg_self_test( 1 ) == 0 );
@@ -959,7 +959,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1085,7 +1085,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ctr_drbg.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ctr_drbg.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

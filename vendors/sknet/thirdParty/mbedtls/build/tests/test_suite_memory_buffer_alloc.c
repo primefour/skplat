@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_memory_buffer_alloc.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -462,7 +462,7 @@ static void test_fail( const char *test, int line_no, const char* filename )
 #include "mbedtls/memory_buffer_alloc.h"
 #define TEST_SUITE_MEMORY_BUFFER_ALLOC
 
-#line 13 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
+#line 13 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
 static int check_pointer( void *p )
 {
     if( p == NULL )
@@ -550,7 +550,7 @@ int verify_int( char *str, int *value )
 /* Test Case code */
 
 #ifdef MBEDTLS_SELF_TEST
-#line 26 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
+#line 26 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
 void test_suite_mbedtls_memory_buffer_alloc_self_test( )
 {
     TEST_ASSERT( mbedtls_memory_buffer_alloc_self_test( 1 ) == 0 );
@@ -561,7 +561,7 @@ exit:
 #endif /* MBEDTLS_SELF_TEST */
 
 #ifdef MBEDTLS_MEMORY_DEBUG
-#line 33 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
+#line 33 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
 void test_suite_memory_buffer_alloc_free_alloc( int a_bytes, int b_bytes, int c_bytes,
                                         int d_bytes,
                                      int free_a, int free_b, int free_c,
@@ -722,7 +722,7 @@ exit:
 #endif /* MBEDTLS_MEMORY_DEBUG */
 
 #ifdef MBEDTLS_MEMORY_DEBUG
-#line 193 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
+#line 193 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.function"
 void test_suite_memory_buffer_alloc_oom_test()
 {
     unsigned char buf[1024];
@@ -906,7 +906,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1032,7 +1032,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_memory_buffer_alloc.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_memory_buffer_alloc.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

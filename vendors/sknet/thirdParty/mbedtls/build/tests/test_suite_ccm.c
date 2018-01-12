@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_ccm.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -526,9 +526,9 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-    if( strcmp( str, "MBEDTLS_CIPHER_ID_AES" ) == 0 )
+    if( strcmp( str, "MBEDTLS_CIPHER_ID_CAMELLIA" ) == 0 )
     {
-        *value = ( MBEDTLS_CIPHER_ID_AES );
+        *value = ( MBEDTLS_CIPHER_ID_CAMELLIA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_CIPHER_ID_BLOWFISH" ) == 0 )
@@ -536,14 +536,14 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_CIPHER_ID_BLOWFISH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_CIPHER_ID_CAMELLIA" ) == 0 )
-    {
-        *value = ( MBEDTLS_CIPHER_ID_CAMELLIA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
     if( strcmp( str, "MBEDTLS_ERR_CCM_BAD_INPUT" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_CCM_BAD_INPUT );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_CIPHER_ID_AES" ) == 0 )
+    {
+        *value = ( MBEDTLS_CIPHER_ID_AES );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 
@@ -559,7 +559,7 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_SELF_TEST
 #ifdef MBEDTLS_AES_C
-#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.function"
+#line 11 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.function"
 void test_suite_mbedtls_ccm_self_test( )
 {
     TEST_ASSERT( mbedtls_ccm_self_test( 1 ) == 0 );
@@ -570,7 +570,7 @@ exit:
 #endif /* MBEDTLS_SELF_TEST */
 #endif /* MBEDTLS_AES_C */
 
-#line 18 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.function"
+#line 18 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.function"
 void test_suite_mbedtls_ccm_setkey( int cipher_id, int key_size, int result )
 {
     mbedtls_ccm_context ctx;
@@ -590,7 +590,7 @@ exit:
 }
 
 #ifdef MBEDTLS_AES_C
-#line 38 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.function"
+#line 38 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.function"
 void test_suite_ccm_lengths( int msg_len, int iv_len, int add_len, int tag_len, int res )
 {
     mbedtls_ccm_context ctx;
@@ -630,7 +630,7 @@ exit:
 }
 #endif /* MBEDTLS_AES_C */
 
-#line 78 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.function"
+#line 78 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.function"
 void test_suite_mbedtls_ccm_encrypt_and_tag( int cipher_id,
                           char *key_hex, char *msg_hex,
                           char *iv_hex, char *add_hex,
@@ -674,7 +674,7 @@ exit:
     mbedtls_ccm_free( &ctx );
 }
 
-#line 123 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.function"
+#line 123 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.function"
 void test_suite_mbedtls_ccm_auth_decrypt( int cipher_id,
                        char *key_hex, char *msg_hex,
                        char *iv_hex, char *add_hex,
@@ -757,6 +757,14 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
+    if( strcmp( str, "MBEDTLS_CAMELLIA_C" ) == 0 )
+    {
+#if defined(MBEDTLS_CAMELLIA_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
     if( strcmp( str, "MBEDTLS_AES_C" ) == 0 )
     {
 #if defined(MBEDTLS_AES_C)
@@ -768,14 +776,6 @@ int dep_check( char *str )
     if( strcmp( str, "MBEDTLS_BLOWFISH_C" ) == 0 )
     {
 #if defined(MBEDTLS_BLOWFISH_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_CAMELLIA_C" ) == 0 )
-    {
-#if defined(MBEDTLS_CAMELLIA_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -963,7 +963,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1089,7 +1089,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ccm.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ccm.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

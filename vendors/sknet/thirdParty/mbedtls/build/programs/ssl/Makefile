@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls
+CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build
+CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/programs/ssl/CMakeFiles/progress.marks
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/programs/ssl/CMakeFiles/progress.marks
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/clean
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/dtls_client.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/dtls_client.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/dtls_client.dir/rule
 .PHONY : programs/ssl/CMakeFiles/dtls_client.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ dtls_client: programs/ssl/CMakeFiles/dtls_client.dir/rule
 
 # fast build rule for target.
 dtls_client/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/build
 .PHONY : dtls_client/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/dtls_server.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/dtls_server.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/dtls_server.dir/rule
 .PHONY : programs/ssl/CMakeFiles/dtls_server.dir/rule
 
 # Convenience name for target.
@@ -194,12 +194,12 @@ dtls_server: programs/ssl/CMakeFiles/dtls_server.dir/rule
 
 # fast build rule for target.
 dtls_server/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/build
 .PHONY : dtls_server/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_server.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_server.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_server.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_server.dir/rule
 
 # Convenience name for target.
@@ -209,12 +209,12 @@ ssl_server: programs/ssl/CMakeFiles/ssl_server.dir/rule
 
 # fast build rule for target.
 ssl_server/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/build
 .PHONY : ssl_server/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_server2.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_server2.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_server2.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_server2.dir/rule
 
 # Convenience name for target.
@@ -224,12 +224,12 @@ ssl_server2: programs/ssl/CMakeFiles/ssl_server2.dir/rule
 
 # fast build rule for target.
 ssl_server2/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/build
 .PHONY : ssl_server2/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_client1.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_client1.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_client1.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_client1.dir/rule
 
 # Convenience name for target.
@@ -239,12 +239,12 @@ ssl_client1: programs/ssl/CMakeFiles/ssl_client1.dir/rule
 
 # fast build rule for target.
 ssl_client1/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/build
 .PHONY : ssl_client1/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_client2.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_client2.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_client2.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_client2.dir/rule
 
 # Convenience name for target.
@@ -254,12 +254,12 @@ ssl_client2: programs/ssl/CMakeFiles/ssl_client2.dir/rule
 
 # fast build rule for target.
 ssl_client2/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/build
 .PHONY : ssl_client2/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_fork_server.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_fork_server.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_fork_server.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_fork_server.dir/rule
 
 # Convenience name for target.
@@ -269,12 +269,12 @@ ssl_fork_server: programs/ssl/CMakeFiles/ssl_fork_server.dir/rule
 
 # fast build rule for target.
 ssl_fork_server/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/build
 .PHONY : ssl_fork_server/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_mail_client.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_mail_client.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_mail_client.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_mail_client.dir/rule
 
 # Convenience name for target.
@@ -284,12 +284,12 @@ ssl_mail_client: programs/ssl/CMakeFiles/ssl_mail_client.dir/rule
 
 # fast build rule for target.
 ssl_mail_client/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/build
 .PHONY : ssl_mail_client/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/mini_client.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/mini_client.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/mini_client.dir/rule
 .PHONY : programs/ssl/CMakeFiles/mini_client.dir/rule
 
 # Convenience name for target.
@@ -299,12 +299,12 @@ mini_client: programs/ssl/CMakeFiles/mini_client.dir/rule
 
 # fast build rule for target.
 mini_client/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/build
 .PHONY : mini_client/fast
 
 # Convenience name for target.
 programs/ssl/CMakeFiles/ssl_pthread_server.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_pthread_server.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/ssl/CMakeFiles/ssl_pthread_server.dir/rule
 .PHONY : programs/ssl/CMakeFiles/ssl_pthread_server.dir/rule
 
 # Convenience name for target.
@@ -314,7 +314,7 @@ ssl_pthread_server: programs/ssl/CMakeFiles/ssl_pthread_server.dir/rule
 
 # fast build rule for target.
 ssl_pthread_server/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/build
 .PHONY : ssl_pthread_server/fast
 
 dtls_client.o: dtls_client.c.o
@@ -323,7 +323,7 @@ dtls_client.o: dtls_client.c.o
 
 # target to build an object file
 dtls_client.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/dtls_client.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/dtls_client.c.o
 .PHONY : dtls_client.c.o
 
 dtls_client.i: dtls_client.c.i
@@ -332,7 +332,7 @@ dtls_client.i: dtls_client.c.i
 
 # target to preprocess a source file
 dtls_client.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/dtls_client.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/dtls_client.c.i
 .PHONY : dtls_client.c.i
 
 dtls_client.s: dtls_client.c.s
@@ -341,7 +341,7 @@ dtls_client.s: dtls_client.c.s
 
 # target to generate assembly for a file
 dtls_client.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/dtls_client.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_client.dir/build.make programs/ssl/CMakeFiles/dtls_client.dir/dtls_client.c.s
 .PHONY : dtls_client.c.s
 
 dtls_server.o: dtls_server.c.o
@@ -350,7 +350,7 @@ dtls_server.o: dtls_server.c.o
 
 # target to build an object file
 dtls_server.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/dtls_server.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/dtls_server.c.o
 .PHONY : dtls_server.c.o
 
 dtls_server.i: dtls_server.c.i
@@ -359,7 +359,7 @@ dtls_server.i: dtls_server.c.i
 
 # target to preprocess a source file
 dtls_server.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/dtls_server.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/dtls_server.c.i
 .PHONY : dtls_server.c.i
 
 dtls_server.s: dtls_server.c.s
@@ -368,7 +368,7 @@ dtls_server.s: dtls_server.c.s
 
 # target to generate assembly for a file
 dtls_server.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/dtls_server.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/dtls_server.dir/build.make programs/ssl/CMakeFiles/dtls_server.dir/dtls_server.c.s
 .PHONY : dtls_server.c.s
 
 mini_client.o: mini_client.c.o
@@ -377,7 +377,7 @@ mini_client.o: mini_client.c.o
 
 # target to build an object file
 mini_client.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/mini_client.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/mini_client.c.o
 .PHONY : mini_client.c.o
 
 mini_client.i: mini_client.c.i
@@ -386,7 +386,7 @@ mini_client.i: mini_client.c.i
 
 # target to preprocess a source file
 mini_client.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/mini_client.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/mini_client.c.i
 .PHONY : mini_client.c.i
 
 mini_client.s: mini_client.c.s
@@ -395,7 +395,7 @@ mini_client.s: mini_client.c.s
 
 # target to generate assembly for a file
 mini_client.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/mini_client.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/mini_client.dir/build.make programs/ssl/CMakeFiles/mini_client.dir/mini_client.c.s
 .PHONY : mini_client.c.s
 
 ssl_client1.o: ssl_client1.c.o
@@ -404,7 +404,7 @@ ssl_client1.o: ssl_client1.c.o
 
 # target to build an object file
 ssl_client1.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/ssl_client1.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/ssl_client1.c.o
 .PHONY : ssl_client1.c.o
 
 ssl_client1.i: ssl_client1.c.i
@@ -413,7 +413,7 @@ ssl_client1.i: ssl_client1.c.i
 
 # target to preprocess a source file
 ssl_client1.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/ssl_client1.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/ssl_client1.c.i
 .PHONY : ssl_client1.c.i
 
 ssl_client1.s: ssl_client1.c.s
@@ -422,7 +422,7 @@ ssl_client1.s: ssl_client1.c.s
 
 # target to generate assembly for a file
 ssl_client1.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/ssl_client1.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client1.dir/build.make programs/ssl/CMakeFiles/ssl_client1.dir/ssl_client1.c.s
 .PHONY : ssl_client1.c.s
 
 ssl_client2.o: ssl_client2.c.o
@@ -431,7 +431,7 @@ ssl_client2.o: ssl_client2.c.o
 
 # target to build an object file
 ssl_client2.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/ssl_client2.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/ssl_client2.c.o
 .PHONY : ssl_client2.c.o
 
 ssl_client2.i: ssl_client2.c.i
@@ -440,7 +440,7 @@ ssl_client2.i: ssl_client2.c.i
 
 # target to preprocess a source file
 ssl_client2.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/ssl_client2.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/ssl_client2.c.i
 .PHONY : ssl_client2.c.i
 
 ssl_client2.s: ssl_client2.c.s
@@ -449,7 +449,7 @@ ssl_client2.s: ssl_client2.c.s
 
 # target to generate assembly for a file
 ssl_client2.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/ssl_client2.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_client2.dir/build.make programs/ssl/CMakeFiles/ssl_client2.dir/ssl_client2.c.s
 .PHONY : ssl_client2.c.s
 
 ssl_fork_server.o: ssl_fork_server.c.o
@@ -458,7 +458,7 @@ ssl_fork_server.o: ssl_fork_server.c.o
 
 # target to build an object file
 ssl_fork_server.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/ssl_fork_server.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/ssl_fork_server.c.o
 .PHONY : ssl_fork_server.c.o
 
 ssl_fork_server.i: ssl_fork_server.c.i
@@ -467,7 +467,7 @@ ssl_fork_server.i: ssl_fork_server.c.i
 
 # target to preprocess a source file
 ssl_fork_server.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/ssl_fork_server.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/ssl_fork_server.c.i
 .PHONY : ssl_fork_server.c.i
 
 ssl_fork_server.s: ssl_fork_server.c.s
@@ -476,7 +476,7 @@ ssl_fork_server.s: ssl_fork_server.c.s
 
 # target to generate assembly for a file
 ssl_fork_server.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/ssl_fork_server.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_fork_server.dir/build.make programs/ssl/CMakeFiles/ssl_fork_server.dir/ssl_fork_server.c.s
 .PHONY : ssl_fork_server.c.s
 
 ssl_mail_client.o: ssl_mail_client.c.o
@@ -485,7 +485,7 @@ ssl_mail_client.o: ssl_mail_client.c.o
 
 # target to build an object file
 ssl_mail_client.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/ssl_mail_client.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/ssl_mail_client.c.o
 .PHONY : ssl_mail_client.c.o
 
 ssl_mail_client.i: ssl_mail_client.c.i
@@ -494,7 +494,7 @@ ssl_mail_client.i: ssl_mail_client.c.i
 
 # target to preprocess a source file
 ssl_mail_client.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/ssl_mail_client.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/ssl_mail_client.c.i
 .PHONY : ssl_mail_client.c.i
 
 ssl_mail_client.s: ssl_mail_client.c.s
@@ -503,7 +503,7 @@ ssl_mail_client.s: ssl_mail_client.c.s
 
 # target to generate assembly for a file
 ssl_mail_client.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/ssl_mail_client.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_mail_client.dir/build.make programs/ssl/CMakeFiles/ssl_mail_client.dir/ssl_mail_client.c.s
 .PHONY : ssl_mail_client.c.s
 
 ssl_pthread_server.o: ssl_pthread_server.c.o
@@ -512,7 +512,7 @@ ssl_pthread_server.o: ssl_pthread_server.c.o
 
 # target to build an object file
 ssl_pthread_server.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/ssl_pthread_server.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/ssl_pthread_server.c.o
 .PHONY : ssl_pthread_server.c.o
 
 ssl_pthread_server.i: ssl_pthread_server.c.i
@@ -521,7 +521,7 @@ ssl_pthread_server.i: ssl_pthread_server.c.i
 
 # target to preprocess a source file
 ssl_pthread_server.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/ssl_pthread_server.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/ssl_pthread_server.c.i
 .PHONY : ssl_pthread_server.c.i
 
 ssl_pthread_server.s: ssl_pthread_server.c.s
@@ -530,7 +530,7 @@ ssl_pthread_server.s: ssl_pthread_server.c.s
 
 # target to generate assembly for a file
 ssl_pthread_server.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/ssl_pthread_server.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_pthread_server.dir/build.make programs/ssl/CMakeFiles/ssl_pthread_server.dir/ssl_pthread_server.c.s
 .PHONY : ssl_pthread_server.c.s
 
 ssl_server.o: ssl_server.c.o
@@ -539,7 +539,7 @@ ssl_server.o: ssl_server.c.o
 
 # target to build an object file
 ssl_server.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/ssl_server.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/ssl_server.c.o
 .PHONY : ssl_server.c.o
 
 ssl_server.i: ssl_server.c.i
@@ -548,7 +548,7 @@ ssl_server.i: ssl_server.c.i
 
 # target to preprocess a source file
 ssl_server.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/ssl_server.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/ssl_server.c.i
 .PHONY : ssl_server.c.i
 
 ssl_server.s: ssl_server.c.s
@@ -557,7 +557,7 @@ ssl_server.s: ssl_server.c.s
 
 # target to generate assembly for a file
 ssl_server.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/ssl_server.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server.dir/build.make programs/ssl/CMakeFiles/ssl_server.dir/ssl_server.c.s
 .PHONY : ssl_server.c.s
 
 ssl_server2.o: ssl_server2.c.o
@@ -566,7 +566,7 @@ ssl_server2.o: ssl_server2.c.o
 
 # target to build an object file
 ssl_server2.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/ssl_server2.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/ssl_server2.c.o
 .PHONY : ssl_server2.c.o
 
 ssl_server2.i: ssl_server2.c.i
@@ -575,7 +575,7 @@ ssl_server2.i: ssl_server2.c.i
 
 # target to preprocess a source file
 ssl_server2.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/ssl_server2.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/ssl_server2.c.i
 .PHONY : ssl_server2.c.i
 
 ssl_server2.s: ssl_server2.c.s
@@ -584,7 +584,7 @@ ssl_server2.s: ssl_server2.c.s
 
 # target to generate assembly for a file
 ssl_server2.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/ssl_server2.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/ssl/CMakeFiles/ssl_server2.dir/build.make programs/ssl/CMakeFiles/ssl_server2.dir/ssl_server2.c.s
 .PHONY : ssl_server2.c.s
 
 # Help Target
@@ -651,6 +651,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

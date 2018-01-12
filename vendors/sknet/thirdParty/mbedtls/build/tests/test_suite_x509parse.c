@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_x509parse.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -644,154 +644,6 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_ASN1_INVALID_LENGTH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_REVOKED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCERT_CN_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_USE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_USE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED | MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED | MBEDTLS_X509_BADCERT_CN_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_USE_C
-    if( strcmp( str, "MBEDTLS_ASN1_CONTEXT_SPECIFIC" ) == 0 )
-    {
-        *value = ( MBEDTLS_ASN1_CONTEXT_SPECIFIC );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_USE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_VERSION" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_VERSION" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_VERSION" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_CN_MISMATCH + MBEDTLS_X509_BADCERT_NOT_TRUSTED" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_CN_MISMATCH + MBEDTLS_X509_BADCERT_NOT_TRUSTED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_NAME+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCRL_EXPIRED" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCRL_EXPIRED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRL_PARSE_C
@@ -803,31 +655,70 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_USE_C
-    if( strcmp( str, "MBEDTLS_ASN1_UTC_TIME" ) == 0 )
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED" ) == 0 )
     {
-        *value = ( MBEDTLS_ASN1_UTC_TIME );
+        *value = ( MBEDTLS_X509_BADCERT_REVOKED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_OTHER | 0x80000000" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_OTHER | 0x80000000 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_NAME+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_USE_C
+    if( strcmp( str, "MBEDTLS_ERR_OID_BUF_TOO_SMALL" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_OID_BUF_TOO_SMALL );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_USE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SERIAL + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_SERIAL + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        *value = ( MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
@@ -845,50 +736,78 @@ int verify_int( char *str, int *value )
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE|MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_DECIPHER_ONLY" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_KU_KEY_CERT_SIGN|MBEDTLS_X509_KU_CRL_SIGN" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE|MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_DECIPHER_ONLY );
+        *value = ( MBEDTLS_X509_KU_KEY_CERT_SIGN|MBEDTLS_X509_KU_CRL_SIGN );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CHECK_KEY_USAGE
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRL_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_OID_NOT_FOUND" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_OID_NOT_FOUND );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_X509_KU_KEY_CERT_SIGN" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_MAX_INTERMEDIATE_CA+1" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_KU_KEY_CERT_SIGN );
+        *value = ( MBEDTLS_X509_MAX_INTERMEDIATE_CA+1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CHECK_KEY_USAGE
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG + MBEDTLS_ERR_OID_NOT_FOUND" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_PK_UNKNOWN_PK_ALG" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG + MBEDTLS_ERR_OID_NOT_FOUND );
+        *value = ( MBEDTLS_ERR_PK_UNKNOWN_PK_ALG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
@@ -899,326 +818,6 @@ int verify_int( char *str, int *value )
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_OTHER" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_OTHER );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_KEY_AGREEMENT" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_KEY_AGREEMENT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CHECK_KEY_USAGE
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_MAX_INTERMEDIATE_CA+1" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_MAX_INTERMEDIATE_CA+1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_INVALID_LENGTH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_INVALID_LENGTH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "-1" ) == 0 )
-    {
-        *value = ( -1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_OTHER | 0x80000000" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_OTHER | 0x80000000 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_UNKNOWN_PK_ALG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_UNKNOWN_PK_ALG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_MISSING" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_MISSING );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_MAX_INTERMEDIATE_CA-1" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_MAX_INTERMEDIATE_CA-1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ERR_X509_FEATURE_UNAVAILABLE + MBEDTLS_ERR_OID_NOT_FOUND" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_FEATURE_UNAVAILABLE + MBEDTLS_ERR_OID_NOT_FOUND );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_USE_C
-    if( strcmp( str, "MBEDTLS_ASN1_GENERALIZED_TIME" ) == 0 )
-    {
-        *value = ( MBEDTLS_ASN1_GENERALIZED_TIME );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_USE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCRL_FUTURE" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCRL_FUTURE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCRL_BAD_MD | MBEDTLS_X509_BADCERT_BAD_MD" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCRL_BAD_MD | MBEDTLS_X509_BADCERT_BAD_MD );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCRL_NOT_TRUSTED" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCRL_NOT_TRUSTED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_MAX_INTERMEDIATE_CA" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_MAX_INTERMEDIATE_CA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-    if( strcmp( str, "MBEDTLS_ERR_PEM_INVALID_DATA + MBEDTLS_ERR_BASE64_INVALID_CHARACTER" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PEM_INVALID_DATA + MBEDTLS_ERR_BASE64_INVALID_CHARACTER );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_FUTURE | MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_FUTURE | MBEDTLS_X509_BADCERT_CN_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_INVALID_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_INVALID_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA256 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_INVALID_LENGTH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_INVALID_LENGTH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CHECK_KEY_USAGE
-#ifdef MBEDTLS_X509_USE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_USE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRL_PARSE_C
@@ -1241,6 +840,74 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_USE_C
+    if( strcmp( str, "MBEDTLS_ASN1_CONTEXT_SPECIFIC" ) == 0 )
+    {
+        *value = ( MBEDTLS_ASN1_CONTEXT_SPECIFIC );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_USE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCERT_CN_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_CN_MISMATCH + MBEDTLS_X509_BADCERT_NOT_TRUSTED" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_CN_MISMATCH + MBEDTLS_X509_BADCERT_NOT_TRUSTED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
 #ifdef MBEDTLS_X509_CSR_PARSE_C
     if( strcmp( str, "MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
     {
@@ -1249,28 +916,176 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_X509_CSR_PARSE_C
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        *value = ( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_INVALID_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_INVALID_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_USE_C
+    if( strcmp( str, "MBEDTLS_ASN1_GENERALIZED_TIME" ) == 0 )
+    {
+        *value = ( MBEDTLS_ASN1_GENERALIZED_TIME );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_USE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SERIAL + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_SERIAL + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_INVALID_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_INVALID_DATA );
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_FUTURE" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_FUTURE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_CN_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_FATAL_ERROR" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_FATAL_ERROR );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+    if( strcmp( str, "MBEDTLS_ERR_PEM_INVALID_DATA + MBEDTLS_ERR_BASE64_INVALID_CHARACTER" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PEM_INVALID_DATA + MBEDTLS_ERR_BASE64_INVALID_CHARACTER );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_FS_IO
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_MAX_INTERMEDIATE_CA" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_MAX_INTERMEDIATE_CA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_INVALID_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_INVALID_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CHECK_KEY_USAGE
@@ -1282,121 +1097,312 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CHECK_KEY_USAGE
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_INVALID_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_INVALID_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_ERR_X509_BAD_INPUT_DATA" ) == 0 )
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_CERT_VERIFY_FAILED" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
+        *value = ( MBEDTLS_ERR_X509_CERT_VERIFY_FAILED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_CERT_VERIFY_FAILED" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_CERT_VERIFY_FAILED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_MISSING" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_MISSING );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_EXPIRED | MBEDTLS_X509_BADCRL_EXPIRED" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_EXPIRED | MBEDTLS_X509_BADCRL_EXPIRED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_FUTURE | MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_FUTURE | MBEDTLS_X509_BADCERT_CN_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED | MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_REVOKED | MBEDTLS_X509_BADCRL_EXPIRED | MBEDTLS_X509_BADCERT_CN_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_ERR_X509_BAD_INPUT_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE|MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_DECIPHER_ONLY" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
+        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE|MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_DECIPHER_ONLY );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CHECK_KEY_USAGE
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCRL_EXPIRED" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCRL_EXPIRED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_NOT_TRUSTED" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_NOT_TRUSTED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_NOT_TRUSTED" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_NOT_TRUSTED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CHECK_KEY_USAGE
+    if( strcmp( str, "MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_KEY_AGREEMENT" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_KU_KEY_ENCIPHERMENT|MBEDTLS_X509_KU_KEY_AGREEMENT );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CHECK_KEY_USAGE
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ASN1_INVALID_LENGTH" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        *value = ( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_VERSION" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_VERSION" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_VERSION" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CHECK_KEY_USAGE
+    if( strcmp( str, "MBEDTLS_X509_KU_KEY_CERT_SIGN" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_KU_KEY_CERT_SIGN );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CHECK_KEY_USAGE
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG + MBEDTLS_ERR_OID_NOT_FOUND" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG + MBEDTLS_ERR_OID_NOT_FOUND );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_INVALID_LENGTH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_OID_NOT_FOUND" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_FEATURE_UNAVAILABLE + MBEDTLS_ERR_OID_NOT_FOUND" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_OID_NOT_FOUND );
+        *value = ( MBEDTLS_ERR_X509_FEATURE_UNAVAILABLE + MBEDTLS_ERR_OID_NOT_FOUND );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        *value = ( MBEDTLS_ERR_PK_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+#ifdef MBEDTLS_X509_USE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE+MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_USE_C
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRL_PARSE_C
 #ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCERT_OTHER" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCERT_OTHER );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_SIG_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_SIG_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_SIG_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_SIG_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CHECK_KEY_USAGE
+    if( strcmp( str, "MBEDTLS_X509_KU_DIGITAL_SIGNATURE" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_KU_DIGITAL_SIGNATURE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CHECK_KEY_USAGE
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCRL_BAD_MD | MBEDTLS_X509_BADCERT_BAD_MD" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCRL_BAD_MD | MBEDTLS_X509_BADCERT_BAD_MD );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRL_PARSE_C
+    if( strcmp( str, "MBEDTLS_X509_BADCRL_FUTURE" ) == 0 )
+    {
+        *value = ( MBEDTLS_X509_BADCRL_FUTURE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CRL_PARSE_C
 #ifdef MBEDTLS_X509_CSR_PARSE_C
     if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_SIGNATURE + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
     {
@@ -1413,6 +1419,13 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CSR_PARSE_C
     if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
@@ -1428,36 +1441,112 @@ int verify_int( char *str, int *value )
     }
 #endif // MBEDTLS_X509_CRL_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_NOT_TRUSTED" ) == 0 )
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_BADCERT_NOT_TRUSTED );
+        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CSR_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_ASN1_SEQUENCE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ASN1_SEQUENCE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_INVALID_LENGTH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_VERSION + MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_NOT_TRUSTED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_BADCRL_NOT_TRUSTED" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_BADCERT_NOT_TRUSTED );
+        *value = ( MBEDTLS_X509_BADCRL_NOT_TRUSTED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_USE_C
-    if( strcmp( str, "MBEDTLS_ERR_OID_BUF_TOO_SMALL" ) == 0 )
+#ifdef MBEDTLS_FS_IO
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "-1" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_OID_BUF_TOO_SMALL );
+        *value = ( -1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_FS_IO
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA256 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_USE_C
+    if( strcmp( str, "MBEDTLS_ASN1_UTC_TIME" ) == 0 )
+    {
+        *value = ( MBEDTLS_ASN1_UTC_TIME );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_USE_C
@@ -1485,9 +1574,9 @@ int verify_int( char *str, int *value )
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-    if( strcmp( str, "MBEDTLS_X509_KU_KEY_CERT_SIGN|MBEDTLS_X509_KU_CRL_SIGN" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_BAD_INPUT_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_KU_KEY_CERT_SIGN|MBEDTLS_X509_KU_CRL_SIGN );
+        *value = ( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
@@ -1495,157 +1584,68 @@ int verify_int( char *str, int *value )
 #endif // MBEDTLS_X509_CHECK_KEY_USAGE
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_FATAL_ERROR" ) == 0 )
+#ifdef MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE
+    if( strcmp( str, "MBEDTLS_ERR_X509_BAD_INPUT_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_FATAL_ERROR );
+        *value = ( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_PK_INVALID_ALG + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_FUTURE" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_X509_BADCERT_FUTURE );
+        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY" ) == 0 )
+#ifdef MBEDTLS_X509_CSR_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY );
+        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-#endif // MBEDTLS_X509_CRT_PARSE_C
+#endif // MBEDTLS_X509_CSR_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_PK_INVALID_PUBKEY + MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+        *value = ( MBEDTLS_ERR_X509_INVALID_NAME + MBEDTLS_ERR_ASN1_OUT_OF_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ASN1_SEQUENCE" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_INVALID_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ASN1_SEQUENCE );
+        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_INVALID_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_X509_CRT_PARSE_C
 #endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
+#ifdef MBEDTLS_X509_USE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_USE_C
+#ifdef MBEDTLS_X509_CRT_PARSE_C
+    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_DATE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_X509_INVALID_DATE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+#endif // MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_CERT_VERIFY_FAILED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_X509_MAX_INTERMEDIATE_CA-1" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_X509_CERT_VERIFY_FAILED );
+        *value = ( MBEDTLS_X509_MAX_INTERMEDIATE_CA-1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 #endif // MBEDTLS_FS_IO
 #endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_CERT_VERIFY_FAILED" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_CERT_VERIFY_FAILED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_FS_IO
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_CN_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_CN_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_FS_IO
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_FORMAT" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_FORMAT );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_X509_BADCERT_EXPIRED | MBEDTLS_X509_BADCRL_EXPIRED" ) == 0 )
-    {
-        *value = ( MBEDTLS_X509_BADCERT_EXPIRED | MBEDTLS_X509_BADCRL_EXPIRED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_SIG_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_SIG_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_SIG_MISMATCH" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_SIG_MISMATCH );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#endif // MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#ifdef MBEDTLS_X509_CSR_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CSR_PARSE_C
-#ifdef MBEDTLS_X509_CRT_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRT_PARSE_C
-#ifdef MBEDTLS_X509_CRL_PARSE_C
-    if( strcmp( str, "MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_X509_INVALID_ALG + MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-#endif // MBEDTLS_X509_CRL_PARSE_C
 
 
     mbedtls_fprintf( stderr,
@@ -1659,7 +1659,7 @@ int verify_int( char *str, int *value )
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 129 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 129 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_cert_info( char *crt_file, char *result_str )
 {
     mbedtls_x509_crt   crt;
@@ -1685,7 +1685,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-#line 152 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 152 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_crl_info( char *crl_file, char *result_str )
 {
     mbedtls_x509_crl   crl;
@@ -1711,7 +1711,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-#line 175 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 175 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_crl_parse( char *crl_file, int result )
 {
     mbedtls_x509_crl   crl;
@@ -1730,7 +1730,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CSR_PARSE_C
-#line 191 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 191 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_csr_info( char *csr_file, char *result_str )
 {
     mbedtls_x509_csr   csr;
@@ -1755,7 +1755,7 @@ exit:
 #endif /* MBEDTLS_X509_CSR_PARSE_C */
 
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 214 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 214 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_verify_info( int flags, char *prefix, char *result_str )
 {
     char buf[2000];
@@ -1777,7 +1777,7 @@ exit:
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-#line 230 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 230 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_verify( char *crt_file, char *ca_file, char *crl_file,
                   char *cn_name_str, int result, int flags_result,
                   char *profile_str,
@@ -1835,7 +1835,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 284 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 284 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_verify_callback( char *crt_file, char *ca_file,
                            int exp_ret, char *exp_vrfy_out )
 {
@@ -1869,7 +1869,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 315 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 315 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_dn_gets( char *crt_file, char *entity, char *result_str )
 {
     mbedtls_x509_crt   crt;
@@ -1900,7 +1900,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 343 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 343 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_time_is_past( char *crt_file, char *entity, int result )
 {
     mbedtls_x509_crt   crt;
@@ -1924,7 +1924,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 364 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 364 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_time_is_future( char *crt_file, char *entity, int result )
 {
     mbedtls_x509_crt   crt;
@@ -1948,7 +1948,7 @@ exit:
 
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_FS_IO
-#line 385 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 385 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509parse_crt_file( char *crt_file, int result )
 {
     mbedtls_x509_crt crt;
@@ -1964,7 +1964,7 @@ exit:
 #endif /* MBEDTLS_FS_IO */
 
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 399 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 399 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509parse_crt( char *crt_data, char *result_str, int result )
 {
     mbedtls_x509_crt   crt;
@@ -1995,7 +1995,7 @@ exit:
 #endif /* MBEDTLS_X509_CRT_PARSE_C */
 
 #ifdef MBEDTLS_X509_CRL_PARSE_C
-#line 429 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 429 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509parse_crl( char *crl_data, char *result_str, int result )
 {
     mbedtls_x509_crl   crl;
@@ -2026,7 +2026,7 @@ exit:
 #endif /* MBEDTLS_X509_CRL_PARSE_C */
 
 #ifdef MBEDTLS_X509_CSR_PARSE_C
-#line 459 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 459 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_csr_parse( char *csr_der_hex, char *ref_out, int ref_ret )
 {
     mbedtls_x509_csr csr;
@@ -2057,7 +2057,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 488 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 488 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_crt_parse_path( char *crt_path, int ret, int nb_crt )
 {
     mbedtls_x509_crt chain, *cur;
@@ -2082,7 +2082,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 510 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 510 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_crt_verify_max( char *ca_file, char *chain_dir, int nb_int,
                                   int ret_chk, int flags_chk )
 {
@@ -2124,7 +2124,7 @@ exit:
 
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
-#line 549 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 549 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_mbedtls_x509_crt_verify_chain(  char *chain_paths, char *trusted_ca, int flags_result )
 {
     char* act;
@@ -2154,7 +2154,7 @@ exit:
 #endif /* MBEDTLS_X509_CRT_PARSE_C */
 
 #ifdef MBEDTLS_X509_USE_C
-#line 577 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 577 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_oid_desc( char *oid_str, char *ref_desc )
 {
     mbedtls_x509_buf oid;
@@ -2188,7 +2188,7 @@ exit:
 #endif /* MBEDTLS_X509_USE_C */
 
 #ifdef MBEDTLS_X509_USE_C
-#line 607 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 607 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_oid_numstr( char *oid_str, char *numstr, int blen, int ret )
 {
     mbedtls_x509_buf oid;
@@ -2220,7 +2220,7 @@ exit:
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CHECK_KEY_USAGE
-#line 633 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 633 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_check_key_usage( char *crt_file, int usage, int ret )
 {
     mbedtls_x509_crt crt;
@@ -2241,7 +2241,7 @@ exit:
 #ifdef MBEDTLS_FS_IO
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE
-#line 649 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 649 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_check_extended_key_usage( char *crt_file, char *usage_hex, int ret )
 {
     mbedtls_x509_crt crt;
@@ -2264,7 +2264,7 @@ exit:
 #endif /* MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE */
 
 #ifdef MBEDTLS_X509_USE_C
-#line 669 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 669 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_get_time( int tag,  char *time_str, int ret,
                     int year, int mon, int day,
                     int hour, int min, int sec )
@@ -2300,7 +2300,7 @@ exit:
 
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_X509_RSASSA_PSS_SUPPORT
-#line 700 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 700 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_parse_rsassa_pss_params( char *hex_params, int params_tag,
                                    int ref_msg_md, int ref_mgf_md,
                                    int ref_salt_len, int ref_ret )
@@ -2333,7 +2333,7 @@ exit:
 
 #ifdef MBEDTLS_X509_CRT_PARSE_C
 #ifdef MBEDTLS_SELF_TEST
-#line 730 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.function"
+#line 730 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.function"
 void test_suite_x509_selftest()
 {
     TEST_ASSERT( mbedtls_x509_self_test( 1 ) == 0 );
@@ -2359,129 +2359,9 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "!MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES" ) == 0 )
-    {
-#if !defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
-    {
-#if defined(MBEDTLS_MD4_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES" ) == 0 )
-    {
-#if defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_X509_ALLOW_EXTENSIONS_NON_V3" ) == 0 )
-    {
-#if defined(MBEDTLS_X509_ALLOW_EXTENSIONS_NON_V3)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECDSA_C" ) == 0 )
-    {
-#if defined(MBEDTLS_ECDSA_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_X509_USE_C" ) == 0 )
-    {
-#if defined(MBEDTLS_X509_USE_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_HAVE_TIME_DATE" ) == 0 )
-    {
-#if defined(MBEDTLS_HAVE_TIME_DATE)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP192R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
-    {
-#if defined(MBEDTLS_SHA256_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP384R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_PKCS1_V15" ) == 0 )
-    {
-#if defined(MBEDTLS_PKCS1_V15)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_SHA512_C" ) == 0 )
-    {
-#if defined(MBEDTLS_SHA512_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_RSA_C" ) == 0 )
-    {
-#if defined(MBEDTLS_RSA_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_C" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
     if( strcmp( str, "MBEDTLS_X509_RSASSA_PSS_SUPPORT" ) == 0 )
     {
 #if defined(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_MD2_C" ) == 0 )
-    {
-#if defined(MBEDTLS_MD2_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -2495,9 +2375,49 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_RSA_C" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
+#if defined(MBEDTLS_RSA_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_X509_USE_C" ) == 0 )
+    {
+#if defined(MBEDTLS_X509_USE_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP192R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_MD2_C" ) == 0 )
+    {
+#if defined(MBEDTLS_MD2_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP384R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_CERTS_C" ) == 0 )
+    {
+#if defined(MBEDTLS_CERTS_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -2511,9 +2431,41 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES" ) == 0 )
     {
-#if defined(MBEDTLS_MD5_C)
+#if defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "!MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES" ) == 0 )
+    {
+#if !defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECDSA_C" ) == 0 )
+    {
+#if defined(MBEDTLS_ECDSA_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_X509_ALLOW_EXTENSIONS_NON_V3" ) == 0 )
+    {
+#if defined(MBEDTLS_X509_ALLOW_EXTENSIONS_NON_V3)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
+    {
+#if defined(MBEDTLS_SHA256_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -2527,9 +2479,57 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_CERTS_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
     {
-#if defined(MBEDTLS_CERTS_C)
+#if defined(MBEDTLS_MD5_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
+    {
+#if defined(MBEDTLS_MD4_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_SHA512_C" ) == 0 )
+    {
+#if defined(MBEDTLS_SHA512_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_PKCS1_V15" ) == 0 )
+    {
+#if defined(MBEDTLS_PKCS1_V15)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_HAVE_TIME_DATE" ) == 0 )
+    {
+#if defined(MBEDTLS_HAVE_TIME_DATE)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_C" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -3242,7 +3242,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -3368,7 +3368,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_x509parse.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_x509parse.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

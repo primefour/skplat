@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls
+CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build
+CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/programs/hash/CMakeFiles/progress.marks
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/programs/hash/CMakeFiles/progress.marks
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/clean
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 programs/hash/CMakeFiles/generic_sum.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/CMakeFiles/generic_sum.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/CMakeFiles/generic_sum.dir/rule
 .PHONY : programs/hash/CMakeFiles/generic_sum.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ generic_sum: programs/hash/CMakeFiles/generic_sum.dir/rule
 
 # fast build rule for target.
 generic_sum/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/build
 .PHONY : generic_sum/fast
 
 # Convenience name for target.
 programs/hash/CMakeFiles/hello.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/CMakeFiles/hello.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/hash/CMakeFiles/hello.dir/rule
 .PHONY : programs/hash/CMakeFiles/hello.dir/rule
 
 # Convenience name for target.
@@ -194,7 +194,7 @@ hello: programs/hash/CMakeFiles/hello.dir/rule
 
 # fast build rule for target.
 hello/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/build
 .PHONY : hello/fast
 
 generic_sum.o: generic_sum.c.o
@@ -203,7 +203,7 @@ generic_sum.o: generic_sum.c.o
 
 # target to build an object file
 generic_sum.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/generic_sum.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/generic_sum.c.o
 .PHONY : generic_sum.c.o
 
 generic_sum.i: generic_sum.c.i
@@ -212,7 +212,7 @@ generic_sum.i: generic_sum.c.i
 
 # target to preprocess a source file
 generic_sum.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/generic_sum.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/generic_sum.c.i
 .PHONY : generic_sum.c.i
 
 generic_sum.s: generic_sum.c.s
@@ -221,7 +221,7 @@ generic_sum.s: generic_sum.c.s
 
 # target to generate assembly for a file
 generic_sum.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/generic_sum.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/generic_sum.dir/build.make programs/hash/CMakeFiles/generic_sum.dir/generic_sum.c.s
 .PHONY : generic_sum.c.s
 
 hello.o: hello.c.o
@@ -230,7 +230,7 @@ hello.o: hello.c.o
 
 # target to build an object file
 hello.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/hello.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/hello.c.o
 .PHONY : hello.c.o
 
 hello.i: hello.c.i
@@ -239,7 +239,7 @@ hello.i: hello.c.i
 
 # target to preprocess a source file
 hello.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/hello.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/hello.c.i
 .PHONY : hello.c.i
 
 hello.s: hello.c.s
@@ -248,7 +248,7 @@ hello.s: hello.c.s
 
 # target to generate assembly for a file
 hello.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/hello.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/hash/CMakeFiles/hello.dir/build.make programs/hash/CMakeFiles/hello.dir/hello.c.s
 .PHONY : hello.c.s
 
 # Help Target
@@ -283,6 +283,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

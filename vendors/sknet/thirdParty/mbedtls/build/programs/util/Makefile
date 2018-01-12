@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls
+CMAKE_SOURCE_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build
+CMAKE_BINARY_DIR = /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,14 +137,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/programs/util/CMakeFiles/progress.marks
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build/CMakeFiles 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/programs/util/CMakeFiles/progress.marks
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/clean
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/clean
 .PHONY : clean
 
 # The main clean target
@@ -154,22 +154,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/preinstall
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 programs/util/CMakeFiles/pem2der.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/CMakeFiles/pem2der.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/CMakeFiles/pem2der.dir/rule
 .PHONY : programs/util/CMakeFiles/pem2der.dir/rule
 
 # Convenience name for target.
@@ -179,12 +179,12 @@ pem2der: programs/util/CMakeFiles/pem2der.dir/rule
 
 # fast build rule for target.
 pem2der/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/build
 .PHONY : pem2der/fast
 
 # Convenience name for target.
 programs/util/CMakeFiles/strerror.dir/rule:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/CMakeFiles/strerror.dir/rule
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f CMakeFiles/Makefile2 programs/util/CMakeFiles/strerror.dir/rule
 .PHONY : programs/util/CMakeFiles/strerror.dir/rule
 
 # Convenience name for target.
@@ -194,7 +194,7 @@ strerror: programs/util/CMakeFiles/strerror.dir/rule
 
 # fast build rule for target.
 strerror/fast:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/build
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/build
 .PHONY : strerror/fast
 
 pem2der.o: pem2der.c.o
@@ -203,7 +203,7 @@ pem2der.o: pem2der.c.o
 
 # target to build an object file
 pem2der.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/pem2der.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/pem2der.c.o
 .PHONY : pem2der.c.o
 
 pem2der.i: pem2der.c.i
@@ -212,7 +212,7 @@ pem2der.i: pem2der.c.i
 
 # target to preprocess a source file
 pem2der.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/pem2der.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/pem2der.c.i
 .PHONY : pem2der.c.i
 
 pem2der.s: pem2der.c.s
@@ -221,7 +221,7 @@ pem2der.s: pem2der.c.s
 
 # target to generate assembly for a file
 pem2der.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/pem2der.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/pem2der.dir/build.make programs/util/CMakeFiles/pem2der.dir/pem2der.c.s
 .PHONY : pem2der.c.s
 
 strerror.o: strerror.c.o
@@ -230,7 +230,7 @@ strerror.o: strerror.c.o
 
 # target to build an object file
 strerror.c.o:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/strerror.c.o
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/strerror.c.o
 .PHONY : strerror.c.o
 
 strerror.i: strerror.c.i
@@ -239,7 +239,7 @@ strerror.i: strerror.c.i
 
 # target to preprocess a source file
 strerror.c.i:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/strerror.c.i
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/strerror.c.i
 .PHONY : strerror.c.i
 
 strerror.s: strerror.c.s
@@ -248,7 +248,7 @@ strerror.s: strerror.c.s
 
 # target to generate assembly for a file
 strerror.c.s:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/strerror.c.s
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(MAKE) -f programs/util/CMakeFiles/strerror.dir/build.make programs/util/CMakeFiles/strerror.dir/strerror.c.s
 .PHONY : strerror.c.s
 
 # Help Target
@@ -283,6 +283,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

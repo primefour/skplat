@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_shax.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -537,7 +537,7 @@ int verify_int( char *str, int *value )
 /* Test Case code */
 
 #ifdef MBEDTLS_SHA1_C
-#line 8 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 8 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_mbedtls_sha1( char *hex_src_string, char *hex_hash_string )
 {
     unsigned char src_str[10000];
@@ -562,7 +562,7 @@ exit:
 #endif /* MBEDTLS_SHA1_C */
 
 #ifdef MBEDTLS_SHA256_C
-#line 29 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 29 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_sha224(char *hex_src_string, char *hex_hash_string )
 {
     unsigned char src_str[10000];
@@ -587,7 +587,7 @@ exit:
 #endif /* MBEDTLS_SHA256_C */
 
 #ifdef MBEDTLS_SHA256_C
-#line 50 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 50 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_mbedtls_sha256(char *hex_src_string, char *hex_hash_string )
 {
     unsigned char src_str[10000];
@@ -612,7 +612,7 @@ exit:
 #endif /* MBEDTLS_SHA256_C */
 
 #ifdef MBEDTLS_SHA512_C
-#line 71 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 71 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_sha384(char *hex_src_string, char *hex_hash_string )
 {
     unsigned char src_str[10000];
@@ -637,7 +637,7 @@ exit:
 #endif /* MBEDTLS_SHA512_C */
 
 #ifdef MBEDTLS_SHA512_C
-#line 92 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 92 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_mbedtls_sha512(char *hex_src_string, char *hex_hash_string )
 {
     unsigned char src_str[10000];
@@ -663,7 +663,7 @@ exit:
 
 #ifdef MBEDTLS_SHA1_C
 #ifdef MBEDTLS_SELF_TEST
-#line 113 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 113 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_sha1_selftest()
 {
     TEST_ASSERT( mbedtls_sha1_self_test( 1 ) == 0 );
@@ -676,7 +676,7 @@ exit:
 
 #ifdef MBEDTLS_SHA256_C
 #ifdef MBEDTLS_SELF_TEST
-#line 120 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 120 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_sha256_selftest()
 {
     TEST_ASSERT( mbedtls_sha256_self_test( 1 ) == 0 );
@@ -689,7 +689,7 @@ exit:
 
 #ifdef MBEDTLS_SHA512_C
 #ifdef MBEDTLS_SELF_TEST
-#line 127 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.function"
+#line 127 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.function"
 void test_suite_sha512_selftest()
 {
     TEST_ASSERT( mbedtls_sha512_self_test( 1 ) == 0 );
@@ -714,14 +714,6 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "MBEDTLS_SHA512_C" ) == 0 )
-    {
-#if defined(MBEDTLS_SHA512_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
     if( strcmp( str, "MBEDTLS_SELF_TEST" ) == 0 )
     {
 #if defined(MBEDTLS_SELF_TEST)
@@ -730,17 +722,25 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
     {
-#if defined(MBEDTLS_SHA1_C)
+#if defined(MBEDTLS_SHA256_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_SHA512_C" ) == 0 )
     {
-#if defined(MBEDTLS_SHA256_C)
+#if defined(MBEDTLS_SHA512_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_SHA1_C" ) == 0 )
+    {
+#if defined(MBEDTLS_SHA1_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -973,7 +973,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1099,7 +1099,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_shax.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_shax.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

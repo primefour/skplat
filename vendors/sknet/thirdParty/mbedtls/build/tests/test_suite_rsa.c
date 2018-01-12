@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_rsa.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -541,54 +541,9 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-    if( strcmp( str, "MBEDTLS_ERR_RSA_BAD_INPUT_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_RSA_KEY_CHECK_FAILED" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA256 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ERR_RSA_VERIFY_FAILED" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_SHA224" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA224 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_SHA384" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA384 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_MD2" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_MD2 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_SHA512" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_SHA512 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_MD5" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_MD5 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ERR_RSA_RNG_FAILED" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_RSA_RNG_FAILED );
+        *value = ( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ERR_RSA_INVALID_PADDING" ) == 0 )
@@ -596,14 +551,14 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_ERR_RSA_INVALID_PADDING );
         return( KEY_VALUE_MAPPING_FOUND );
     }
+    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
     if( strcmp( str, "MBEDTLS_ERR_RSA_PUBLIC_FAILED + MBEDTLS_ERR_MPI_BAD_INPUT_DATA" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_RSA_PUBLIC_FAILED + MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_MD_MD4" ) == 0 )
-    {
-        *value = ( MBEDTLS_MD_MD4 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_RSA_PKCS_V15" ) == 0 )
@@ -611,19 +566,64 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_RSA_PKCS_V15 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_ERR_RSA_KEY_CHECK_FAILED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_MD_SHA256" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
+        *value = ( MBEDTLS_MD_SHA256 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_MD_SHA1" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_RSA_RNG_FAILED" ) == 0 )
     {
-        *value = ( MBEDTLS_MD_SHA1 );
+        *value = ( MBEDTLS_ERR_RSA_RNG_FAILED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ERR_RSA_PRIVATE_FAILED + MBEDTLS_ERR_MPI_BAD_INPUT_DATA" ) == 0 )
     {
         *value = ( MBEDTLS_ERR_RSA_PRIVATE_FAILED + MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_MD5" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_MD5 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_MD2" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_MD2 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_SHA224" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA224 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ERR_RSA_VERIFY_FAILED" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_RSA_VERIFY_FAILED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_MD4" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_MD4 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_SHA512" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA512 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_MD_SHA384" ) == 0 )
+    {
+        *value = ( MBEDTLS_MD_SHA384 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ERR_RSA_BAD_INPUT_DATA" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 
@@ -637,7 +637,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 20 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 20 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_pkcs1_sign( char *message_hex_string, int padding_mode, int digest,
                      int mod, int radix_P, char *input_P, int radix_Q,
                      char *input_Q, int radix_N, char *input_N, int radix_E,
@@ -700,7 +700,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 84 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 84 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_pkcs1_verify( char *message_hex_string, int padding_mode, int digest,
                        int mod, int radix_N, char *input_N, int radix_E,
                        char *input_E, char *result_hex_str, int result )
@@ -734,7 +734,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 120 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 120 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_rsa_pkcs1_sign_raw( char *message_hex_string, char *hash_result_string,
                          int padding_mode, int mod, int radix_P, char *input_P,
                          int radix_Q, char *input_Q, int radix_N,
@@ -817,7 +817,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 204 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 204 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_rsa_pkcs1_verify_raw( char *message_hex_string, char *hash_result_string,
                            int padding_mode, int mod, int radix_N,
                            char *input_N, int radix_E, char *input_E,
@@ -879,7 +879,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 267 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 267 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_pkcs1_encrypt( char *message_hex_string, int padding_mode, int mod,
                         int radix_N, char *input_N, int radix_E, char *input_E,
                         char *result_hex_str, int result )
@@ -920,7 +920,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 309 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 309 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_rsa_pkcs1_encrypt_bad_rng( char *message_hex_string, int padding_mode,
                                 int mod, int radix_N, char *input_N,
                                 int radix_E, char *input_E,
@@ -959,7 +959,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 349 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 349 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_pkcs1_decrypt( char *message_hex_string, int padding_mode, int mod,
                         int radix_P, char *input_P, int radix_Q, char *input_Q,
                         int radix_N, char *input_N, int radix_E, char *input_E,
@@ -1014,7 +1014,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 405 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 405 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_public( char *message_hex_string, int mod, int radix_N, char *input_N,
                  int radix_E, char *input_E, char *result_hex_str, int result )
 {
@@ -1067,7 +1067,7 @@ exit:
     mbedtls_rsa_free( &ctx2 );
 }
 
-#line 459 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 459 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_private( char *message_hex_string, int mod, int radix_P, char *input_P,
                   int radix_Q, char *input_Q, int radix_N, char *input_N,
                   int radix_E, char *input_E, char *result_hex_str, int result )
@@ -1146,7 +1146,7 @@ exit:
     mbedtls_rsa_free( &ctx ); mbedtls_rsa_free( &ctx2 );
 }
 
-#line 539 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 539 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_rsa_check_privkey_null()
 {
     mbedtls_rsa_context ctx;
@@ -1158,7 +1158,7 @@ exit:
     return;
 }
 
-#line 549 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 549 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_check_pubkey( int radix_N, char *input_N, int radix_E, char *input_E,
                        int result )
 {
@@ -1181,7 +1181,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 573 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 573 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_check_privkey( int mod, int radix_P, char *input_P, int radix_Q,
                         char *input_Q, int radix_N, char *input_N,
                         int radix_E, char *input_E, int radix_D, char *input_D,
@@ -1233,7 +1233,7 @@ exit:
     mbedtls_rsa_free( &ctx );
 }
 
-#line 626 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 626 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_rsa_check_pubpriv( int mod, int radix_Npub, char *input_Npub,
                         int radix_Epub, char *input_Epub,
                         int radix_P, char *input_P, int radix_Q,
@@ -1303,7 +1303,7 @@ exit:
 #ifdef MBEDTLS_CTR_DRBG_C
 #ifdef MBEDTLS_ENTROPY_C
 #ifdef ENTROPY_HAVE_STRONG
-#line 694 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 694 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_mbedtls_rsa_gen_key( int nrbits, int exponent, int result)
 {
     mbedtls_rsa_context ctx;
@@ -1335,7 +1335,7 @@ exit:
 #endif /* ENTROPY_HAVE_STRONG */
 
 #ifdef MBEDTLS_SELF_TEST
-#line 723 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.function"
+#line 723 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.function"
 void test_suite_rsa_selftest()
 {
     TEST_ASSERT( mbedtls_rsa_self_test( 1 ) == 0 );
@@ -1362,9 +1362,25 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
+    if( strcmp( str, "MBEDTLS_MD2_C" ) == 0 )
+    {
+#if defined(MBEDTLS_MD2_C)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
     if( strcmp( str, "MBEDTLS_SELF_TEST" ) == 0 )
     {
 #if defined(MBEDTLS_SELF_TEST)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
+    {
+#if defined(MBEDTLS_MD5_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1386,22 +1402,6 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_PKCS1_V15" ) == 0 )
-    {
-#if defined(MBEDTLS_PKCS1_V15)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_MD5_C" ) == 0 )
-    {
-#if defined(MBEDTLS_MD5_C)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
     if( strcmp( str, "MBEDTLS_MD4_C" ) == 0 )
     {
 #if defined(MBEDTLS_MD4_C)
@@ -1410,17 +1410,17 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_MD2_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
     {
-#if defined(MBEDTLS_MD2_C)
+#if defined(MBEDTLS_SHA256_C)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_SHA256_C" ) == 0 )
+    if( strcmp( str, "MBEDTLS_PKCS1_V15" ) == 0 )
     {
-#if defined(MBEDTLS_SHA256_C)
+#if defined(MBEDTLS_PKCS1_V15)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -2032,7 +2032,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -2158,7 +2158,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_rsa.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_rsa.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;

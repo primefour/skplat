@@ -1,16 +1,16 @@
 /*
  * *** THIS FILE HAS BEEN MACHINE GENERATED ***
  *
- * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/scripts/generate_code.pl
+ * This file has been machine generated using the script: /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/scripts/generate_code.pl
  *
  * Test file      : test_suite_ecp.c
  *
  * The following files were used to create this file.
  *
- *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/main_test.function
- *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/helpers.function
- *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function
- *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.data
+ *      Main code file  : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/main_test.function
+ *      Helper file     : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/helpers.function
+ *      Test suite file : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function
+ *      Test suite data : /home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.data
  *
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
@@ -528,29 +528,9 @@ int verify_int( char *str, int *value )
         return( 0 );
     }
 
-    if( strcmp( str, "MBEDTLS_ERR_ECP_BAD_INPUT_DATA" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ECP_INVALID_KEY" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "ECP_PF_UNKNOWN" ) == 0 )
-    {
-        *value = ( ECP_PF_UNKNOWN );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_CURVE25519" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_CURVE25519 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP192K1" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_SECP192K1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_NONE" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_NONE );
+        *value = ( MBEDTLS_ERR_ECP_INVALID_KEY );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ECP_DP_BP256R1" ) == 0 )
@@ -558,19 +538,9 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_ECP_DP_BP256R1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ECP_BAD_INPUT_DATA" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP384R1" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_BP384R1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL" ) == 0 )
-    {
-        *value = ( MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL );
+        *value = ( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1" ) == 0 )
@@ -578,24 +548,9 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_ECP_DP_SECP256R1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224K1" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP384R1" ) == 0 )
     {
-        *value = ( MBEDTLS_ECP_DP_SECP224K1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_PF_COMPRESSED" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_PF_COMPRESSED );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP512R1" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_BP512R1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256K1" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_SECP256K1 );
+        *value = ( MBEDTLS_ECP_DP_SECP384R1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ECP_DP_SECP521R1" ) == 0 )
@@ -603,19 +558,44 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_ECP_DP_SECP521R1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224K1" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_SECP224K1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP512R1" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_BP512R1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_PF_COMPRESSED" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_PF_COMPRESSED );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_NONE" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_NONE );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "ECP_PF_UNKNOWN" ) == 0 )
+    {
+        *value = ( ECP_PF_UNKNOWN );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
     if( strcmp( str, "MBEDTLS_ECP_PF_UNCOMPRESSED" ) == 0 )
     {
         *value = ( MBEDTLS_ECP_PF_UNCOMPRESSED );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224R1" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP384R1" ) == 0 )
     {
-        *value = ( MBEDTLS_ECP_DP_SECP224R1 );
-        return( KEY_VALUE_MAPPING_FOUND );
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP384R1" ) == 0 )
-    {
-        *value = ( MBEDTLS_ECP_DP_SECP384R1 );
+        *value = ( MBEDTLS_ECP_DP_BP384R1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
     if( strcmp( str, "MBEDTLS_ECP_DP_SECP192R1" ) == 0 )
@@ -623,9 +603,29 @@ int verify_int( char *str, int *value )
         *value = ( MBEDTLS_ECP_DP_SECP192R1 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
-    if( strcmp( str, "MBEDTLS_ERR_ECP_INVALID_KEY" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL" ) == 0 )
     {
-        *value = ( MBEDTLS_ERR_ECP_INVALID_KEY );
+        *value = ( MBEDTLS_ERR_ECP_BUFFER_TOO_SMALL );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP192K1" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_SECP192K1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256K1" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_SECP256K1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224R1" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_SECP224R1 );
+        return( KEY_VALUE_MAPPING_FOUND );
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_CURVE25519" ) == 0 )
+    {
+        *value = ( MBEDTLS_ECP_DP_CURVE25519 );
         return( KEY_VALUE_MAPPING_FOUND );
     }
 
@@ -639,7 +639,7 @@ int verify_int( char *str, int *value )
 /*----------------------------------------------------------------------------*/
 /* Test Case code */
 
-#line 13 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 13 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_curve_info( int id, int tls_id, int size, char *name )
 {
     const mbedtls_ecp_curve_info *by_id, *by_tls, *by_name;
@@ -660,7 +660,7 @@ exit:
     return;
 }
 
-#line 32 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 32 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_check_pub( int grp_id, char *x_hex, char *y_hex, char *z_hex, int ret )
 {
     mbedtls_ecp_group grp;
@@ -682,7 +682,7 @@ exit:
     mbedtls_ecp_point_free( &P );
 }
 
-#line 55 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 55 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_test_vect( int id, char *dA_str, char *xA_str, char *yA_str,
                     char *dB_str, char *xB_str, char *yB_str, char *xZ_str,
                     char *yZ_str )
@@ -736,7 +736,7 @@ exit:
     mbedtls_mpi_free( &xB ); mbedtls_mpi_free( &yB ); mbedtls_mpi_free( &xZ ); mbedtls_mpi_free( &yZ );
 }
 
-#line 110 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 110 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_test_vec_x( int id, char *dA_hex, char *xA_hex,
                      char *dB_hex, char *xB_hex, char *xS_hex )
 {
@@ -786,7 +786,7 @@ exit:
     mbedtls_mpi_free( &xS );
 }
 
-#line 161 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 161 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_fast_mod( int id, char *N_str )
 {
     mbedtls_ecp_group grp;
@@ -818,7 +818,7 @@ exit:
     mbedtls_ecp_group_free( &grp );
 }
 
-#line 194 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 194 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_write_binary( int id, char *x, char *y, char *z, int format,
                        char *out, int blen, int ret )
 {
@@ -851,7 +851,7 @@ exit:
     mbedtls_ecp_group_free( &grp ); mbedtls_ecp_point_free( &P );
 }
 
-#line 228 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 228 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_read_binary( int id, char *input, char *x, char *y, char *z,
                       int ret )
 {
@@ -888,7 +888,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z );
 }
 
-#line 266 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 266 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_tls_read_point( int id, char *input, char *x, char *y, char *z,
                          int ret )
 {
@@ -927,7 +927,7 @@ exit:
     mbedtls_mpi_free( &X ); mbedtls_mpi_free( &Y ); mbedtls_mpi_free( &Z );
 }
 
-#line 306 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 306 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_tls_write_read_point( int id )
 {
     mbedtls_ecp_group grp;
@@ -978,7 +978,7 @@ exit:
     mbedtls_ecp_point_free( &pt );
 }
 
-#line 358 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 358 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_tls_read_group( char *record, int result, int bits )
 {
     mbedtls_ecp_group grp;
@@ -1004,7 +1004,7 @@ exit:
     mbedtls_ecp_group_free( &grp );
 }
 
-#line 385 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 385 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_tls_write_read_group( int id )
 {
     mbedtls_ecp_group grp1, grp2;
@@ -1034,7 +1034,7 @@ exit:
     mbedtls_ecp_group_free( &grp2 );
 }
 
-#line 416 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 416 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_check_privkey( int id, char *key_hex, int ret )
 {
     mbedtls_ecp_group grp;
@@ -1053,7 +1053,7 @@ exit:
     mbedtls_mpi_free( &d );
 }
 
-#line 436 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 436 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_check_pub_priv( int id_pub, char *Qx_pub, char *Qy_pub,
                          int id, char *d, char *Qx, char *Qy, int ret )
 {
@@ -1078,7 +1078,7 @@ exit:
     mbedtls_ecp_keypair_free( &prv );
 }
 
-#line 462 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 462 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_gen_keypair( int id )
 {
     mbedtls_ecp_group grp;
@@ -1105,7 +1105,7 @@ exit:
     mbedtls_mpi_free( &d );
 }
 
-#line 490 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 490 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_mbedtls_ecp_gen_key( int id )
 {
     mbedtls_ecp_keypair key;
@@ -1124,7 +1124,7 @@ exit:
 }
 
 #ifdef MBEDTLS_SELF_TEST
-#line 509 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.function"
+#line 509 "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.function"
 void test_suite_ecp_selftest()
 {
     TEST_ASSERT( mbedtls_ecp_self_test( 1 ) == 0 );
@@ -1149,17 +1149,9 @@ int dep_check( char *str )
     if( str == NULL )
         return( 1 );
 
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP256R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP521R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP192R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
+#if defined(MBEDTLS_ECP_DP_SECP521R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1173,6 +1165,14 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
+    if( strcmp( str, "MBEDTLS_ECP_DP_CURVE25519_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_CURVE25519_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
     if( strcmp( str, "MBEDTLS_ECP_DP_SECP224R1_ENABLED" ) == 0 )
     {
 #if defined(MBEDTLS_ECP_DP_SECP224R1_ENABLED)
@@ -1181,33 +1181,9 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP384R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_BP512R1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224K1_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_SECP224K1_ENABLED)
-        return( DEPENDENCY_SUPPORTED );
-#else
-        return( DEPENDENCY_NOT_SUPPORTED );
-#endif
-    }
-    if( strcmp( str, "MBEDTLS_ECP_DP_CURVE25519_ENABLED" ) == 0 )
-    {
-#if defined(MBEDTLS_ECP_DP_CURVE25519_ENABLED)
+#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1229,17 +1205,41 @@ int dep_check( char *str )
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP256R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP224K1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
+#if defined(MBEDTLS_ECP_DP_SECP224K1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
 #endif
     }
-    if( strcmp( str, "MBEDTLS_ECP_DP_SECP521R1_ENABLED" ) == 0 )
+    if( strcmp( str, "MBEDTLS_ECP_DP_SECP192R1_ENABLED" ) == 0 )
     {
-#if defined(MBEDTLS_ECP_DP_SECP521R1_ENABLED)
+#if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP512R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP384R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
+        return( DEPENDENCY_SUPPORTED );
+#else
+        return( DEPENDENCY_NOT_SUPPORTED );
+#endif
+    }
+    if( strcmp( str, "MBEDTLS_ECP_DP_BP256R1_ENABLED" ) == 0 )
+    {
+#if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
         return( DEPENDENCY_SUPPORTED );
 #else
         return( DEPENDENCY_NOT_SUPPORTED );
@@ -1696,7 +1696,7 @@ int dispatch_test(int cnt, char *params[50])
     "     -v | --verbose    Display full information about each test\n" \
     "     -h | --help       Display this information\n\n", \
     argv[0], \
-    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.data"
+    "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.data"
 
 
 /** Retrieve one input line into buf, which must have room for len
@@ -1822,7 +1822,7 @@ static int run_test_snprintf( void )
 int main(int argc, const char *argv[])
 {
     /* Local Configurations and options */
-    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/mbedtls/tests/suites/test_suite_ecp.data";
+    const char *default_filename = "/home/crazyhorse/go/testGo/src/github.com/primefour/skplat/vendors/sknet/thirdParty/mbedtls/tests/suites/test_suite_ecp.data";
     const char *test_filename = NULL;
     const char **test_files = NULL;
     int testfile_count = 0;
