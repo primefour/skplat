@@ -211,10 +211,12 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 if(!mIsSeucre){
                     n = read(mFd,tmpBuff,sizeof(tmpBuff));
                 }else{
-                    n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff));
-                    if(n == HTTPS_WOULD_BLOCK){
-                        continue;
-                    }
+                    do{
+                        n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff));
+                    } while(n ==HTTPS_WOULD_BLOCK);
+                    //if(n == HTTPS_WOULD_BLOCK){
+                    //    continue;
+                    //}
                 }
                 if(n > 0){
                     if(breakFpn(this,tmpBuff,n,recvBuffer)){
@@ -533,6 +535,10 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
 
     //check is secure connect
     if(mIsSeucre){
+        //set block for https
+        //set flags as non-block
+        int flags = fcntl(mFd,F_GETFL,0);
+        fcntl(mFd,F_SETFL, flags&~O_NONBLOCK); 
         mHttpsSupport = new HttpsTransfer(mFd,host);
         //do https shake 
         //note:for lack of root cert,we will ignore the verify result of web cert now
@@ -680,10 +686,14 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 if(!mIsSeucre){
                     n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
                 }else{
-                    n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff) -1);
+                    do{
+                        n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff) -1);
+                    }while(n == HTTPS_WOULD_BLOCK);
+                    /*
                     if(n == HTTPS_WOULD_BLOCK){
                         continue;
                     }
+                    */
                 }
 
                 if(n > 0){
@@ -1016,10 +1026,14 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
                 if(!mIsSeucre){
                     n = read(mFd,tmpBuff,rsize);
                 }else{
-                    n = mHttpsSupport->read(tmpBuff,rsize);
+                    do{
+                        n = mHttpsSupport->read(tmpBuff,rsize);
+                    } while(n ==HTTPS_WOULD_BLOCK);
+                    /*
                     if(n == HTTPS_WOULD_BLOCK){
                         continue;
                     }
+                    */
                 }
                 if(n > 0){
                     wfile.append(tmpBuff,n);

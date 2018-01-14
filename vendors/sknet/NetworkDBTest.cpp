@@ -145,7 +145,10 @@ int main(){
     ALOGD("====> %s ",(const char *)recvBuffer->data());
     */
     HttpTransfer transfer;
-    transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
+    //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
+    transfer.doGet("https://curl.haxx.se/download/curl-7.57.0.tar.gz");
+    //transfer.doGet("https://localhost:8081/hello");
+
     //HttpTransfer transfer;
     //transfer.doGet("http://cms-bucket.nosdn.127.net/e30ef02fbf6f4791af287c00b9fa49a720180112110836.png?imageView&thumbnail=140y88&quality=85");
     /*transfer.doGet("http://www.163.com");
