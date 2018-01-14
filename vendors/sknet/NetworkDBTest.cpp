@@ -44,6 +44,7 @@ If-Modified-Since: Thu, 28 Dec 2017 15:25:53 GMT
 int main(){
     ALOGD("Hello world");
     sp<NetworkDatabase>& db = NetworkDatabase::getInstance();
+    /*
     SocketAddress sockAddr1("www.baidu.com","192.168.1.23");
     sockAddr1.setPort(8080);
     SocketAddress sockAddr2("192.168.1.1");
@@ -146,8 +147,11 @@ int main(){
     */
     HttpTransfer transfer;
     //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
-    transfer.doGet("https://curl.haxx.se/download/curl-7.57.0.tar.gz");
+    //transfer.doGet("https://curl.haxx.se/download/curl-7.57.0.tar.gz");
     //transfer.doGet("https://localhost:8081/hello");
+    transfer.doGet("http://www.baidu.com");
+    transfer.reset();
+    transfer.doGet("http://www.baidu.com");
 
     //HttpTransfer transfer;
     //transfer.doGet("http://cms-bucket.nosdn.127.net/e30ef02fbf6f4791af287c00b9fa49a720180112110836.png?imageView&thumbnail=140y88&quality=85");

@@ -212,7 +212,11 @@ class HttpTransfer :public RefBase{
             mTask = NULL;
             mRelocationCount = 0;
             mIsDownload = HTTP_NONE_DOWNLOAD;
-
+            mfilePath = "";
+            mChunkFilter = NULL;
+            mGzipFilter = NULL;
+            mBufferFilter = NULL;
+            mIsSeucre = false;
             if(mObserver == NULL){
                 //use default observer
                 mObserver = new TransferObserver();

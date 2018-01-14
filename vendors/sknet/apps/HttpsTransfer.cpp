@@ -147,7 +147,7 @@ int HttpsTransfer::write(const char *buff,int len){
 int HttpsTransfer::readSelect(fd_set *rdSet){
     //ALOGD("%s in_msglen %zd ",__func__,mSslCtx.in_msglen); 
     if(mSslCtx.in_msglen  > 0 && mSslCtx.in_offt != NULL){
-        ALOGD("return true %s in_msglen %zd ",__func__,mSslCtx.in_msglen); 
+        //ALOGD("return true %s in_msglen %zd ",__func__,mSslCtx.in_msglen); 
         FD_ZERO(rdSet);
         FD_SET(mServerFd.fd,rdSet);
         return 1;
