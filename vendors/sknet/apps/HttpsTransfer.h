@@ -29,6 +29,8 @@
 #include "Log.h"
 #include "RefBase.h"
 #include<string>
+#include<unistd.h>
+#include<fcntl.h>
 
 class HttpsTransfer:public RefBase{
     public:
@@ -44,6 +46,7 @@ class HttpsTransfer:public RefBase{
         int write(const char *buff,int len);
         int read(char *buff,int len);
         int getSocket() const;
+        int readSelect(fd_set *rdSet);
     private:
         mbedtls_net_context mServerFd;
         mbedtls_entropy_context mEntropy;

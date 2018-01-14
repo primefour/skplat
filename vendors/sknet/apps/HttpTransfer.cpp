@@ -201,7 +201,14 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+        if(mIsSeucre){
+            ret = mHttpsSupport->readSelect(&rdSet); 
+            if(!ret){
+                ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+            }
+        }else{
+            ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+        }
         //ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
@@ -211,12 +218,12 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 if(!mIsSeucre){
                     n = read(mFd,tmpBuff,sizeof(tmpBuff));
                 }else{
-                    do{
+                    //do{
                         n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff));
-                    } while(n ==HTTPS_WOULD_BLOCK);
-                    //if(n == HTTPS_WOULD_BLOCK){
-                    //    continue;
-                    //}
+                    //} while(n ==HTTPS_WOULD_BLOCK);
+                    if(n == HTTPS_WOULD_BLOCK){
+                        continue;
+                    }
                 }
                 if(n > 0){
                     if(breakFpn(this,tmpBuff,n,recvBuffer)){
@@ -537,8 +544,8 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     if(mIsSeucre){
         //set block for https
         //set flags as non-block
-        int flags = fcntl(mFd,F_GETFL,0);
-        fcntl(mFd,F_SETFL, flags&~O_NONBLOCK); 
+        //int flags = fcntl(mFd,F_GETFL,0);
+        //fcntl(mFd,F_SETFL, flags&~O_NONBLOCK); 
         mHttpsSupport = new HttpsTransfer(mFd,host);
         //do https shake 
         //note:for lack of root cert,we will ignore the verify result of web cert now
@@ -675,7 +682,15 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+
+        if(mIsSeucre){
+            ret = mHttpsSupport->readSelect(&rdSet); 
+            if(!ret){
+                ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+            }
+        }else{
+            ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+        }
         ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
@@ -686,14 +701,12 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 if(!mIsSeucre){
                     n = read(mFd,tmpBuff,sizeof(tmpBuff) -1);
                 }else{
-                    do{
+                    //do{
                         n = mHttpsSupport->read(tmpBuff,sizeof(tmpBuff) -1);
-                    }while(n == HTTPS_WOULD_BLOCK);
-                    /*
+                    //}while(n == HTTPS_WOULD_BLOCK);
                     if(n == HTTPS_WOULD_BLOCK){
                         continue;
                     }
-                    */
                 }
 
                 if(n > 0){
@@ -1011,7 +1024,14 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
         int maxFd = mPipe[1] > mFd ?mPipe[1]:mFd;
         maxFd ++;
         //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
-        ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+        if(mIsSeucre){
+            ret = mHttpsSupport->readSelect(&rdSet); 
+            if(!ret){
+                ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+            }
+        }else{
+            ret = select(maxFd,&rdSet,NULL,NULL,&tv);
+        }
         //ALOGD("http get read wait select end");
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
@@ -1026,14 +1046,12 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
                 if(!mIsSeucre){
                     n = read(mFd,tmpBuff,rsize);
                 }else{
-                    do{
+                    //do{
                         n = mHttpsSupport->read(tmpBuff,rsize);
-                    } while(n ==HTTPS_WOULD_BLOCK);
-                    /*
+                    //} while(n ==HTTPS_WOULD_BLOCK);
                     if(n == HTTPS_WOULD_BLOCK){
                         continue;
                     }
-                    */
                 }
                 if(n > 0){
                     wfile.append(tmpBuff,n);

@@ -58,6 +58,7 @@ void HttpsTransfer::sslShake(){
     }
 
     //Loading the CA root certificate ... 
+    //fix me,there is no any root certificate
     ALOGD("Loading the CA root certificate ...");
     ret = mbedtls_x509_crt_parse(&mRootCert,(const unsigned char *)mbedtls_test_cas_pem,mbedtls_test_cas_pem_len);
     if( ret < 0 ){
@@ -141,6 +142,18 @@ int HttpsTransfer::write(const char *buff,int len){
         return UNKNOWN_ERROR;
     }
     return ret;
+}
+
+int HttpsTransfer::readSelect(fd_set *rdSet){
+    //ALOGD("%s in_msglen %zd ",__func__,mSslCtx.in_msglen); 
+    if(mSslCtx.in_msglen  > 0 && mSslCtx.in_offt != NULL){
+        ALOGD("return true %s in_msglen %zd ",__func__,mSslCtx.in_msglen); 
+        FD_ZERO(rdSet);
+        FD_SET(mServerFd.fd,rdSet);
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
 int HttpsTransfer::read(char *buff,int len){
