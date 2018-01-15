@@ -210,11 +210,11 @@ void AppFileLog::assertLog(LogEntry *logInfo,const char *condition,const char *f
     if(mFile != NULL){
         mFile->write(*mBuffer);
     }
-
     if(mConsole){
         //log to terminal
         printConsole(logInfo,mBuffer->data());
     }
+    assert(false);
 }
 
 void AppFileLog::printLog(LogEntry *logInfo,const char *format,...){

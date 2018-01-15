@@ -1,7 +1,6 @@
 #ifndef __SK_LOG_H__
 #define __SK_LOG_H__
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
 #include <sys/cdefs.h>
 #include <stdio.h>
