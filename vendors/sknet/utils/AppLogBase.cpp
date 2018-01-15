@@ -15,7 +15,7 @@ void skLogSetLevel(int level){
 }
 
 bool skLogCheckLevel(int level){
-    return gLogWriter.isLog(level)
+    return gLogWriter.isLog(level);
 }
 
 void skLogClose(){
