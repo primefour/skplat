@@ -17,11 +17,20 @@
 #define gettid() syscall(SYS_gettid)
 #endif
 #include"Mutex.h"
+/*
 #include"RawFile.h"
 #include"BufferUtils.h"
+*/
 #define LOG_EXT "log"
 #define LOG_PREFIX "skplat"
+
+#ifndef LOG_TAG 
 #define LOG_TAG "SKPLATLOG"
+#endif
+
+class RawFile;
+//class Mutex;
+class BufferUtils;
 
 
 enum{
@@ -36,6 +45,7 @@ enum{
 };
 
 struct LogEntry {
+    /*
     LogEntry(){
         tag = NULL;
         fileName = NULL;
@@ -46,6 +56,7 @@ struct LogEntry {
         tid = -1;
         mainPid = -1;
     }
+    */
     int level;
     const char *tag;
     const char *fileName;

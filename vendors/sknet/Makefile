@@ -81,7 +81,7 @@ $(MODEL_OBJS):%.o : %.cpp
 $(STORE_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./apps/
 
-$(APPS_OBJS):%.o : %.cpp
+$(APPS_OBJS):%.o : %.cpp 
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./store -I ./apps/
 
 clean:

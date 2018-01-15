@@ -26,6 +26,7 @@ BasicHashtableImpl::BasicHashtableImpl(size_t entrySize, bool hasTrivialDestruct
         mBucketSize(entrySize + sizeof(Bucket)), mHasTrivialDestructor(hasTrivialDestructor),
         mLoadFactor(loadFactor), mSize(0),
         mFilledBuckets(0), mBuckets(NULL) {
+    ALOGD("loadFactor = %f %f ",mLoadFactor,loadFactor);
     determineCapacity(minimumInitialCapacity, mLoadFactor, &mBucketCount, &mCapacity);
 }
 
@@ -317,6 +318,7 @@ static size_t PRIMES[] = {
 
 void BasicHashtableImpl::determineCapacity(size_t minimumCapacity, float loadFactor,
         size_t* __restrict__ outBucketCount, size_t* __restrict__ outCapacity) {
+    ALOGD("loadFactor = %f ",loadFactor);
     LOG_ALWAYS_FATAL_IF(loadFactor <= 0.0f || loadFactor > 1.0f,
             "Invalid load factor %0.3f.  Must be in the range (0, 1].", loadFactor);
 

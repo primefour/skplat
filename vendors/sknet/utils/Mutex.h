@@ -24,7 +24,7 @@
 #if defined(HAVE_PTHREADS)
 # include <pthread.h>
 #endif
-#include"Log.h"
+#include "TypeHelpers.h"
 
 class Condition;
 

@@ -22,6 +22,8 @@
 #include <string.h>
 #include <sys/types.h>
 #include <string>
+
+typedef int status_t;
 /*
  * Types traits
  */

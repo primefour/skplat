@@ -13,6 +13,8 @@
 #include "AppFileLog.h"
 #include "FileUtils.h"
 #include "RawFile.h"
+#include "Mutex.h"
+#include "BufferUtils.h"
 
 
 void printConsole(LogEntry *logInfo,const char* logMsg){
@@ -57,6 +59,7 @@ static const char* levelStrings[] = {
 AppFileLog::AppFileLog(){
     mOpenFileTime = 0;
     mBuffer = new BufferUtils(MAX_LINE_LEN);
+    mConsole = true;
 }
 
 AppFileLog::~AppFileLog(){
@@ -212,7 +215,7 @@ void AppFileLog::assertLog(LogEntry *logInfo,const char *condition,const char *f
     }
     if(mConsole){
         //log to terminal
-        printConsole(logInfo,mBuffer->data());
+        printConsole(logInfo,tmpBuff);
     }
     assert(false);
 }
