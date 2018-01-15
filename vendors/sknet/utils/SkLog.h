@@ -13,18 +13,14 @@
 extern "C" {
 #endif
 
-bool skCheckLogLevel(int level);
-void skLogPrint(LogEntry *logInfo,const char* format, ...);
-void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...);
-
 #ifdef LOG_DISABLE
-#define  skCheckLogLevel(_level)	(false)
+#define  skLogCheckLevel(_level)	(false)
 #define  skLogAssert(...)			((void)0)
 #define  skLogPrint(...)			((void)0)
 #else
 
 #define sklog(level,tag, file, func, line, ...) do{ \
-    if (skCheckLogLevel(level)) {\
+    if (skLogCheckLevel(level)) {\
         LogEntry info= {level, tag, file, func, line, {0, 0}, -1, -1, -1};\
         gettimeofday(&info.timeval, NULL);\
         skLogPrint(&info,__VA_ARGS__); \
@@ -32,7 +28,7 @@ void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...
 }while(0)
 
 #define sklog_if(exp, level, tag, file, func, line, ...) do{ \
-    if ((exp) &&  skCheckLogLevel(level)) {\
+    if ((exp) && skLogCheckLevel(level)) {\
         LogEntry info= {level, tag, file, func, line,{0, 0}, -1, -1, -1};\
         gettimeofday(&info.timeval, NULL);\
         skLogPrint(&info,__VA_ARGS__); \
@@ -40,7 +36,7 @@ void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...
 }while(0)
 
 #define skassert(exp,...) do { \
-    if (!(exp) && skCheckLogLevel(kLevelFatal)) { \
+    if (!(exp) && skLogCheckLevel(kLevelFatal)) { \
         LogEntry info= {kLevelFatal, SKLOG_TAG,__FILE__, __func__, __LINE__,{0, 0}, -1, -1, -1};\
         gettimeofday(&info.timeval, NULL); \
         skLogAssert(&info,#exp,__VA_ARGS__); \
