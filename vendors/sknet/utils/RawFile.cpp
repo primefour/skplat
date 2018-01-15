@@ -263,7 +263,7 @@ int RawFile::append(BufferUtils&buffer,int writeLength){
 
 }
 
-int RawFile::write(char *buff,int len){
+int RawFile::write(const char *buff,int len){
     if(mFd < 0){
         ALOGW("write file mfd < 0 ");
         return UNKNOWN_ERROR;
@@ -324,6 +324,13 @@ size_t RawFile::size(){
     size_t size = lseek(0,SEEK_END);
     lseek(pos,SEEK_SET);
     return size;
+}
+
+int RawFile::flush(){
+    if(mFd >= 0){
+        return fsync(mFd);
+    }
+    return BAD_VALUE;
 }
 
 

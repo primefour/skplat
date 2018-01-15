@@ -29,6 +29,7 @@ UTILS_SRC := utils/BasicHashtable.cpp \
 	utils/WorkQueue.cpp \
 	utils/FileUtils.cpp \
 	utils/RawFile.cpp \
+	utils/AppFileLog.cpp \
 
 
 MODEL_SRC := model/SocketAddress.cpp \

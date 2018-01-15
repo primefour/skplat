@@ -30,7 +30,7 @@ class RawFile{
         int readInt32(int32_t &data);
         int readLine(char *buff,int len);
         int readLine(BufferUtils& buffer);
-        int write(char *buff,int len);
+        int write(const char *buff,int len);
         int append(char *buff,int len);
         int append(BufferUtils& buffer,int writeLength = -1);
         int writeInt32(int32_t data);
@@ -38,6 +38,7 @@ class RawFile{
         size_t lseek(int offset,int flags);
         size_t loffset();
         size_t size();
+        int flush();
     private:
         std::string mfilePath;
         int mEndianType;
