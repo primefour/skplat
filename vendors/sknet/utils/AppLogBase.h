@@ -1,10 +1,20 @@
 #ifndef __APP_LOG_BASE_H__
 #define __APP_LOG_BASE_H__
+#include <sys/time.h>
+#include <stdio.h>
 #include"AppFileLog.h"
+
+void skLogPrint(LogEntry *logInfo,const char* format, ...);
+void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...);
+void skLogSetDir(const char *dir);
+void skLogSetLevel(int level);
+bool skLogCheckLevel(int level);
+void skLogClose();
+void skLogFlush();
 
 struct ScopeProfile{
     ScopeProfile(int level, const char* tag,const char* fileName, const char* funcName, int line){
-        if(skCheckLogLevel(level)){
+        if(skLogCheckLevel(level)){
             mLogInfo.level = level;
             mLogInfo.tag = tag;
             mLogInfo.fileName = fileName;
@@ -18,27 +28,18 @@ struct ScopeProfile{
         }
     }
     ~ScopeProfile(){
-        if(skCheckLogLevel(mLogInfo.level)){
+        if(skLogCheckLevel(mLogInfo.level)){
             timeval tv;
             gettimeofday(&tv, NULL);
             mLogInfo.tv = tv;
             char logMsg[128] ={0};
             long timeSpan = (tv.tv_sec - mTimeValue.tv_sec) * 1000 + (tv.tv_usec - mTimeValue.tv_usec) / 1000;
-            snprintf(strout, sizeof(strout), "exit span is :%ld ms",timeSpan);
+            snprintf(logMsg, sizeof(logMsg) -1, "exit span is :%ld ms",timeSpan);
             skLogPrint(&mLogInfo,logMsg);
         }
     }
     LogEntry mLogInfo;
 	struct timeval mTimeValue;
 };
-
-void skLogPrint(LogEntry *logInfo,const char* format, ...);
-void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...);
-void skLogSetDir(const char *dir);
-void skLogSetLevel(int level);
-bool skLogCheckLevel(int level);
-void skLogClose();
-void skLogFlush();
-
 	
 #endif

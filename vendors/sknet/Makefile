@@ -30,6 +30,7 @@ UTILS_SRC := utils/BasicHashtable.cpp \
 	utils/FileUtils.cpp \
 	utils/RawFile.cpp \
 	utils/AppFileLog.cpp \
+	utils/AppLogBase.cpp \
 
 
 MODEL_SRC := model/SocketAddress.cpp \
