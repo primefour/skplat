@@ -39,6 +39,14 @@ extern "C" {
     } \
 }while(0)
 
+#define skassert_if(exp,...) do { \
+    if ((exp) && skLogCheckLevel(LogLevelFatal)) { \
+        LogEntry info= {LogLevelFatal, SKLOG_TAG,__FILE__, __func__, __LINE__,{0, 0}, -1, -1, -1};\
+        gettimeofday(&info.tv, NULL); \
+        skLogAssert(&info,#exp,__VA_ARGS__); \
+    } \
+}while(0)
+
 #define __sklog_impl(level, ...) 			sklog(level,SKLOG_TAG, __FILE__, __func__, __LINE__, __VA_ARGS__)
 #define __sklog_impl_if(level, exp, ...) 	sklog_if(exp,level,SKLOG_TAG, __FILE__, __func__, __LINE__, __VA_ARGS__)
 

@@ -11,6 +11,21 @@
 #include"Log.h"
 #include"FileUtils.h"
 
+#ifdef ALOGD
+#undef ALOGD
+#define ALOGD printf
+#endif
+
+#ifdef ALOGW
+#undef ALOGW
+#define ALOGW printf
+#endif
+
+#ifdef ALOGE
+#undef ALOGE
+#define ALOGE printf
+#endif
+
 RawFile::RawFile(const char *filePath){
     ASSERT(filePath != NULL,"invalidate input");
     mfilePath = filePath;
@@ -290,6 +305,7 @@ int RawFile::write(BufferUtils&buffer,int writeLength){
         ALOGE("this is read only file object");
         return BAD_VALUE;
     }
+
     int ret;
     if(writeLength == -1 && buffer.size() > 0){
         ret = ::write(mFd,buffer.data(),buffer.size());

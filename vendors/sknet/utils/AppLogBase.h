@@ -2,7 +2,29 @@
 #define __APP_LOG_BASE_H__
 #include <sys/time.h>
 #include <stdio.h>
-#include"AppFileLog.h"
+
+enum{
+    LogLevelAll = 0,
+    LogLevelVerbose = 0,
+    LogLevelDebug,    // Detailed information on the flow through the system.
+    LogLevelInfo,     // Interesting runtime events (startup/shutdown), should be conservative and keep to a minimum.
+    LogLevelWarn,     // Other runtime situations that are undesirable or unexpected, but not necessarily "wrong".
+    LogLevelError,    // Other runtime errors or unexpected conditions.
+    LogLevelFatal,    // Severe errors that cause premature termination.
+    LogLevelNone,     // Special level used to disable all log messages.
+};
+
+struct LogEntry {
+    int level;
+    const char *tag;
+    const char *fileName;
+    const char *funcName;
+    int line;
+    struct timeval tv;
+    int pid;
+    int tid;
+    int mainPid;
+};
 
 void skLogPrint(LogEntry *logInfo,const char* format, ...);
 void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...);

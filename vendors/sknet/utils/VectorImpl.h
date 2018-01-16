@@ -20,6 +20,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <sys/types.h>
+#include "TypeHelpers.h"
 
 // ---------------------------------------------------------------------------
 // No user serviceable parts in here...

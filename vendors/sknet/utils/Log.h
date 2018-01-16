@@ -39,7 +39,7 @@
 
 #define ALOG_ASSERT skassert
 #define ASSERT  skassert
-#define LOG_ALWAYS_FATAL_IF skassert
+#define LOG_ALWAYS_FATAL_IF skassert_if
 #define LOG_FATAL_IF LOG_ALWAYS_FATAL_IF
 
 #endif 

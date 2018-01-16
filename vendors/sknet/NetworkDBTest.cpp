@@ -42,7 +42,17 @@ If-Modified-Since: Thu, 28 Dec 2017 15:25:53 GMT
  */
 
 int main(){
+    skLogSetDir("./");
     ALOGD("Hello world");
+    ALOGD("Hello kkjkjklkljl lj;j;fjasf a;fja  jlkworld");
+    ALOGD("Hello world %s ","hello world" );
+
+    ALOGD("Hello world %s ","hello kkkkkkkjkjlkjadsafsdfasfasfsfjalkfjlkjdfalfjafjkdfafworld" );
+
+    ALOGD("Hello %d world %s ",3,"hello kkkkkkkjkjlkjadsafsdfasfasfsfjalkfjlkjdfalfjafjkdfafworld" );
+
+    ALOGD("Hello %ld %d world %s ",(long)4,3,"hello kkkkkkkjkjlkjadsafsdfasfasfsfjalkfjlkjdfalfjafjkdfafworld" );
+
     sp<NetworkDatabase>& db = NetworkDatabase::getInstance();
     /*
     SocketAddress sockAddr1("www.baidu.com","192.168.1.23");
@@ -146,6 +156,7 @@ int main(){
     ALOGD("====> %s ",(const char *)recvBuffer->data());
     */
     HttpTransfer transfer;
+    /*
     transfer.reset();
     transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
     transfer.reset();
@@ -157,9 +168,10 @@ int main(){
     transfer.reset();
     transfer.doGet("http://www.baidu.com");
     transfer.reset();
+    */
     transfer.doDownload("https://curl.haxx.se/download/curl-7.57.0.tar.gz","");
     transfer.reset();
-    transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
+    //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
 
     //HttpTransfer transfer;
     //transfer.doGet("http://cms-bucket.nosdn.127.net/e30ef02fbf6f4791af287c00b9fa49a720180112110836.png?imageView&thumbnail=140y88&quality=85");
