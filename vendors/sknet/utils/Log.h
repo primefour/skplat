@@ -3,22 +3,26 @@
 #include<stdio.h>
 #include<assert.h>
 #include"SkLog.h"
+#ifdef SKPLAT_DISABLE_LOG
+#define ALOGV 
+#define ALOGD 
+#define ALOGI 
+#define ALOGW 
+#define ALOGE 
+#define ALOGF 
 
+#define ALOGV_IF 
+#define ALOGD_IF 
+#define ALOGI_IF 
+#define ALOGW_IF 
+#define ALOGE_IF 
+#define ALOGF_IF 
 
-#define NO_ERROR (0)
-#define OK (0)
-#define NEED_MORE (0x1f)
-#define INVALID_OPERATION (-1)
-#define WOULD_BLOCK (-2)
-#define UNKNOWN_ERROR (-3)
-#define BAD_INDEX (-4)
-#define NO_MEMORY (-5)
-#define BAD_VALUE (-6)
-#define NAME_NOT_FOUND (-7)
-#define TIMEOUT_ERROR (-8)
-#define ABORT_ERROR (-9)
-#define HTTPS_WOULD_BLOCK (-10)
-
+#define ALOG_ASSERT 
+#define ASSERT  
+#define LOG_ALWAYS_FATAL_IF 
+#define LOG_FATAL_IF 
+#else
 #define ALOGV skverbose
 #define ALOGD skdebug
 #define ALOGI skinfo
@@ -37,6 +41,8 @@
 #define ASSERT  skassert
 #define LOG_ALWAYS_FATAL_IF skassert
 #define LOG_FATAL_IF LOG_ALWAYS_FATAL_IF
+
+#endif 
 
 /*
 #define ALOGD(...) {printf(__VA_ARGS__);printf("\n");};

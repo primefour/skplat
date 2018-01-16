@@ -15,12 +15,6 @@
 extern "C" {
 #endif
 
-#ifdef LOG_DISABLE
-#define  skLogCheckLevel(_level)	(false)
-#define  skLogAssert(...)			((void)0)
-#define  skLogPrint(...)			((void)0)
-#else
-
 #define sklog(level,tag, file, func, line, ...) do{ \
     if (skLogCheckLevel(level)) {\
         LogEntry info= {level, tag, file, func, line, {0, 0}, -1, -1, -1};\
@@ -69,8 +63,6 @@ extern "C" {
 #define verbose_scope(name,msg) __scope_impl(LogLevelVerbose,name,msg)
 #define debug_scope(name, msg) __scope_impl(LogLevelDebug, name,msg)
 #define info_scope(name,msg) __scope_impl(LogLevelInfo, name,msg)
-
-#endif
 
 #ifdef __cplusplus
 }
