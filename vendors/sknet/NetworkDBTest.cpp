@@ -169,8 +169,9 @@ int main(){
     transfer.doGet("http://www.baidu.com");
     transfer.reset();
     */
-    transfer.doDownload("https://curl.haxx.se/download/curl-7.57.0.tar.gz","");
-    transfer.reset();
+    //transfer.doDownload("https://curl.haxx.se/download/curl-7.57.0.tar.gz","");
+    transfer.doDownload("https://github-production-release-asset-2e65be.s3.amazonaws.com/339002/397875ee-6c0b-11e4-8d77-2f8197e58a3a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180117%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180117T143259Z&X-Amz-Expires=300&X-Amz-Signature=01d53cb9db80e9945b250677d84cc012ad0fa553de1862bf7397950b8cd2df45&X-Amz-SignedHeaders=host&actor_id=3366232&response-content-disposition=attachment%3B%20filename%3DAptana_Studio_3_Setup_Linux_x86_64_3.6.1.zip&response-content-type=application%2Foctet-stream","./DAptana_Studio_3_Setup_Linux_x86_64_3.6.1.zip");
+    //transfer.reset();
     //transfer.doDownload("http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe","");
 
     //HttpTransfer transfer;
