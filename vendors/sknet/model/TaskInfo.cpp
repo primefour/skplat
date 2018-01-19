@@ -4,6 +4,7 @@
 TaskInfo::TaskInfo(){
     //set default value
     mSendOnly = false;
+    mPersist = false;
     mMethod = TASK_METHOD_HTTP_GET;
     mRetryTimes = RETRY_DEFAULT_TIMES;
     mTaskType = TASK_TYPE_HTTP;

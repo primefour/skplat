@@ -259,7 +259,7 @@ int NetworkDatabase::xTaskInsert(sp<TaskInfo> &task,int taskState){
                 task->mRecvFile.empty() ?"NULL":task->mRecvFile.c_str(),
                 task->mSendFile.empty() ?"NULL":task->mSendFile.c_str(),
                 task->mSendOnly ?1:0,
-                task->mRetryTimes, 
+                task->mRetryTimes,
                 task->mTaskType,
                 task->mConnTimeout,
                 task->mTaskTimeout);

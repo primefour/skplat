@@ -45,18 +45,20 @@ struct TaskInfo :public RefBase{
     std::string mTaskId; //task name or id
     std::string mModuleName; //for notify callback
     std::string mUrl;
-    //only for download task 
+    //only for download task
     std::string mRecvFile; //the path download data where to save
-    //send file 
+    //send file
     std::string mSendFile; //send a file to server
     //send data
     sp<BufferUtils> mSendData; //data will send to server
     //write buffer
     sp<BufferUtils> mRecvData;
-    //transfer 
+    //transfer
     sp<HttpTransfer> mTransfer;
 
-    bool mSendOnly; 
+    bool mPersist;
+
+    bool mSendOnly;
     int  mMethod;
     int  mRetryTimes; //retry times
     int  mTaskType;
