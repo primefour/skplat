@@ -102,7 +102,7 @@ private:
          * cancel running WorkUnit
          */
         bool cancel(WorkUnit *workUnit){
-            if(mRunningWork == workUnit){
+            if(workUnit != NULL && mRunningWork == workUnit){
                 mRunningWork->cancel();
                 mRunningWork = NULL;
                 return true;

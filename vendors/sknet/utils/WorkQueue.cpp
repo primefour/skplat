@@ -71,7 +71,7 @@ status_t WorkQueue::cancel() {
 
 status_t WorkQueue::cancel(WorkUnit **workUnit){
     AutoMutex _l(mLock);
-    if (mFinished || mCanceled) {
+    if (mFinished || mCanceled || *workUnit == NULL) {
         return INVALID_OPERATION;
     }
 

@@ -7,12 +7,11 @@
 #include"BufferUtils.h"
 #include"HttpTransfer.h"
 #include"RefBase.h"
+#include"WorkQueue.h"
 
 #define RETRY_DEFAULT_TIMES 5
 #define CONNECT_DEFAULT_TIMEOUT 15000 //ms
 #define TASK_DEFAULT_TIMEOUT 60000 //ms
-
-//class HttpTransfer;
 
 enum TASK_INFO_TYPE{
     TASK_TYPE_HTTP,
@@ -41,6 +40,16 @@ enum TASK_METHOD_STATE {
     TASK_METHOD_MAX,
 };
 
+struct TaskInfo;
+
+struct TaskObserver:public RefBase{
+    virtual void onTaskDone(TaskInfo *task) = 0;
+    virtual void onTaskFailed(TaskInfo *task) = 0;
+    virtual void onTaskCanceled(TaskInfo *task) = 0;
+    virtual void onTaskStart(TaskInfo *task) = 0;
+    virtual void onTaskStates(TaskInfo *task,int progress,int arg1,int arg2)=0;
+};
+
 struct TaskInfo :public RefBase{
     std::string mTaskId; //task name or id
     std::string mModuleName; //for notify callback
@@ -54,10 +63,14 @@ struct TaskInfo :public RefBase{
     //write buffer
     sp<BufferUtils> mRecvData;
     //transfer
-    sp<HttpTransfer> mTransfer;
+    sp<HttpTransfer> mHttpTransfer;
+    //an observer
+    sp<TaskObserver> mListener;
+
+    //work unit for workqueue
+    WorkQueue::WorkUnit *mWorkUnit;
 
     bool mPersist;
-
     bool mSendOnly;
     int  mMethod;
     int  mRetryTimes; //retry times
@@ -67,8 +80,78 @@ struct TaskInfo :public RefBase{
     //do with info
     int mTaskState;
     int mTryTimes;
+    int mCanceled;
     long mStartTime;
     long mStartConnTime;
     TaskInfo();
+
+    void reset(){
+        //set default value
+        mSendOnly = false;
+        mPersist = false;
+        mMethod = TASK_METHOD_HTTP_GET;
+        mRetryTimes = RETRY_DEFAULT_TIMES;
+        mTaskType = TASK_TYPE_HTTP;
+        mConnTimeout = CONNECT_DEFAULT_TIMEOUT;//15s
+        mTaskTimeout = TASK_DEFAULT_TIMEOUT;//1min
+        mTaskState = TASK_STATE_IDLE;
+        mTryTimes = 0;
+        mStartTime = 0;
+        mStartConnTime = 0;
+        mRecvData = new BufferUtils();
+        mSendData = new BufferUtils();
+        mHttpTransfer = NULL;
+        mWorkUnit = NULL;
+        mCanceled = false;
+
+    }
+
+    void onStatesChange(int state,int progress,int arg1,int arg2){
+        if(mTaskState == state){
+            return;
+        }
+
+        if(mListener == NULL){
+            return;
+        }
+        if(mTaskState == TASK_STATE_INIT){
+            mListener->onTaskStart(this);
+        }else if(mTaskState == TASK_STATE_DONE){
+            mListener->onTaskDone(this);
+        }else if(mTaskState == TASK_STATE_FAIL){
+            mListener->onTaskFailed(this);
+        }else{
+            //progress
+            mListener->onTaskStates(this,progress,arg1,arg2);
+        }
+    }
+
+    void cancel(){
+        if(!mCanceled){
+            mCanceled = true;
+            if(mHttpTransfer != NULL){
+                mHttpTransfer->cancel();
+            }
+        }
+    }
+};
+
+class HttpWorkUnit:public WorkQueue::WorkUnit {
+    public:
+        HttpWorkUnit(sp<TaskInfo> &task):mTask(task){
+        }
+        HttpWorkUnit(){mTask = NULL;}
+
+        virtual bool run(){
+            return false;
+        }
+
+        virtual void cancel(){
+            if(mTask != NULL){
+                mTask->cancel();
+            }
+        }
+    private:
+        sp<TaskInfo> mTask;
 };
 #endif//

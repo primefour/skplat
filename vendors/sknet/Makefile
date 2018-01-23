@@ -52,6 +52,7 @@ APPS_SRC := apps/SocksConnect.cpp \
 	apps/HttpsTransfer.cpp \
 	apps/HttpChunkFilter.cpp \
 	apps/GzipDecodeFilter.cpp \
+	apps/TaskManager.cpp
 
 
 UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)  

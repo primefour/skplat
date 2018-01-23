@@ -207,6 +207,7 @@ class HttpTransfer :public RefBase{
             mFd = -1;
             mState = HTTP_INIT;
             mRequest = NULL;
+            mCanceled = false;
             pipe2(mPipe,O_NONBLOCK);
             mError = 0;
             mTask = NULL;
@@ -221,6 +222,12 @@ class HttpTransfer :public RefBase{
                 //use default observer
                 mObserver = new TransferObserver();
             }
+        }
+
+        void cancel(){
+            interrupt();
+            mCanceled = true;
+            return;
         }
 
         void interrupt(){//may be block
@@ -281,6 +288,7 @@ class HttpTransfer :public RefBase{
         int mFd;
         int mState;
         int mPipe[2];
+        int mCanceled;
         int mError;
         DurationTimer mDuration;
         sp<HttpRequest> mRequest;

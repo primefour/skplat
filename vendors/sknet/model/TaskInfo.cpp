@@ -16,5 +16,7 @@ TaskInfo::TaskInfo(){
     mStartConnTime = 0;
     mRecvData = new BufferUtils();
     mSendData = new BufferUtils();
-    mTransfer = NULL;
+    mHttpTransfer = NULL;
+    mWorkUnit = NULL;
+    mCanceled = false;
 }
