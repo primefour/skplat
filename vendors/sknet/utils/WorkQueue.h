@@ -34,13 +34,16 @@ public:
     public:
         WorkUnit() { }
         virtual ~WorkUnit() { }
-
         /*
          * Runs the work unit.
          * If the result is 'true' then the work queue continues scheduling work as usual.
          * If the result is 'false' then the work queue is canceled.
          */
         virtual bool run() = 0;
+        /*
+         * exit for long time task by itself
+         */
+        virtual void cancel() = 0;
     };
 
     /* Creates a work queue with the specified maximum number of work threads. */
@@ -82,12 +85,32 @@ public:
      */
     status_t finish();
 
+    /*
+     * Cancels a WorkUnit.
+     * If the WorkUnit in running,will call WorkUnit cancel to exit.return OK;
+     * If the WorkUnit in ToDo quueu,will remove directly. return OK
+     * else return NAME_NOT_FOUND
+     */
+    status_t cancel(WorkUnit **workUnit);
+
 private:
     class WorkThread : public Thread {
     public:
         WorkThread(WorkQueue* workQueue, bool canCallJava);
         virtual ~WorkThread();
+        /*
+         * cancel running WorkUnit
+         */
+        bool cancel(WorkUnit *workUnit){
+            if(mRunningWork == workUnit){
+                mRunningWork->cancel();
+                mRunningWork = NULL;
+                return true;
+            }
+            return false;
+        }
 
+        WorkUnit* mRunningWork;
     private:
         virtual bool threadLoop();
 
@@ -95,7 +118,7 @@ private:
     };
 
     status_t cancelLocked();
-    bool threadLoop(); // called from each work thread
+    bool threadLoop(WorkThread *self); // called from each work thread
 
     const size_t mMaxThreads;
     const bool mCanCallJava;

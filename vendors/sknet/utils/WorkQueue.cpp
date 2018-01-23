@@ -69,6 +69,37 @@ status_t WorkQueue::cancel() {
     return cancelLocked();
 }
 
+status_t WorkQueue::cancel(WorkUnit **workUnit){
+    AutoMutex _l(mLock);
+    if (mFinished || mCanceled) {
+        return INVALID_OPERATION;
+    }
+
+    size_t count = mWorkUnits.size();
+    for (size_t i = 0; i < count; i++) {
+        if(*workUnit == mWorkUnits.itemAt(i)){
+            mWorkUnits.removeAt(i);
+            delete *workUnit;
+            *workUnit = NULL;
+            return OK;
+        }
+    }
+
+    // It is not possible for the list of work threads to change once the mFinished
+    // flag has been set, so we can access mWorkThreads outside of the lock here.
+    count = mWorkThreads.size();
+    for (size_t i = 0; i < count; i++) {
+        if(mWorkThreads.itemAt(i)->cancel(*workUnit)){
+            //will delete by threadloop
+            *workUnit = NULL;
+            return OK;
+        }
+    }
+    mWorkChangedCondition.broadcast();
+    mWorkDequeuedCondition.broadcast();
+    return NAME_NOT_FOUND ;
+}
+
 status_t WorkQueue::cancelLocked() {
     if (mFinished) {
         return INVALID_OPERATION;
@@ -110,7 +141,7 @@ status_t WorkQueue::finish() {
     return OK;
 }
 
-bool WorkQueue::threadLoop() {
+bool WorkQueue::threadLoop(WorkThread *threadSelf) {
     WorkUnit* workUnit;
     { // acquire lock
         AutoMutex _l(mLock);
@@ -124,6 +155,7 @@ bool WorkQueue::threadLoop() {
                 workUnit = mWorkUnits.itemAt(0);
                 mWorkUnits.removeAt(0);
                 mIdleThreads -= 1;
+                threadSelf->mRunningWork = workUnit;
                 mWorkDequeuedCondition.broadcast();
                 break;
             }
@@ -137,6 +169,7 @@ bool WorkQueue::threadLoop() {
     } // release lock
 
     bool shouldContinue = workUnit->run();
+    threadSelf->mRunningWork = NULL;
     delete workUnit;
 
     { // acquire lock
@@ -157,11 +190,13 @@ bool WorkQueue::threadLoop() {
 
 WorkQueue::WorkThread::WorkThread(WorkQueue* workQueue, bool canCallJava) :
         Thread(canCallJava), mWorkQueue(workQueue) {
+        mRunningWork = NULL;
 }
 
 WorkQueue::WorkThread::~WorkThread() {
+        mRunningWork = NULL;
 }
 
 bool WorkQueue::WorkThread::threadLoop() {
-    return mWorkQueue->threadLoop();
+    return mWorkQueue->threadLoop(this);
 }
