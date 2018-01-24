@@ -165,12 +165,14 @@ void skLogPrint(LogEntry *logInfo,const char* format, ...){
         return;
     }
 
+    //crash
+    if(ret > left){
+        ret = left;
+    }
     int size = tmpPtr - tmpBuff + ret;
-
     if(gAppLogger.isConsole()){
         printConsole(logInfo,tmpPtr);
     }
-    //printf("size = %d ",size);
     *(tmpBuff+size) = '\n';
     gAppLogger.writeFile(tmpBuff,size +1);
 }
