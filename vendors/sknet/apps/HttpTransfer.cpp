@@ -74,10 +74,16 @@ int HttpTransfer::doRangeDownload(sp<HttpRequest> &req,const char *filePath,Rang
 int HttpTransfer::doDownload(const char *url,const char *filePath){
     mIsDownload = HTTP_PARENT_DOWNLOAD;
     mfilePath = filePath;
+    if(url == NULL && mTask != NULL){
+        url = mTask->mUrl.c_str();
+    }
     return doGet(url);
 }
 
 int HttpTransfer::doGet(const char *url){
+    if(url == NULL && mTask != NULL){
+        url = mTask->mUrl.c_str();
+    }
     HttpRequest * req = createRequest(url);
     if(req == NULL){
         return BAD_VALUE;
@@ -202,7 +208,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
         maxFd ++;
         //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
         if(mIsSeucre){
-            ret = mHttpsSupport->readSelect(&rdSet); 
+            ret = mHttpsSupport->readSelect(&rdSet);
             if(!ret){
                 ret = select(maxFd,&rdSet,NULL,NULL,&tv);
             }
@@ -227,6 +233,9 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 }
                 if(n > 0){
                     if(breakFpn(this,tmpBuff,n,recvBuffer)){
+                        if(mObserver != NULL){
+                            mObserver->onCompleted();
+                        }
                         return recvBuffer->size();
                     }
                     //ALOGD("tmpBuff = %s ",tmpBuff);
@@ -242,6 +251,9 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                     mError ++;
                     return UNKNOWN_ERROR;
                 }else{
+                    if(mObserver != NULL){
+                        mObserver->onCompleted();
+                    }
                     ALOGD("recv data complete %p size: %zd  error:%s",
                             recvBuffer->data(),recvBuffer->size(),strerror(errno));
                     break;
@@ -510,12 +522,11 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     //get Address
     Vector<SocketAddress> addrs = Cache->getAddrs(host,service);
     int ret = 0;
-    TaskInfo *task = (TaskInfo*)mTask;
     {
         //connect to server
         SocksConnect connect(addrs);
-        if(task != NULL){
-            ret = connect.connect(task->mConnTimeout);
+        if(mTask != NULL){
+            ret = connect.connect(mTask->mConnTimeout);
         }else{
             ret = connect.connect(TRANSFER_CONNECT_TIMEOUT);
         }
@@ -597,9 +608,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     int nsended = 0;
     struct timeval tv;
 
-    if(task != NULL){
-        tv.tv_sec = task->mTaskTimeout /1000;
-        tv.tv_usec = task->mTaskTimeout %1000 * 1000;
+    if(mTask!= NULL){
+        tv.tv_sec = mTask->mTaskTimeout /1000;
+        tv.tv_usec = mTask->mTaskTimeout %1000 * 1000;
     }else{
         tv.tv_sec = TRANSFER_SELECT_TIMEOUT;
         tv.tv_usec = 0;
@@ -847,15 +858,15 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }
 
     sp<BufferUtils> recvBuffer = NULL;
-    if(task != NULL){
-        recvBuffer = task->mRecvData;
+    if(mTask!= NULL){
+        recvBuffer = mTask->mRecvData;
     }else{
         ALOGW("HTTP TRANSFER NO TASK BIND");
         mResponse->mBody = new BufferUtils();
         recvBuffer = mResponse->mBody;
     }
 
-    mBufferFilter = new BufferFilter(); 
+    mBufferFilter = new BufferFilter();
     mBufferFilter->setRecvBuffer(recvBuffer,mResponse->mContentLength);
 
     //ALOGD("tmpBuffer->dataWithOffset() = %s tmpBuffer->size():%zd  tmpBuffer->offset() = %ld ",
@@ -1111,7 +1122,70 @@ void HttpTransfer::installFilters(){
 }
 
 
- /*   
+
+HttpTransfer::TransferObserver::TransferObserver(sp<TaskInfo> task){
+    mTask = task;
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_INIT,0,0,0);
+    }
+}
+void HttpTransfer::TransferObserver::onStartConnect(){
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_CONN,0,0,0);
+    }
+    ALOGD("start connecting...");
+}
+//return false will stop this transfer or continue
+bool HttpTransfer::TransferObserver::onConnected(bool success){
+    ALOGD("connect completely...");
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_CONNED,0,0,0);
+    }
+    return true;
+}
+
+void HttpTransfer::TransferObserver::onSending(long bytes,long total){
+    ALOGD("send data %ld:%ld",total,bytes);
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_SEND,bytes,total,0);
+    }
+    return ;
+}
+
+bool HttpTransfer::TransferObserver::onSended(){
+    ALOGD("send completely...");
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_SENDED,0,0,0);
+    }
+    return true;
+}
+
+void HttpTransfer::TransferObserver::onProgress(long bytes,long total){
+    ALOGD("recv data %ld:%ld",total,bytes);
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_RECV,bytes,total,0);
+    }
+    return;
+}
+
+void HttpTransfer::TransferObserver::onCompleted(){
+    ALOGD("recv data completely...");
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_DONE,0,0,0);
+    }
+    return;
+}
+
+void HttpTransfer::TransferObserver::onFailed(){
+    if(mTask != NULL){
+        mTask->onStatesChange(TASK_STATE_FAIL,0,0,0);
+    }
+    ALOGD("http transfer failed");
+    return;
+}
+
+
+ /*
 	acceptRangeHeader   = "Accept-Ranges"
 	contentLengthHeader = "Content-Length"
 
@@ -1188,8 +1262,8 @@ MultipartEntity mutiEntity = newMultipartEntity();
 File file = new File("d:/photo.jpg");
 mutiEntity.addPart("desc",new StringBody("美丽的西双版纳", Charset.forName("utf-8")));
 mutiEntity.addPart("pic", newFileBody(file));
- 
- 
+
+
 httpPost.setEntity(mutiEntity);
 HttpResponse  httpResponse = httpClient.execute(httpPost);
 HttpEntity httpEntity =  httpResponse.getEntity();

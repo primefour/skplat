@@ -81,6 +81,8 @@
 #include"GzipDecodeFilter.h"
 #include"BufferFilter.h"
 
+struct TaskInfo;
+
 struct Range{
     long begin;
     long end;
@@ -136,38 +138,16 @@ class HttpTransfer :public RefBase{
         typedef int (*BreakFpn)(void *obj,const char*data,int size,sp<BufferUtils> &buff);
         class TransferObserver:public RefBase{
             public :
-            virtual void onStartConnect(){
-                ALOGD("start connecting...");
-            }
-            //return false will stop this transfer or continue
-            virtual bool onConnected(bool success){
-                ALOGD("connect completely...");
-                return true;
-            }
-
-            virtual void onSending(long bytes,long total){
-                ALOGD("send data %ld:%ld",total,bytes);
-                return ;
-            }
-
-            virtual bool onSended(){
-                ALOGD("send completely..."); 
-                return true;
-            }
-
-            virtual void onProgress(long bytes,long total){
-                ALOGD("recv data %ld:%ld",total,bytes); 
-                return;
-            }
-
-            virtual void onCompleted(){
-                ALOGD("recv data completely...");
-                return;
-            }
-            virtual void onFailed(){
-                ALOGD("http transfer failed");
-                return;
-            }
+                TransferObserver(sp<TaskInfo> task = NULL);
+                virtual void onStartConnect();
+                //return false will stop this transfer or continue
+                virtual bool onConnected(bool success);
+                virtual void onSending(long bytes,long total);
+                virtual bool onSended();
+                virtual void onProgress(long bytes,long total);
+                virtual void onCompleted();
+                virtual void onFailed();
+                sp<TaskInfo> mTask;
         };
 
         static const char *HttpGetHints;
@@ -191,8 +171,11 @@ class HttpTransfer :public RefBase{
             HTTP_FAIL,
         };
 
-        HttpTransfer(){
+        HttpTransfer(sp<TaskInfo> task){
             init();
+            mTask = task;
+            //use default observer
+            mObserver = new TransferObserver(mTask);
         }
 
         ~HttpTransfer(){
@@ -218,10 +201,6 @@ class HttpTransfer :public RefBase{
             mGzipFilter = NULL;
             mBufferFilter = NULL;
             mIsSeucre = false;
-            if(mObserver == NULL){
-                //use default observer
-                mObserver = new TransferObserver();
-            }
         }
 
         void cancel(){
@@ -293,8 +272,8 @@ class HttpTransfer :public RefBase{
         DurationTimer mDuration;
         sp<HttpRequest> mRequest;
         sp<HttpResponse> mResponse;
+        sp<TaskInfo> mTask;
         Mutex mMutex;
-        void *mTask;
         static int mRelocationLimited;
         int mRelocationCount;
         int mIsDownload;

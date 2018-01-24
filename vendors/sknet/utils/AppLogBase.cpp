@@ -118,7 +118,6 @@ static void printConsole(LogEntry *logInfo,const char* logMsg){
     }
 #else
 #ifdef APPLE
-    
 
 #else
     printf("%s:%s ",LOG_TAG,printString);
@@ -171,6 +170,7 @@ void skLogPrint(LogEntry *logInfo,const char* format, ...){
     if(gAppLogger.isConsole()){
         printConsole(logInfo,tmpPtr);
     }
+    //printf("size = %d ",size);
     *(tmpBuff+size) = '\n';
     gAppLogger.writeFile(tmpBuff,size +1);
 }

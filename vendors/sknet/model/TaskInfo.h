@@ -25,7 +25,9 @@ enum TASK_INFO_STATE {
     TASK_STATE_IDLE,
     TASK_STATE_INIT,
     TASK_STATE_CONN,
+    TASK_STATE_CONNED,
     TASK_STATE_SEND,
+    TASK_STATE_SENDED,
     TASK_STATE_RECV,
     TASK_STATE_DONE,
     TASK_STATE_FAIL,
@@ -43,11 +45,11 @@ enum TASK_METHOD_STATE {
 struct TaskInfo;
 
 struct TaskObserver:public RefBase{
-    virtual void onTaskDone(TaskInfo *task) = 0;
-    virtual void onTaskFailed(TaskInfo *task) = 0;
-    virtual void onTaskCanceled(TaskInfo *task) = 0;
-    virtual void onTaskStart(TaskInfo *task) = 0;
-    virtual void onTaskStates(TaskInfo *task,int progress,int arg1,int arg2)=0;
+    virtual void onTaskDone(sp<TaskInfo> &task);
+    virtual void onTaskFailed(sp<TaskInfo> &task);
+    virtual void onTaskCanceled(sp<TaskInfo> &task);
+    virtual void onTaskStart(sp<TaskInfo> &task);
+    virtual void onTaskStates(sp<TaskInfo> &task,int progress,int arg1,int arg2);
 };
 
 struct TaskInfo :public RefBase{
@@ -66,7 +68,6 @@ struct TaskInfo :public RefBase{
     sp<HttpTransfer> mHttpTransfer;
     //an observer
     sp<TaskObserver> mListener;
-
     //work unit for workqueue
     sp<WorkQueue::WorkUnit> mWorkUnit;
 
@@ -83,81 +84,27 @@ struct TaskInfo :public RefBase{
     int mCanceled;
     long mStartTime;
     long mStartConnTime;
+    bool mWaiting;
     TaskInfo();
-    void reset(){
-        //set default value
-        mSendOnly = false;
-        mPersist = false;
-        mMethod = TASK_METHOD_HTTP_GET;
-        mRetryTimes = RETRY_DEFAULT_TIMES;
-        mTaskType = TASK_TYPE_HTTP;
-        mConnTimeout = CONNECT_DEFAULT_TIMEOUT;//15s
-        mTaskTimeout = TASK_DEFAULT_TIMEOUT;//1min
-        mTaskState = TASK_STATE_IDLE;
-        mTryTimes = 0;
-        mStartTime = 0;
-        mStartConnTime = 0;
-        mRecvData = new BufferUtils();
-        mSendData = new BufferUtils();
-        mHttpTransfer = NULL;
-        mWorkUnit = NULL;
-        mListener = NULL;
-        mCanceled = false;
-
-    }
-
-    void onStatesChange(int state,int progress,int arg1,int arg2){
-        if(mTaskState == state){
-            return;
-        }
-
-        if(mListener == NULL){
-            return;
-        }
-
-        if(mTaskState == TASK_STATE_INIT){
-            mListener->onTaskStart(this);
-        }else if(mTaskState == TASK_STATE_DONE){
-            mListener->onTaskDone(this);
-        }else if(mTaskState == TASK_STATE_FAIL){
-            mListener->onTaskFailed(this);
-        }else if(mCanceled){
-            mListener->onTaskCanceled(this);
-        }else{
-            //progress
-            mListener->onTaskStates(this,progress,arg1,arg2);
-        }
-
-    }
-
-    void cancel(){
-        if(!mCanceled){
-            mCanceled = true;
-            if(mHttpTransfer != NULL){
-                mHttpTransfer->cancel();
-            }
-        }
-    }
+    ~TaskInfo();
+    void reset();
+    void onStatesChange(int state,int progress,int arg1,int arg2);
+    void cancel();
+    void wait();
 };
 
 class HttpWorkUnit:public WorkQueue::WorkUnit {
     public:
         HttpWorkUnit(sp<TaskInfo> &task):mTask(task){
+            ALOGE("Task id :%s url is:%s create",mTask->mTaskId.c_str(),mTask->mUrl.c_str());
         }
-
         HttpWorkUnit(){mTask = NULL;}
-
-        ~HttpWorkUnit(){mTask = NULL;}
-
-        virtual bool run(){
-            return false;
+        ~HttpWorkUnit(){
+            ALOGE("Task id :%s url is:%s destroy",mTask->mTaskId.c_str(),mTask->mUrl.c_str());
+            mTask = NULL;
         }
-
-        virtual void cancel(){
-            if(mTask != NULL){
-                mTask->cancel();
-            }
-        }
+        virtual bool run();
+        virtual void cancel();
     private:
         sp<TaskInfo> mTask;
 };

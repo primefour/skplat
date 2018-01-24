@@ -1,4 +1,5 @@
 #include<string>
+#include"TaskInfo.h"
 #include"HttpRequest.h"
 #include"HttpTransfer.h"
 #include"DownloaderManager.h"
@@ -7,7 +8,7 @@
 RangeDownloader::RangeDownloader(sp<HttpRequest> &req,
         const char *filePath,Range &range,
         DownloaderManager::CompleteObserver &observer):mObserver(observer),mRg(range){
-    mTransfer = new HttpTransfer();
+    mTransfer = new HttpTransfer(NULL);
     mReq = req;
     mfilePath = filePath;
     mTransferObserver = new TransferListener(this);

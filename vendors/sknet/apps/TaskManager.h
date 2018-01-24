@@ -7,6 +7,8 @@
 #include"TaskInfo.h"
 #include"NetworkDatabase.h"
 #include"Vector.h"
+#include"Timers.h"
+#include"mbedtls/sha256.h"
 
 //this is http work manager
 class HttpWorkManager:public WorkQueue {
@@ -39,8 +41,9 @@ class TaskDispatch{
     public:
         /*
          * pool size default is ten
+         * uuid is identify for user and help to create taskid
          */
-        TaskDispatch(int poolSize = 10);
+        TaskDispatch(int poolSize = 10,std::string uuid ="testuser");
 
         virtual ~TaskDispatch();
 
@@ -63,9 +66,20 @@ class TaskDispatch{
         void putTask(sp<TaskInfo> &task);
 
     private:
+        /*
+         * create a global unique string to identify a task
+         */
+        std::string getStringId();
+        /*
+         * create a unique string id of current user to identify a task
+         */
+        std::string getIntegerId();
+
         void initTasksPool();
         //empty taskInfo Pool
         int mPoolSize;
+        //use 32 char
+        std::string mUUID;
         Vector<sp<TaskInfo> > mTasksPool;
         //database manager
         sp<NetworkDatabase> mDatabase;

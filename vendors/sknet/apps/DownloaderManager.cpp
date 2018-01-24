@@ -1,5 +1,6 @@
 #include<string>
 #include"HttpRequest.h"
+#include"TaskInfo.h"
 #include"HttpTransfer.h"
 #include"DownloaderManager.h"
 #include<unistd.h>
