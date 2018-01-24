@@ -41,7 +41,7 @@ void NetworkDatabase::createTables(){
     //don't change items order of each create sql language
     const char* xDnsSQL= "create table if not exists xdns (host text,ip text,ip_type int default 0,"
                                 "fetch_type int default 0,conn_profile int64 default -1);";
-    const char *xTaskSQL= "create table if not exists xtask (task_id text,module_name text,url text,method int,send_data blob,task_type int,"
+    const char *xTaskSQL= "create table if not exists xtask (task_id text,url text,method int,send_data blob,task_type int,"
                                 "send_only int,recv_file text,send_file text,retry_times int,conn_timeout int64,task_timeout int64,"
                                 "task_state int default 0,start_time int64 default 0,conn_time int64 default 0,try_times int default 0);";
     mDBWrapper->createTable(xDnsSQL);
@@ -182,7 +182,6 @@ int NetworkDatabase::xDnsDelete(const char *host,const char *ip){
 int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colEntries,void *pArgs){
 
     static std::string taskIdKey ="task_id";
-    static std::string moduleKey = "module_name";
     static std::string urlKey = "url";
     static std::string methodKey="method";
     static std::string sendDataKey="send_data";
@@ -209,7 +208,6 @@ int NetworkDatabase::xTaskInfoVCallback(KeyedHash<std::string,ColumnEntry> *colE
     Vector<sp<TaskInfo> > *pTaskArray = (Vector<sp<TaskInfo> >*)pArgs;
     sp<TaskInfo> newTask = new TaskInfo();
     newTask->mTaskId = colEntries->get(taskIdKey).getString();
-    newTask->mModuleName = colEntries->get(moduleKey).getString();
     newTask->mUrl = colEntries->get(urlKey).getString();
     newTask->mMethod = colEntries->get(methodKey).getLong();
     const char *data = colEntries->get(sendDataKey).getString();
@@ -246,16 +244,16 @@ int NetworkDatabase::xTaskGetTasks(Vector<sp<TaskInfo> > &tasks,int taskState){
 
 int NetworkDatabase::xTaskInsert(sp<TaskInfo> &task,int taskState){
     char sql_buff[4096]={0};
-    if(task->mTaskId.empty() ||task->mModuleName.empty()){
-        ALOGE("invalidate task,please check host module name and task id ");
+    if(task->mTaskId.empty()){
+        ALOGE("invalidate task,please check host name and task id ");
         return BAD_VALUE;
     }
     sqlite3_stmt* pStmt = NULL;
     if(task->mSendData->size() > 0){
-        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
+        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,url,method,recv_file,"
                 "send_file,send_data,send_only,retry_times,task_type,conn_timeout,task_timeout)"
-                "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%ld,%ld);",
-                task->mTaskId.c_str(),task->mModuleName.c_str(),task->mUrl.c_str(),task->mMethod,
+                "  values (\'%s\',\'%s\',%d,\'%s\',\'%s\',?,%d,%d,%d,%ld,%ld);",
+                task->mTaskId.c_str(),task->mUrl.c_str(),task->mMethod,
                 task->mRecvFile.empty() ?"NULL":task->mRecvFile.c_str(),
                 task->mSendFile.empty() ?"NULL":task->mSendFile.c_str(),
                 task->mSendOnly ?1:0,
@@ -268,14 +266,14 @@ int NetworkDatabase::xTaskInsert(sp<TaskInfo> &task,int taskState){
             pStmt = mDBWrapper->bindValue(pStmt,1,task->mSendData->data(),task->mSendData->size());
         }
     }else{
-        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,module_name,url,method,recv_file,"
+        snprintf(sql_buff,sizeof(sql_buff),"insert into xtask(task_id,url,method,recv_file,"
                 "send_file,send_only,retry_times,task_type,conn_timeout,task_timeout)"
-                "  values (\'%s\',\'%s\',\'%s\',%d,\'%s\',\'%s\',%d,%d,%d,%ld,%ld);",
-                task->mTaskId.c_str(),task->mModuleName.c_str(),task->mUrl.c_str(),task->mMethod,
+                "  values (\'%s\',\'%s\',%d,\'%s\',\'%s\',%d,%d,%d,%ld,%ld);",
+                task->mTaskId.c_str(),task->mUrl.c_str(),task->mMethod,
                 task->mRecvFile.empty() ?"NULL":task->mRecvFile.c_str(),
                 task->mSendFile.empty() ?"NULL":task->mSendFile.c_str(),
                 task->mSendOnly ?1:0,
-                task->mRetryTimes, 
+                task->mRetryTimes,
                 task->mTaskType,
                 task->mConnTimeout,
                 task->mTaskTimeout);

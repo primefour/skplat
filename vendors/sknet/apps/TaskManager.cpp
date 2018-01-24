@@ -3,6 +3,7 @@
 
 TaskDispatch::TaskDispatch(int poolSize){
     mPoolSize = poolSize;
+    mDatabase = NetworkDatabase::getInstance();
     initTasksPool();
     mHttpWorkerManager = new HttpWorkManager();
 }

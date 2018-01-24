@@ -33,7 +33,7 @@ WorkQueue::~WorkQueue() {
     }
 }
 
-status_t WorkQueue::schedule(WorkUnit* workUnit, size_t backlog) {
+status_t WorkQueue::schedule(sp<WorkUnit>  &workUnit, size_t backlog) {
     AutoMutex _l(mLock);
 
     if (mFinished || mCanceled) {
@@ -69,18 +69,16 @@ status_t WorkQueue::cancel() {
     return cancelLocked();
 }
 
-status_t WorkQueue::cancel(WorkUnit **workUnit){
+status_t WorkQueue::cancel(sp<WorkUnit> &workUnit){
     AutoMutex _l(mLock);
-    if (mFinished || mCanceled || *workUnit == NULL) {
+    if (mFinished || mCanceled || workUnit == NULL) {
         return INVALID_OPERATION;
     }
 
     size_t count = mWorkUnits.size();
     for (size_t i = 0; i < count; i++) {
-        if(*workUnit == mWorkUnits.itemAt(i)){
+        if(workUnit == mWorkUnits.itemAt(i)){
             mWorkUnits.removeAt(i);
-            delete *workUnit;
-            *workUnit = NULL;
             return OK;
         }
     }
@@ -89,9 +87,8 @@ status_t WorkQueue::cancel(WorkUnit **workUnit){
     // flag has been set, so we can access mWorkThreads outside of the lock here.
     count = mWorkThreads.size();
     for (size_t i = 0; i < count; i++) {
-        if(mWorkThreads.itemAt(i)->cancel(*workUnit)){
+        if(mWorkThreads.itemAt(i)->cancel(workUnit)){
             //will delete by threadloop
-            *workUnit = NULL;
             return OK;
         }
     }
@@ -107,11 +104,6 @@ status_t WorkQueue::cancelLocked() {
 
     if (!mCanceled) {
         mCanceled = true;
-
-        size_t count = mWorkUnits.size();
-        for (size_t i = 0; i < count; i++) {
-            delete mWorkUnits.itemAt(i);
-        }
         mWorkUnits.clear();
         mWorkChangedCondition.broadcast();
         mWorkDequeuedCondition.broadcast();
@@ -142,7 +134,7 @@ status_t WorkQueue::finish() {
 }
 
 bool WorkQueue::threadLoop(WorkThread *threadSelf) {
-    WorkUnit* workUnit;
+    sp<WorkUnit> workUnit;
     { // acquire lock
         AutoMutex _l(mLock);
 
@@ -169,8 +161,9 @@ bool WorkQueue::threadLoop(WorkThread *threadSelf) {
     } // release lock
 
     bool shouldContinue = workUnit->run();
+    //remove items
     threadSelf->mRunningWork = NULL;
-    delete workUnit;
+    workUnit = NULL;
 
     { // acquire lock
         AutoMutex _l(mLock);

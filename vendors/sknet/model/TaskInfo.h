@@ -52,7 +52,7 @@ struct TaskObserver:public RefBase{
 
 struct TaskInfo :public RefBase{
     std::string mTaskId; //task name or id
-    std::string mModuleName; //for notify callback
+    //request url
     std::string mUrl;
     //only for download task
     std::string mRecvFile; //the path download data where to save
@@ -68,7 +68,7 @@ struct TaskInfo :public RefBase{
     sp<TaskObserver> mListener;
 
     //work unit for workqueue
-    WorkQueue::WorkUnit *mWorkUnit;
+    sp<WorkQueue::WorkUnit> mWorkUnit;
 
     bool mPersist;
     bool mSendOnly;
@@ -84,7 +84,6 @@ struct TaskInfo :public RefBase{
     long mStartTime;
     long mStartConnTime;
     TaskInfo();
-
     void reset(){
         //set default value
         mSendOnly = false;
@@ -102,6 +101,7 @@ struct TaskInfo :public RefBase{
         mSendData = new BufferUtils();
         mHttpTransfer = NULL;
         mWorkUnit = NULL;
+        mListener = NULL;
         mCanceled = false;
 
     }
@@ -114,16 +114,20 @@ struct TaskInfo :public RefBase{
         if(mListener == NULL){
             return;
         }
+
         if(mTaskState == TASK_STATE_INIT){
             mListener->onTaskStart(this);
         }else if(mTaskState == TASK_STATE_DONE){
             mListener->onTaskDone(this);
         }else if(mTaskState == TASK_STATE_FAIL){
             mListener->onTaskFailed(this);
+        }else if(mCanceled){
+            mListener->onTaskCanceled(this);
         }else{
             //progress
             mListener->onTaskStates(this,progress,arg1,arg2);
         }
+
     }
 
     void cancel(){
@@ -140,7 +144,10 @@ class HttpWorkUnit:public WorkQueue::WorkUnit {
     public:
         HttpWorkUnit(sp<TaskInfo> &task):mTask(task){
         }
+
         HttpWorkUnit(){mTask = NULL;}
+
+        ~HttpWorkUnit(){mTask = NULL;}
 
         virtual bool run(){
             return false;

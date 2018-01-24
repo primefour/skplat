@@ -18,9 +18,8 @@ class HttpWorkManager:public WorkQueue {
          * commit a task,will create a workunit to complete this task
          */
         void commitWork(sp<TaskInfo> &task){
-            WorkQueue::WorkUnit *work = new HttpWorkUnit(task);
-            task->mWorkUnit = work;
-            schedule(work);
+            task->mWorkUnit = new HttpWorkUnit(task);
+            schedule(task->mWorkUnit);
         }
 
         /*
@@ -28,7 +27,7 @@ class HttpWorkManager:public WorkQueue {
          * else return NAME_NOT_FOUND
          */
         bool cancelWork(sp<TaskInfo> &task){
-            return cancel(&(task->mWorkUnit)) == OK;
+            return cancel(task->mWorkUnit) == OK;
         }
 };
 
@@ -58,7 +57,6 @@ class TaskDispatch{
          * get an empty task from pool
          */
         sp<TaskInfo> getTask();
-
         /*
          * put the useless task to pool for reusing it
          */

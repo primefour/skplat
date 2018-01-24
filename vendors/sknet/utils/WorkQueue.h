@@ -16,7 +16,7 @@
 
 #ifndef _LIBS_UTILS_WORK_QUEUE_H
 #define _LIBS_UTILS_WORK_QUEUE_H
-
+#include "RefBase.h"
 #include "Vector.h"
 #include "Threads.h"
 
@@ -30,7 +30,7 @@
  */
 class WorkQueue {
 public:
-    class WorkUnit {
+    class WorkUnit :public RefBase{
     public:
         WorkUnit() { }
         virtual ~WorkUnit() { }
@@ -67,7 +67,7 @@ public:
      *
      * If 'backlog' is 0, then no throttle is applied.
      */
-    status_t schedule(WorkUnit* workUnit, size_t backlog = 2);
+    status_t schedule(sp<WorkUnit> &workUnit, size_t backlog = 2);
 
     /* Cancels all pending work.
      * If the work queue is already finished, returns INVALID_OPERATION.
@@ -91,7 +91,7 @@ public:
      * If the WorkUnit in ToDo quueu,will remove directly. return OK
      * else return NAME_NOT_FOUND
      */
-    status_t cancel(WorkUnit **workUnit);
+    status_t cancel(sp<WorkUnit> &workUnit);
 
 private:
     class WorkThread : public Thread {
@@ -101,7 +101,7 @@ private:
         /*
          * cancel running WorkUnit
          */
-        bool cancel(WorkUnit *workUnit){
+        bool cancel(sp<WorkUnit> &workUnit){
             if(workUnit != NULL && mRunningWork == workUnit){
                 mRunningWork->cancel();
                 mRunningWork = NULL;
@@ -110,7 +110,7 @@ private:
             return false;
         }
 
-        WorkUnit* mRunningWork;
+        sp<WorkUnit> mRunningWork;
     private:
         virtual bool threadLoop();
 
@@ -131,6 +131,6 @@ private:
     bool mFinished;
     size_t mIdleThreads;
     Vector<sp<WorkThread> > mWorkThreads;
-    Vector<WorkUnit*> mWorkUnits;
+    Vector<sp<WorkUnit> > mWorkUnits;
 };
 #endif // _LIBS_UTILS_WORK_QUEUE_H
