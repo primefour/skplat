@@ -202,7 +202,7 @@ int main(){
     task->mUrl = "http://www.163.com";
     dispatch->commitTask(task);
     task->wait();
-    ALOGD("task recv is %s ",task->mRecvData->data());
+    ALOGDUMP(task->mRecvData->data(),task->mRecvData->size());
     delete dispatch;
     return 0;
 }

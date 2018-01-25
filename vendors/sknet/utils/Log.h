@@ -4,24 +4,24 @@
 #include<assert.h>
 #include"SkLog.h"
 #ifdef SKPLAT_DISABLE_LOG
-#define ALOGV 
-#define ALOGD 
-#define ALOGI 
-#define ALOGW 
-#define ALOGE 
-#define ALOGF 
+#define ALOGV
+#define ALOGD
+#define ALOGI
+#define ALOGW
+#define ALOGE
+#define ALOGF
 
-#define ALOGV_IF 
-#define ALOGD_IF 
-#define ALOGI_IF 
-#define ALOGW_IF 
-#define ALOGE_IF 
-#define ALOGF_IF 
+#define ALOGV_IF
+#define ALOGD_IF
+#define ALOGI_IF
+#define ALOGW_IF
+#define ALOGE_IF
+#define ALOGF_IF
 
-#define ALOG_ASSERT 
-#define ASSERT  
-#define LOG_ALWAYS_FATAL_IF 
-#define LOG_FATAL_IF 
+#define ALOG_ASSERT
+#define ASSERT
+#define LOG_ALWAYS_FATAL_IF
+#define LOG_FATAL_IF
 #else
 #define ALOGV skverbose
 #define ALOGD skdebug
@@ -41,8 +41,9 @@
 #define ASSERT  skassert
 #define LOG_ALWAYS_FATAL_IF skassert_if
 #define LOG_FATAL_IF LOG_ALWAYS_FATAL_IF
+#define ALOGDUMP sk_debug_dump
 
-#endif 
+#endif
 
 /*
 #define ALOGD(...) {printf(__VA_ARGS__);printf("\n");};

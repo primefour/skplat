@@ -143,6 +143,12 @@ void skLogFlush(){
     gAppLogger.flush();
 }
 
+//dump large log
+void skLogDump(LogEntry *logInfo,const char *data,int length){
+    gAppLogger.writeFile(data,length);
+    gAppLogger.writeFile("\n",1);
+}
+
 void skLogPrint(LogEntry *logInfo,const char* format, ...){
     if(logInfo == NULL || format == NULL){
         return;

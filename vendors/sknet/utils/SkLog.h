@@ -15,6 +15,14 @@
 extern "C" {
 #endif
 
+#define skdump(level,tag, file, func, line,data,len)do{ \
+    if (skLogCheckLevel(level)) {\
+        LogEntry info= {level, tag, file, func, line, {0, 0}, -1, -1, -1};\
+        gettimeofday(&info.tv, NULL);\
+        skLogDump(&info,data,len); \
+    } \
+}while(0)
+
 #define sklog(level,tag, file, func, line, ...) do{ \
     if (skLogCheckLevel(level)) {\
         LogEntry info= {level, tag, file, func, line, {0, 0}, -1, -1, -1};\
@@ -47,6 +55,7 @@ extern "C" {
     } \
 }while(0)
 
+#define __skdump_impl(level,data,len)       skdump(level,SKLOG_TAG, __FILE__, __func__, __LINE__,data,len)
 #define __sklog_impl(level, ...) 			sklog(level,SKLOG_TAG, __FILE__, __func__, __LINE__, __VA_ARGS__)
 #define __sklog_impl_if(level, exp, ...) 	sklog_if(exp,level,SKLOG_TAG, __FILE__, __func__, __LINE__, __VA_ARGS__)
 
@@ -56,6 +65,7 @@ extern "C" {
 #define skwarn(...)                __sklog_impl(LogLevelWarn, __VA_ARGS__)
 #define skerror(...)               __sklog_impl(LogLevelError, __VA_ARGS__)
 #define skfatal(...)               __sklog_impl(LogLevelFatal, __VA_ARGS__)
+#define sk_debug_dump(data,len)    __skdump_impl(LogLevelDebug,data,len);
 
 #define skverbose_if(exp, ...)     __sklog_impl_if(LogLevelVerbose, exp, __VA_ARGS__)
 #define skdebug_if(exp, ...)       __sklog_impl_if(LogLevelDebug, exp, __VA_ARGS__)

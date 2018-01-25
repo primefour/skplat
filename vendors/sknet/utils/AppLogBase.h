@@ -25,7 +25,7 @@ struct LogEntry {
     int tid;
     int mainPid;
 };
-
+void skLogDump(LogEntry *logInfo,const char *data,int length);
 void skLogPrint(LogEntry *logInfo,const char* format, ...);
 void skLogAssert(LogEntry *logInfo,const char *condition,const char* format, ...);
 void skLogSetDir(const char *dir);
