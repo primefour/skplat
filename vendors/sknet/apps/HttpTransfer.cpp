@@ -959,6 +959,9 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             DownloaderManager  *dm = new DownloaderManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
             dm->start();
             dm->wait4Complete();
+            if(mObserver != NULL){
+                mObserver->onCompleted();
+            }
             delete dm;
             return OK;
         }else{
@@ -976,13 +979,23 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 count -= downloadSize;
                 rawFile.append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
                 if(count <= 0){
+                    if(mObserver != NULL){
+                        mObserver->onCompleted();
+                    }
                     return downloadSize;;
                 }
             }
             ret = commonReader(rawFile,count,tv);
             if(ret < 0){
                 ALOGE("download partial file %s failed",mfilePath.c_str());
+                if(mObserver != NULL){
+                    mObserver->onFailed();
+                }
                 return UNKNOWN_ERROR;
+            }
+
+            if(mObserver != NULL){
+                mObserver->onCompleted();
             }
             return mResponse->mContentLength;
         }

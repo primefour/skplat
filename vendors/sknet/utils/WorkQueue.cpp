@@ -33,12 +33,20 @@ WorkQueue::~WorkQueue() {
     }
 }
 
-status_t WorkQueue::schedule(sp<WorkUnit>  &workUnit, size_t backlog) {
-    AutoMutex _l(mLock);
 
+status_t WorkQueue::schedule(sp<WorkUnit>  &workUnit, size_t backlog) {
+
+    ALOGD(">>>>shedule a task size = %d ",mWorkUnits.size());
+    AutoMutex _l(mLock);
+    ALOGD("<<<<<shedule a task size = %d ",mWorkUnits.size());
+    ALOGD("mFinished  =%d  mCanceled = %d ",mFinished,mCanceled);
     if (mFinished || mCanceled) {
+
+    ALOGD("++++++++shedule a task size = %d ",mWorkUnits.size());
         return INVALID_OPERATION;
     }
+
+    ALOGD("shedule a task size = %d ",mWorkUnits.size());
 
     if (mWorkThreads.size() < mMaxThreads
             && mIdleThreads < mWorkUnits.size() + 1) {
@@ -59,6 +67,8 @@ status_t WorkQueue::schedule(sp<WorkUnit>  &workUnit, size_t backlog) {
     }
 
     mWorkUnits.add(workUnit);
+
+    ALOGD("+ shedule a task size = %d ",mWorkUnits.size());
     mWorkChangedCondition.broadcast();
     return OK;
 }
@@ -171,6 +181,7 @@ bool WorkQueue::threadLoop(WorkThread *threadSelf) {
         mIdleThreads += 1;
 
         if (!shouldContinue) {
+            ALOGD("shouldContinue +++++++++");
             cancelLocked();
             return false;
         }

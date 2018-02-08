@@ -21,6 +21,7 @@ class HttpWorkManager:public WorkQueue {
          */
         void commitWork(sp<TaskInfo> &task){
             task->mWorkUnit = new HttpWorkUnit(task);
+            ALOGD("commit a task ");
             schedule(task->mWorkUnit);
         }
 

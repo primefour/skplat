@@ -127,6 +127,7 @@ bool HttpWorkUnit::run(){
     }else if(mTask->mTaskType == TASK_TYPE_HTTP_DOWNLOAD){
         mTask->mHttpTransfer->doDownload(NULL,"");
     }
+    return true;
 }
 
 void HttpWorkUnit::cancel(){
