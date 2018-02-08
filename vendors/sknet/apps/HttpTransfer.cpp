@@ -929,13 +929,23 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             count -= downloadSize;
             rawFile.append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
             if(count <= 0){
+                if(mObserver != NULL){
+                    mObserver->onCompleted();
+                }
                 return downloadSize;;
             }
         }
         ret = commonReader(rawFile,count,tv);
         if(ret < 0){
             ALOGE("download partial file %s failed",mfilePath.c_str());
+            if(mObserver != NULL){
+                mObserver->onFailed();
+            }
             return UNKNOWN_ERROR;
+        }
+
+        if(mObserver != NULL){
+            mObserver->onCompleted();
         }
         return rg.end - rg.begin +1;
     }else {
@@ -1049,7 +1059,7 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
         maxFd ++;
         //ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
         if(mIsSeucre){
-            ret = mHttpsSupport->readSelect(&rdSet); 
+            ret = mHttpsSupport->readSelect(&rdSet);
             if(!ret){
                 ret = select(maxFd,&rdSet,NULL,NULL,&tv);
             }
@@ -1080,6 +1090,9 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
                 if(n > 0){
                     wfile.append(tmpBuff,n);
                     nrecved += n;
+                    if(mObserver != NULL){
+                        mObserver->onProgress(nrecved,mResponse->mContentLength);
+                    }
                     //check header whether is complete
                 }else if(n < 0){
                     mError ++;
