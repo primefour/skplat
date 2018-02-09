@@ -8,19 +8,34 @@
 
 class RangeDownloader;
 
-class DownloaderManager{
+class RangeObserver:public RefBase{
+    public:
+        virtual void onComplete(Range &rg){
+            ALOGD("download complete range is %ld - %ld ",rg.begin,rg.end);
+        }
+
+        virtual void onFailed(Range &rg){
+            ALOGE("download fail range is %ld - %ld ",rg.begin,rg.end);
+        }
+
+        virtual void onProgress(int idx,int percent){
+            ALOGD("download percent idx %d ==>  %d ",idx,percent);
+        }
+};
+
+class RangeManager{
     public:
         static const char *downloaderPartialFolder;
         static const char *downloaderFolder;
-        DownloaderManager(sp<HttpRequest> &req,const char *filePath,long contentLength);
-        virtual ~DownloaderManager();
-        class CompleteObserver{
+        RangeManager(sp<HttpRequest> &req,const char *filePath,long contentLength);
+        virtual ~RangeManager();
+        class RangeDLObserver:public RangeObserver{
             public:
-                CompleteObserver(DownloaderManager *mg){
+                RangeDLObserver(RangeManager*mg){
                     mMng = mg;
                 }
 
-                inline void onComplete(Range &rg){
+                void onComplete(Range &rg){
                     AutoMutex _l(mMng->mMutex);
                     mMng->mCompleteCount ++;
                     if(mMng->mFailedCount > 0){
@@ -42,7 +57,7 @@ class DownloaderManager{
                     }
                 }
 
-                inline void onFailed(Range &rg){
+                void onFailed(Range &rg){
                     AutoMutex _l(mMng->mMutex);
                     ALOGW("get a failed range %ld - %ld ",rg.begin,rg.end);
                     mMng->mFailedCount ++;
@@ -53,12 +68,11 @@ class DownloaderManager{
                     }
                 }
 
-                inline void onProgress(int idx,int percent){
+                void onProgress(int idx,int percent){
                     ALOGD("download percent idx %d ==>  %d ",idx,percent);
                 }
-
             private:
-                DownloaderManager *mMng;
+                RangeManager *mMng;
         };
         int wait4Complete();
         void start();
@@ -76,7 +90,6 @@ class DownloaderManager{
         int mDownloadCount;
         Mutex mMutex;
         Condition mCond;
-        CompleteObserver mObserver;
 };
 
 #endif

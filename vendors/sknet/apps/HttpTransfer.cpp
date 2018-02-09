@@ -16,7 +16,7 @@
 #include<stdarg.h>
 #include"RawFile.h"
 #include"FileUtils.h"
-#include"DownloaderManager.h"
+#include"RangeManager.h"
 #include"HttpChunkFilter.h"
 #include"GzipDecodeFilter.h"
 
@@ -954,10 +954,10 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         //check support range download 
         std::string rangeSupport = mResponse->mHeader.getValues(HttpHeader::acceptRangeHints);
         ALOGD("range Support is %s ",rangeSupport.c_str());
-        FileUtils::makeDir(DownloaderManager::downloaderFolder);
+        FileUtils::makeDir(RangeManager::downloaderFolder);
         if(mfilePath.empty()){
             std::string fileName = getDownloadFilePath();
-            mfilePath = DownloaderManager::downloaderFolder;
+            mfilePath = RangeManager::downloaderFolder;
             mfilePath += "/";
             mfilePath += fileName;
         }
@@ -965,8 +965,8 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         //remove the old file and create a new one;
         FileUtils::deleteFiles(mfilePath.c_str());
         if(!rangeSupport.empty() && rangeSupport == serverRangeUnits){
-            //create DownloaderManager
-            DownloaderManager  *dm = new DownloaderManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
+            //create RangeManager
+            RangeManager  *dm = new RangeManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
             dm->start();
             dm->wait4Complete();
             if(mObserver != NULL){

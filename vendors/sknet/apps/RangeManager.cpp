@@ -2,23 +2,23 @@
 #include"HttpRequest.h"
 #include"TaskInfo.h"
 #include"HttpTransfer.h"
-#include"DownloaderManager.h"
+#include"RangeManager.h"
 #include<unistd.h>
 #include<fcntl.h>
 #include<stdio.h>
 #include<sys/types.h>
-#include <dirent.h>  
-#include <string.h>  
-#include <sys/stat.h>  
+#include <dirent.h>
+#include <string.h>
+#include <sys/stat.h>
 #include "RangeDownloader.h"
 #include "FileUtils.h"
 
 #define DOWNLOAD_MAX_THREADS 10
-const char *DownloaderManager::downloaderPartialFolder = "./.sknetDownload";
-const char *DownloaderManager::downloaderFolder = "./Downloader";
+const char *RangeManager::downloaderPartialFolder = "./.sknetDownload";
+const char *RangeManager::downloaderFolder = "./Downloader";
 
-DownloaderManager::DownloaderManager(sp<HttpRequest> &req,
-        const char *filePath,long contentLength):mObserver(this){
+RangeManager::RangeManager(sp<HttpRequest> &req,
+        const char *filePath,long contentLength){
     mMainRequest = req;
     mfilePath = filePath;
     mFailedCount =0 ;
@@ -30,13 +30,13 @@ DownloaderManager::DownloaderManager(sp<HttpRequest> &req,
     divdeContentLength(contentLength);
 }
 
-void DownloaderManager::getFilePathByRange(Range &rg,char *buff,int count){
+void RangeManager::getFilePathByRange(Range &rg,char *buff,int count){
     memset(buff,0,count);
     snprintf(buff,count,"%s.part_%ld_%ld", mfilePath.c_str(),rg.begin,rg.end);
     return ;
 }
 
-void DownloaderManager::divdeContentLength(long content){
+void RangeManager::divdeContentLength(long content){
     if(content < 2 * 1024 * 1024){
         //only two
         mDownloadCount = 2;
@@ -73,11 +73,11 @@ void DownloaderManager::divdeContentLength(long content){
     for(i = 0 ;i < mDownloadCount;i++){
         getFilePathByRange(mRanges[i],xfilePath,sizeof(xfilePath) -1);
         mDownloadThreads[i] = new RangeDownloader(mMainRequest,
-                xfilePath,mRanges[i],this->mObserver);
+                xfilePath,mRanges[i],new RangeDLObserver(this) );
     }
 }
 
-void DownloaderManager::start(){
+void RangeManager::start(){
     int i = 0;
     //create thread for downloading
     for(i = 0 ;i < mDownloadCount;i++){
@@ -85,7 +85,7 @@ void DownloaderManager::start(){
     }
 }
 
-void DownloaderManager::cancel(){
+void RangeManager::cancel(){
     int i = 0;
     //create thread for downloading
     for(i = 0 ;i < mDownloadCount;i++){
@@ -93,7 +93,7 @@ void DownloaderManager::cancel(){
     }
 }
 
-int DownloaderManager::wait4Complete(){
+int RangeManager::wait4Complete(){
     AutoMutex _l(mMutex);
     ALOGD("enter mFailedCount = %d  mCompleteCount = %d  mDownloadCount = %d ",mFailedCount,mCompleteCount,mDownloadCount);
     while(mFailedCount + mCompleteCount < mDownloadCount){
@@ -132,7 +132,7 @@ int DownloaderManager::wait4Complete(){
     }
 }
 
-void DownloaderManager::recoverFailedTask(){
+void RangeManager::recoverFailedTask(){
     int i = 0;
     //create thread for downloading
     for(i = 0 ;i < mDownloadCount;i++){
@@ -144,7 +144,7 @@ void DownloaderManager::recoverFailedTask(){
     }
 }
 
-DownloaderManager::~DownloaderManager(){
+RangeManager::~RangeManager(){
     int i = 0;
     for(i = 0 ;i < mDownloadCount;i++){
         mDownloadThreads[i]->join();

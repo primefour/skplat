@@ -47,7 +47,7 @@ APPS_SRC := apps/SocksConnect.cpp \
 	apps/HttpHeader.cpp \
 	apps/HttpTransfer.cpp \
 	apps/HttpResponse.cpp \
-	apps/DownloaderManager.cpp \
+	apps/RangeManager.cpp \
 	apps/RangeDownloader.cpp \
 	apps/HttpsTransfer.cpp \
 	apps/HttpChunkFilter.cpp \

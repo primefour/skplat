@@ -2,12 +2,13 @@
 #include"TaskInfo.h"
 #include"HttpRequest.h"
 #include"HttpTransfer.h"
-#include"DownloaderManager.h"
+#include"RangeManager.h"
 #include"RangeDownloader.h"
 
 RangeDownloader::RangeDownloader(sp<HttpRequest> &req,
         const char *filePath,Range &range,
-        DownloaderManager::CompleteObserver &observer):mObserver(observer),mRg(range){
+        sp<RangeObserver> observer):mObserver(observer),mRg(range){
+    //create a transfer
     mTransfer = new HttpTransfer(NULL);
     mReq = req;
     mfilePath = filePath;
@@ -38,7 +39,7 @@ bool RangeDownloader::threadLoop(){
         ALOGD("%s file size is %ld ",mfilePath.c_str(),size);
         if(size >= mRg.end - mRg.begin + 1){
             mRg.setDone();
-            mObserver.onComplete(mRg);
+            mObserver->onComplete(mRg);
             return false;
         }
         mRg.begin += size;
@@ -48,10 +49,10 @@ bool RangeDownloader::threadLoop(){
     ret = mTransfer->doRangeDownload(mReq,mfilePath.c_str(),mRg);
     if(ret < 0){
         mRg.setFailed();
-        mObserver.onFailed(mRg);
+        mObserver->onFailed(mRg);
     }else{
         mRg.setDone();
-        mObserver.onComplete(mRg);
+        mObserver->onComplete(mRg);
     }
     return false;
 }

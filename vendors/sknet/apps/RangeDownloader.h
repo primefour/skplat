@@ -3,8 +3,9 @@
 #include<string>
 #include"HttpRequest.h"
 #include"HttpTransfer.h"
-#include"DownloaderManager.h"
+#include"RangeManager.h"
 #include"Threads.h"
+#include"RefBase.h"
 
 class RangeDownloader:public Thread{
     public:
@@ -30,15 +31,15 @@ class RangeDownloader:public Thread{
                 }
 
                 virtual bool onSended(){
-                    ALOGD("RangeDownloader send completely..."); 
+                    ALOGD("RangeDownloader send completely...");
                     return true;
                 }
 
                 virtual void onProgress(long bytes,long total){
-                    ALOGD("RangeDownloader recv data %ld:%ld",total,bytes); 
+                    ALOGD("RangeDownloader recv data %ld:%ld",total,bytes);
                     long actualBytes = bytes + mRgDownloader->mRg.total - total;
                     int percent = actualBytes * 100 / mRgDownloader->mRg.total;
-                    mRgDownloader->mObserver.onProgress(mRgDownloader->mRg.idx,percent);
+                    mRgDownloader->mObserver->onProgress(mRgDownloader->mRg.idx,percent);
                     return;
                 }
 
@@ -56,7 +57,7 @@ class RangeDownloader:public Thread{
         };
 
         RangeDownloader(sp<HttpRequest> &req,
-                const char *filePath,Range &range,DownloaderManager::CompleteObserver &observer);
+                const char *filePath,Range &range,sp<RangeObserver> observer);
         virtual ~RangeDownloader();
 
         virtual bool threadLoop();
@@ -89,7 +90,7 @@ class RangeDownloader:public Thread{
         Range mRg;
         sp<HttpTransfer> mTransfer;
         sp<HttpRequest> mReq;
-        DownloaderManager::CompleteObserver &mObserver;
+        sp<RangeObserver> mObserver;
         sp<HttpTransfer::TransferObserver> mTransferObserver;
 };
 #endif 
