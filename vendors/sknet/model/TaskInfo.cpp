@@ -72,11 +72,8 @@ void TaskInfo::reset(){
 }
 
 void TaskInfo::onStatesChange(int state,int progress,int arg1,int arg2){
-    if(mTaskState == state){
-        return;
-    }
     mTaskState = state;
-    ALOGD(">>>>>> mTaskState  = %d ",mTaskState);
+    ALOGD(">>>>>> mTaskState :%d  progress :%d ",mTaskState,progress);
     if(mListener == NULL){
         if(mWaiting && (mTaskState == TASK_STATE_FAIL ||
                     mTaskState == TASK_STATE_DONE)){

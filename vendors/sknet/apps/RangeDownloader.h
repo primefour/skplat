@@ -36,7 +36,6 @@ class RangeDownloader:public Thread{
                 }
 
                 virtual void onProgress(long bytes,long total){
-                    ALOGD("RangeDownloader recv data %ld:%ld",total,bytes);
                     mRgDownloader->mObserver->onProgress(mRgDownloader->mRg.idx,bytes);
                     return;
                 }
