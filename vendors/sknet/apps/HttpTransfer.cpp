@@ -951,7 +951,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     }else {
         //create RangeDownloader to  do mutil-download
         ASSERT(mResponse->mContentLength >= 0,"mResponse->mContentLength is %ld ",mResponse->mContentLength);
-        //check support range download 
+        //check support range download
         std::string rangeSupport = mResponse->mHeader.getValues(HttpHeader::acceptRangeHints);
         ALOGD("range Support is %s ",rangeSupport.c_str());
         FileUtils::makeDir(RangeManager::downloaderFolder);
@@ -966,7 +966,10 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         FileUtils::deleteFiles(mfilePath.c_str());
         if(!rangeSupport.empty() && rangeSupport == serverRangeUnits){
             //create RangeManager
-            RangeManager  *dm = new RangeManager(mRequest,mfilePath.c_str(),mResponse->mContentLength);
+            RangeManager  *dm = new RangeManager(mRequest,
+                    mfilePath.c_str(),
+                    mResponse->mContentLength,
+                    mTask);
             dm->start();
             dm->wait4Complete();
             if(mObserver != NULL){

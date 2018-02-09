@@ -5,6 +5,7 @@
 #include"HttpTransfer.h"
 #include"Mutex.h"
 #include"Condition.h"
+#include "TaskInfo.h"
 
 class RangeDownloader;
 
@@ -27,7 +28,8 @@ class RangeManager{
     public:
         static const char *downloaderPartialFolder;
         static const char *downloaderFolder;
-        RangeManager(sp<HttpRequest> &req,const char *filePath,long contentLength);
+        RangeManager(sp<HttpRequest> &req,const char *filePath,
+                long contentLength,sp<TaskInfo> &task);
         virtual ~RangeManager();
         class RangeDLObserver:public RangeObserver{
             public:
@@ -68,9 +70,10 @@ class RangeManager{
                     }
                 }
 
-                void onProgress(int idx,int percent){
-                    ALOGD("download percent idx %d ==>  %d ",idx,percent);
+                void onProgress(int idx,int size){
+                    mMng->updateProgress(idx,size);
                 }
+
             private:
                 RangeManager *mMng;
         };
@@ -79,15 +82,18 @@ class RangeManager{
         void cancel();
     private:
         void recoverFailedTask();
+        void updateProgress(int idx,int size);
         void getFilePathByRange(Range &rg,char *buff,int count);
         std::string mfilePath;
         void divdeContentLength(long content);
         Range *mRanges;
         sp<RangeDownloader> *mDownloadThreads;
         sp<HttpRequest> mMainRequest;
+        sp<TaskInfo> mTask;
         int mCompleteCount;
         int mFailedCount;
         int mDownloadCount;
+        long mContentLength;
         Mutex mMutex;
         Condition mCond;
 };

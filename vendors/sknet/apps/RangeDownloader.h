@@ -37,9 +37,7 @@ class RangeDownloader:public Thread{
 
                 virtual void onProgress(long bytes,long total){
                     ALOGD("RangeDownloader recv data %ld:%ld",total,bytes);
-                    long actualBytes = bytes + mRgDownloader->mRg.total - total;
-                    int percent = actualBytes * 100 / mRgDownloader->mRg.total;
-                    mRgDownloader->mObserver->onProgress(mRgDownloader->mRg.idx,percent);
+                    mRgDownloader->mObserver->onProgress(mRgDownloader->mRg.idx,bytes);
                     return;
                 }
 

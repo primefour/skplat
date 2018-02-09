@@ -12,13 +12,15 @@
 #include <sys/stat.h>
 #include "RangeDownloader.h"
 #include "FileUtils.h"
+#include "TaskInfo.h"
 
 #define DOWNLOAD_MAX_THREADS 10
 const char *RangeManager::downloaderPartialFolder = "./.sknetDownload";
 const char *RangeManager::downloaderFolder = "./Downloader";
 
 RangeManager::RangeManager(sp<HttpRequest> &req,
-        const char *filePath,long contentLength){
+        const char *filePath,long contentLength,sp<TaskInfo> &task){
+    mTask = task;
     mMainRequest = req;
     mfilePath = filePath;
     mFailedCount =0 ;
@@ -26,6 +28,7 @@ RangeManager::RangeManager(sp<HttpRequest> &req,
     mDownloadThreads = NULL;
     mDownloadCount = 0;
     mRanges = NULL;
+    mContentLength = contentLength;
     //init mRanges
     divdeContentLength(contentLength);
 }
@@ -129,6 +132,18 @@ int RangeManager::wait4Complete(){
         return OK;
     }else{
         return UNKNOWN_ERROR;
+    }
+}
+
+void RangeManager::updateProgress(int idx,int size){
+    mRanges[idx].size = size;
+    long count = 0;
+    int i = 0;
+    for(i = 0 ;i < mDownloadCount;i++){
+        count += mRanges[i].size;
+    }
+    if(mTask != NULL){
+        mTask->onStatesChange((int)TASK_STATE_RECV,count,mContentLength,0);
     }
 }
 
