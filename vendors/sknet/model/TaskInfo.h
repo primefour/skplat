@@ -34,6 +34,15 @@ enum TASK_INFO_STATE {
     TASK_STATE_MAX,
 };
 
+enum TASK_FAILED_TYPE{
+    TASK_FAILED_NONE,
+    TASK_FAILED_TIMEOUT,
+    TASK_FAILED_NETWOKR,
+    TASK_FAILED_PROTOCAL,
+    TASK_FAILED_MAX,
+};
+
+
 enum TASK_METHOD_STATE {
     TASK_METHOD_HTTP_GET,
     TASK_METHOD_HTTP_POST,
@@ -80,6 +89,7 @@ struct TaskInfo :public RefBase{
     long mTaskTimeout; //ms
     //do with info
     int mTaskState;
+    int mFailedNo;
     int mTryTimes;
     int mCanceled;
     long mStartTime;

@@ -536,7 +536,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             if(mObserver != NULL){
                 mObserver->onConnected(false);
             }
-            return UNKNOWN_ERROR;   
+            return UNKNOWN_ERROR;
         }else{
             if(mObserver != NULL){
                 ret = mObserver->onConnected(true);

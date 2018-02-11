@@ -36,6 +36,7 @@ TaskInfo::TaskInfo(){
     mConnTimeout = CONNECT_DEFAULT_TIMEOUT;//15s
     mTaskTimeout = TASK_DEFAULT_TIMEOUT;//1min
     mTaskState = TASK_STATE_IDLE;
+    mFailedNo = 0;
     mTryTimes = 0;
     mStartTime = 0;
     mStartConnTime = 0;
@@ -59,6 +60,7 @@ void TaskInfo::reset(){
     mConnTimeout = CONNECT_DEFAULT_TIMEOUT;//15s
     mTaskTimeout = TASK_DEFAULT_TIMEOUT;//1min
     mTaskState = TASK_STATE_IDLE;
+    mFailedNo = 0;
     mTryTimes = 0;
     mStartTime = 0;
     mStartConnTime = 0;
