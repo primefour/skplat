@@ -1,19 +1,19 @@
-## debug flag  
-DBG_ENABLE   = 1  
-## source file path  
-## target exec file name  
-#TARGET     := 
-## get all source files  
-##SRCS         += $(wildcard *.cpp)  
-##SRCS_HEADER  += $(wildcard *.h)  
+## debug flag
+DBG_ENABLE   = 1
+## source file path
+## target exec file name
+#TARGET     :=
+## get all source files
+##SRCS         += $(wildcard *.cpp)
+##SRCS_HEADER  += $(wildcard *.h)
 ##SOURCES := $(filter-out %Test.cpp,$(SRCS))
-#OBJS        := $(SOURCES:.cpp=.o)  
+#OBJS        := $(SOURCES:.cpp=.o)
 
 #LDFLAGS += -lpthread -lsqlite3 -ldl
 
 #build:$(SOURCES) $(SRCS_HEADER)
-#	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/ 
-#	g++ -o $(TARGET) $(OBJS) $(LDFLAGS) -L ../../sqlite/ 
+#	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/
+#	g++ -o $(TARGET) $(OBJS) $(LDFLAGS) -L ../../sqlite/
 #
 #
 UTILS_SRC := utils/BasicHashtable.cpp \
@@ -55,18 +55,18 @@ APPS_SRC := apps/SocksConnect.cpp \
 	apps/TaskManager.cpp
 
 
-UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)  
-MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)  
-STORE_OBJS        := $(STORE_SRC:.cpp=.o)  
-APPS_OBJS         := $(APPS_SRC:.cpp=.o)  
+UTILS_OBJS        := $(UTILS_SRC:.cpp=.o)
+MODEL_OBJS        := $(MODEL_SRC:.cpp=.o)
+STORE_OBJS        := $(STORE_SRC:.cpp=.o)
+APPS_OBJS         := $(APPS_SRC:.cpp=.o)
 
 LDFLAGS += -lpthread -lsqlite3 -ldl -L thirdParty/mbedtls/target/lib -lmbedtls -lmbedx509 -lmbedcrypto  -lz
 
 CXXFLAGS += -g -DHAVE_PTHREADS -I thirdParty/mbedtls/target/include/
 
 #build:$(SOURCES) $(SRCS_HEADER)
-#	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/ 
-#	g++ -o $(TARGET) $(OBJS) $(LDFLAGS) -L ../../sqlite/ 
+#	g++ -c $(CXXFLAGS) $(SOURCES) -I ../../sqlite/
+#	g++ -o $(TARGET) $(OBJS) $(LDFLAGS) -L ../../sqlite/
 #
 #
 
@@ -82,7 +82,7 @@ $(MODEL_OBJS):%.o : %.cpp
 $(STORE_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./apps/
 
-$(APPS_OBJS):%.o : %.cpp 
+$(APPS_OBJS):%.o : %.cpp
 	g++ -c $< -o $@ $(CXXFLAGS) -I ../sqlite/ -I ./utils/ -I ./model/ -I ./store -I ./apps/
 
 clean:

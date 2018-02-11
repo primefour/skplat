@@ -19,26 +19,32 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <stdint.h>
-//#include<sys/types.h>
+#include "Mutex.h"
+static Mutex gAtomicMutex;
+
 
 inline int android_atomic_inc(volatile int32_t *count){
+    AutoMutex _l(gAtomicMutex);
     int ref = *count;
     (*count) ++;
     return ref;
 }
 
 inline int android_atomic_dec(volatile int32_t *count){
+    AutoMutex _l(gAtomicMutex);
     int ref = *count;
     (*count) --;
     return ref;
 }
 
 inline int android_atomic_add(int value,volatile int32_t *result){
+    AutoMutex _l(gAtomicMutex);
     return *result += value ;
 }
 
 
 inline int android_atomic_cmpxchg(int oldvalue ,int newvalue,volatile int32_t *op2){
+    AutoMutex _l(gAtomicMutex);
     if(oldvalue == *op2){
         *op2 = newvalue;
         return 0;
@@ -48,6 +54,7 @@ inline int android_atomic_cmpxchg(int oldvalue ,int newvalue,volatile int32_t *o
 }
 
 inline void android_atomic_or(int mode, volatile int32_t *op2){
+    AutoMutex _l(gAtomicMutex);
     *op2 |= mode;
 }
 

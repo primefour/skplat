@@ -203,6 +203,7 @@ int main(){
     dispatch->commitTask(task);
     task->wait();
     ALOGDUMP(task->mRecvData->data(),task->mRecvData->size());
+    //dispatch->putTask(task);
     task->reset();
     task->mTaskType = TASK_TYPE_HTTP_DOWNLOAD;
     task->mUrl = "http://download.skycn.com/hao123-soft-online-bcs/soft/X/2015-12-17_XMPSetup_5.1.29.4510-video.exe";
