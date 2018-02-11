@@ -58,7 +58,11 @@ struct TaskObserver:public RefBase{
     virtual void onTaskFailed(sp<TaskInfo> &task);
     virtual void onTaskCanceled(sp<TaskInfo> &task);
     virtual void onTaskStart(sp<TaskInfo> &task);
-    virtual void onTaskStates(sp<TaskInfo> &task,int progress,int arg1,int arg2);
+    virtual void onTaskConnect(sp<TaskInfo> &task){};
+    virtual void onTaskConnected(sp<TaskInfo> &task){};
+    virtual void onTaskSend(sp<TaskInfo> &task){};
+    virtual void onTaskSended(sp<TaskInfo> &task){};
+    virtual void onTaskRecv(sp<TaskInfo> &task,int progress,int arg1,int arg2);
 };
 
 struct TaskInfo :public RefBase{

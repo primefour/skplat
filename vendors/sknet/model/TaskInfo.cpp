@@ -75,35 +75,45 @@ void TaskInfo::reset(){
 
 void TaskInfo::onStatesChange(int state,int progress,int arg1,int arg2){
     mTaskState = state;
-    ALOGD(">>>>>> mTaskState :%d  progress :%d ",mTaskState,progress);
     if(mListener == NULL){
         if(mWaiting && (mTaskState == TASK_STATE_FAIL ||
                     mTaskState == TASK_STATE_DONE)){
             notifyTask();
         }
-        return;
-    }
-    sp<TaskInfo> task = this;
-
-    if(mTaskState == TASK_STATE_INIT){
-        mListener->onTaskStart(task);
-    }else if(mTaskState == TASK_STATE_DONE){
-        if(mWaiting){
-            notifyTask();
-        }else{
-            mListener->onTaskDone(task);
-        }
-    }else if(mTaskState == TASK_STATE_FAIL){
-        if(mWaiting){
-            notifyTask();
-        }else{
-            mListener->onTaskFailed(task);
-        }
-    }else if(mCanceled){
-        mListener->onTaskCanceled(task);
+        return ;
     }else{
-        //progress
-        mListener->onTaskStates(task,progress,arg1,arg2);
+        sp<TaskInfo> task = this;
+        if(mTaskState == TASK_STATE_INIT){
+            mListener->onTaskStart(task);
+        }else if(mTaskState == TASK_STATE_DONE){
+            if(mWaiting){
+                notifyTask();
+            }
+            mListener->onTaskDone(task);
+        }else if(mTaskState == TASK_STATE_FAIL){
+            if(mWaiting){
+                notifyTask();
+            }else{
+                mListener->onTaskFailed(task);
+            }
+        }else if(mTaskState == TASK_STATE_CONN) {
+            mListener->onTaskConnect(task);
+            ALOGD("++++++ TASK ID %s Connecting",mTaskId.c_str());
+        }else if(mTaskState == TASK_STATE_CONNED) {
+            mListener->onTaskConnected(task);
+            ALOGD("++++++ TASK ID %s Connected",mTaskId.c_str());
+        }else if(mTaskState == TASK_STATE_SEND) {
+            mListener->onTaskSend(task);
+            ALOGD("++++++ TASK ID %s Sending ",mTaskId.c_str());
+        }else if(mTaskState == TASK_STATE_SENDED) {
+            ALOGD("++++++ TASK ID %s Send Completely",mTaskId.c_str());
+            mListener->onTaskSended(task);
+        }else if(mCanceled){
+            mListener->onTaskCanceled(task);
+        }else{
+            //TASK_STATE_RECV progress
+            mListener->onTaskRecv(task,progress,arg1,arg2);
+        }
     }
 
 }
@@ -136,21 +146,22 @@ void HttpWorkUnit::cancel(){
 }
 
 void TaskObserver::onTaskDone(sp<TaskInfo> &task){
-    ALOGD("TASK ID %s ",task->mTaskId.c_str());
+    ALOGD("++++++ TASK ID %s Done",task->mTaskId.c_str());
 }
 
 void TaskObserver::onTaskFailed(sp<TaskInfo> &task){
-    ALOGD("TASK ID %s ",task->mTaskId.c_str());
+    ALOGD("+++++ TASK ID %s Failed",task->mTaskId.c_str());
 }
 
 void TaskObserver::onTaskCanceled(sp<TaskInfo> &task){
-    ALOGD("TASK ID %s ",task->mTaskId.c_str());
+    ALOGD("+++++ TASK ID %s Cancel",task->mTaskId.c_str());
 }
 
 void TaskObserver::onTaskStart(sp<TaskInfo> &task){
-    ALOGD("TASK ID %s ",task->mTaskId.c_str());
+    ALOGD("+++++ TASK ID %s Start",task->mTaskId.c_str());
 }
 
-void TaskObserver::onTaskStates(sp<TaskInfo> &task,int progress,int arg1,int arg2){
-    ALOGD("TASK ID %s ",task->mTaskId.c_str());
+void TaskObserver::onTaskRecv(sp<TaskInfo> &task,int progress,int arg1,int arg2){
+    ALOGD("++++++ TASK ID %s Receiving data",task->mTaskId.c_str());
 }
+

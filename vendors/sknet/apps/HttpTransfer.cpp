@@ -234,7 +234,6 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 }
                 if(n > 0){
                     if(breakFpn(this,tmpBuff,n,recvBuffer)){
-                        mObserver->onCompleted();
                         return recvBuffer->size();
                     }
                     //ALOGD("tmpBuff = %s ",tmpBuff);
