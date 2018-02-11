@@ -145,12 +145,12 @@ class HttpTransfer :public RefBase{
                 TransferObserver(sp<TaskInfo> task = NULL);
                 virtual void onStartConnect();
                 //return false will stop this transfer or continue
-                virtual bool onConnected(bool success);
+                virtual void onConnected();
                 virtual void onSending(long bytes,long total);
-                virtual bool onSended();
+                virtual void onSended();
                 virtual void onProgress(long bytes,long total);
                 virtual void onCompleted();
-                virtual void onFailed();
+                virtual void onFailed(int error);
                 sp<TaskInfo> mTask;
         };
 

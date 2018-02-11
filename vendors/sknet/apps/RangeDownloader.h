@@ -20,9 +20,8 @@ class RangeDownloader:public Thread{
                 }
 
                 //return false will stop this transfer or continue
-                virtual bool onConnected(bool success){
+                virtual void onConnected(bool success){
                     ALOGD("RangeDownloader connect completely...");
-                    return true;
                 }
 
                 virtual void onSending(long bytes,long total){
@@ -30,9 +29,8 @@ class RangeDownloader:public Thread{
                     return ;
                 }
 
-                virtual bool onSended(){
+                virtual void onSended(){
                     ALOGD("RangeDownloader send completely...");
-                    return true;
                 }
 
                 virtual void onProgress(long bytes,long total){
@@ -45,8 +43,8 @@ class RangeDownloader:public Thread{
                     return;
                 }
 
-                virtual void onFailed(){
-                    ALOGD("RangeDownloader http transfer failed");
+                virtual void onFailed(int error){
+                    ALOGD("RangeDownloader http transfer failed error :%d ",error);
                     return;
                 }
             private:

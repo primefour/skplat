@@ -120,7 +120,7 @@ int SocksConnect::connect(long timeout){ //millisecond
     int size = mAddrs.size();
     int i = 0;
     for(i = 0 ;i < size ; i ++){
-        mStates[i] = CONNECT_CONNECTING;
+        mStates[i] = SOCK_CONNECT_CONNECTING;
         ALOGD("fd %d call connect ",mFds[i]);
         char xtmpAddr[256]={0};
         struct sockaddr_in *tmp = (struct sockaddr_in *)(mAddrs[i].getSockAddr());
@@ -130,7 +130,7 @@ int SocksConnect::connect(long timeout){ //millisecond
         ALOGD("fd %d call connect end ret = %d ",mFds[i],ret);
         if(ret == 0){
             //connect successful
-            mStates[i] = CONNECT_CONNECTED;
+            mStates[i] = SOCK_CONNECT_CONNECTED;
             mConnFdIdx = i;
             mError = 0;
             return OK;
@@ -152,7 +152,7 @@ int SocksConnect::connect(long timeout){ //millisecond
                 //other error ignore
                 errCount ++;
                 ALOGD("fd %d call connect end ret = %d ERROR",mFds[i],ret);
-                mStates[i] = CONNECT_FAILED;
+                mStates[i] = SOCK_CONNECT_FAILED;
                 continue ;
             }
         }
@@ -205,17 +205,17 @@ int SocksConnect::connect(long timeout){ //millisecond
             if(FD_ISSET(mFds[i],&wrSet)) {//connect
                 if (getsockopt(mFds[i],SOL_SOCKET,SO_ERROR,&optValue,&optSize) < 0) { 
                     ALOGW("getsockopt fail error string %s fd %d",strerror(errno),mFds[i]);
-                    mStates[i] = CONNECT_FAILED;
+                    mStates[i] = SOCK_CONNECT_FAILED;
                     continue;
                 } 
                 if (optValue != 0) { 
                     ALOGW("connect fail error code %d fd %d",optValue,mFds[i]);
-                    mStates[i] = CONNECT_FAILED;
+                    mStates[i] = SOCK_CONNECT_FAILED;
                     continue;
                 } 
                 ALOGD("connect successfully fd %d",mFds[i]);
                 mError = 0;
-                mStates[i] = CONNECT_CONNECTED;
+                mStates[i] = SOCK_CONNECT_CONNECTED;
                 mConnFdIdx = i;
                 mDuration.stop();
                 return OK;

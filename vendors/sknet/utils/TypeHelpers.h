@@ -36,6 +36,10 @@
 #define TIMEOUT_ERROR (-8)
 #define ABORT_ERROR (-9)
 #define HTTPS_WOULD_BLOCK (-10)
+#define INVALIDE_URL (-11)
+#define CONNECT_FAILED (-12)
+#define NETWORK_FAILED (-13)
+#define PROTOCAL_FAILED (-14)
 
 typedef int status_t;
 /*
@@ -45,7 +49,7 @@ template <typename T> struct trait_trivial_ctor { enum { value = false }; };
 template <typename T> struct trait_trivial_dtor { enum { value = false }; };
 template <typename T> struct trait_trivial_copy { enum { value = false }; };
 template <typename T> struct trait_trivial_move { enum { value = false }; };
-template <typename T> struct trait_pointer      { enum { value = false }; };    
+template <typename T> struct trait_pointer      { enum { value = false }; };
 template <typename T> struct trait_pointer<T*>  { enum { value = true }; };
 
 template <typename TYPE>

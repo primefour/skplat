@@ -56,8 +56,8 @@ HttpRequest *HttpTransfer::createRequest(const char *url){
     req->mHeader.setEntry(HttpHeader::acceptEncodingHints,"gzip,deflate");
     req->mHeader.setEntry(HttpHeader::hostHints,req->mUrl.mHost.c_str());
     if(mIsDownload == HTTP_CHILD_DOWNLOAD){
-        //Range:bytes=554554- 
-        //Range:bytes=0-100 
+        //Range:bytes=554554-
+        //Range:bytes=0-100
         req->mHeader.setEntry(HttpHeader::clientRangeHints,"bytes=%d-%d",mPartialData.begin,mPartialData.end);
     }
     return req;
@@ -86,6 +86,7 @@ int HttpTransfer::doGet(const char *url){
     }
     HttpRequest * req = createRequest(url);
     if(req == NULL){
+        mObserver->onFailed(INVALIDE_URL);
         return BAD_VALUE;
     }
     req->mMethod = "GET";
@@ -105,6 +106,7 @@ int HttpTransfer::doPost(const char *url,sp<BufferUtils> &buffer){
     req->mMethod = "POST";
     ASSERT(buffer->size() > 0,"Invalidate post body");
     if(req == NULL ||buffer->size() <= 0){
+        mObserver->onFailed(INVALIDE_URL);
         return BAD_VALUE;
     }
     //bind request and response
@@ -126,6 +128,7 @@ int HttpTransfer::doPost(const char *url,BufferUtils &buff){
     req->mMethod = "POST";
     ASSERT(buff.size() > 0,"Invalidate post body");
     if(req  == NULL ||buff.size() <= 0){
+        mObserver->onFailed(INVALIDE_URL);
         return BAD_VALUE;
     }
     //bind request and response
@@ -181,9 +184,7 @@ int HttpTransfer::chunkedEOF(void *obj,const char *txd,int size,sp<BufferUtils> 
         while(hobj->mBufferFilter->read(buffer));
     }
 
-    if(hobj->mObserver != NULL){
-        hobj->mObserver->onProgress(hobj->mBufferFilter->size(),-1);
-    }
+    hobj->mObserver->onProgress(hobj->mBufferFilter->size(),-1);
 
     if(hobj->mBufferFilter->endOfFile()){
         return true;
@@ -233,9 +234,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                 }
                 if(n > 0){
                     if(breakFpn(this,tmpBuff,n,recvBuffer)){
-                        if(mObserver != NULL){
-                            mObserver->onCompleted();
-                        }
+                        mObserver->onCompleted();
                         return recvBuffer->size();
                     }
                     //ALOGD("tmpBuff = %s ",tmpBuff);
@@ -251,9 +250,7 @@ int HttpTransfer::socketReader(sp<BufferUtils> &recvBuffer,struct timeval &tv,Br
                     mError ++;
                     return UNKNOWN_ERROR;
                 }else{
-                    if(mObserver != NULL){
-                        mObserver->onCompleted();
-                    }
+                    mObserver->onCompleted();
                     ALOGD("recv data complete %p size: %zd  error:%s",
                             recvBuffer->data(),recvBuffer->size(),strerror(errno));
                     break;
@@ -375,10 +372,7 @@ int HttpTransfer::identifyBreak(void *obj,const char *data,int length,sp<BufferU
 
     hobj->mBufferFilter->write(data,length);
     while(hobj->mBufferFilter->read(buffer));
-
-    if(hobj->mObserver != NULL){
-        hobj->mObserver->onProgress(hobj->mBufferFilter->size(),hobj->mResponse->mContentLength);
-    }
+    hobj->mObserver->onProgress(hobj->mBufferFilter->size(),hobj->mResponse->mContentLength);
 
     if(hobj->mBufferFilter->endOfFile()){
         //buffer->size() >= hobj->mResponse->mContentLength){
@@ -495,9 +489,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
     const char *host = NULL;
     const char *service = NULL;
     bool isSecure = false;
-    if(mObserver != NULL){
-        mObserver->onStartConnect();
-    }
+    mObserver->onStartConnect();
 
     if(req->mUseProxy){
         host = req->mProxyUrl.mHost.c_str();
@@ -533,18 +525,10 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
 
         if(ret != OK){
             ALOGD("http get connect fail ");
-            if(mObserver != NULL){
-                mObserver->onConnected(false);
-            }
+            mObserver->onFailed(CONNECT_FAILED);
             return UNKNOWN_ERROR;
         }else{
-            if(mObserver != NULL){
-                ret = mObserver->onConnected(true);
-                if(!ret){
-                    ALOGE("abort by user");
-                    return ABORT_ERROR;
-                }
-            }
+            mObserver->onConnected();
         }
         //get validate socket fd
         mFd = connect.getSocket();
@@ -630,6 +614,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             if(FD_ISSET(mPipe[1],&rdSet)){
                 ALOGD("transfer http get is aborted by user");
                 mError ++;
+                mObserver->onFailed(ABORT_ERROR);
                 return ABORT_ERROR;
             }else if (FD_ISSET(mFd,&wrSet)){
                 if(!mIsSeucre){
@@ -643,44 +628,42 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 if(n > 0){
                     sendBuffer.offset(n,SEEK_CUR);
                     nsended += n;
-                    if(mObserver != NULL){
-                        mObserver->onSending(nsended,sendBuffer.size());
-                    }
+                    mObserver->onSending(nsended,sendBuffer.size());
                 }else if(n < 0){
                     ALOGD("send data fail %p size: %zd  ret = %d err :%s ",sendBuffer.data(),sendBuffer.size(),n,strerror(errno));
                     mError ++;
+                    mObserver->onFailed(NETWORK_FAILED);
                     return UNKNOWN_ERROR;
                 }
             }else{
                 //unknown error
                 ALOGE("SOCKET ERROR %s ",strerror(errno));
                 mError ++;
+                mObserver->onFailed(UNKNOWN_ERROR);
                 return UNKNOWN_ERROR;
             }
         }else if(ret == 0){
             //timeout
             ALOGW("ret %d SOCKET SEND TIMEOUT %s ",ret,strerror(errno));
             mError ++;
+            mObserver->onFailed(TIMEOUT_ERROR);
             return TIMEOUT_ERROR;
         }else {
+            mError ++;
             //socket error
             ALOGE("ret %d SOCKET ERROR %s ",ret,strerror(errno));
+            mObserver->onFailed(UNKNOWN_ERROR);
             return UNKNOWN_ERROR;
         }
     }
 
     if(mError){
         ALOGE("UNKNOWN_ERROR HTTP DO TRANSFER");
+        mObserver->onFailed(UNKNOWN_ERROR);
         return UNKNOWN_ERROR;
     }
 
-    if(mObserver != NULL){
-        ret = mObserver->onSended();
-        if(!ret){
-            ALOGW("send complete and abort by user");
-            return ABORT_ERROR;
-        }
-    }
+    mObserver->onSended();
 
     sp<BufferUtils> tmpBuffer = new BufferUtils();
     n = 0;
@@ -695,7 +678,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         ALOGD("http get read wait select begin tv timeout value %ld ",tv.tv_sec *1000 + tv.tv_usec/1000);
 
         if(mIsSeucre){
-            ret = mHttpsSupport->readSelect(&rdSet); 
+            ret = mHttpsSupport->readSelect(&rdSet);
             if(!ret){
                 ret = select(maxFd,&rdSet,NULL,NULL,&tv);
             }
@@ -706,6 +689,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         if(ret > 0){
             if(FD_ISSET(mPipe[1],&rdSet)){
                 ALOGW("http get write abort by user");
+                mObserver->onFailed(ABORT_ERROR);
                 return ABORT_ERROR;
             }else if(FD_ISSET(mFd,&rdSet)){
                 memset(tmpBuff,0,sizeof(tmpBuff));
@@ -730,6 +714,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                         //parse header
                         if(OK != parseStatus((const char *)tmpBuffer->data())){
                             ALOGE("recv data http header %s failed",(const char *)tmpBuffer->data());
+                            mObserver->onFailed(PROTOCAL_FAILED);
                             return UNKNOWN_ERROR;
                         }else{
                             ALOGD("version %d.%d status code %d status description: %s",
@@ -739,6 +724,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                         //ALOGD("recv data http header %s ",(const char *)tmpBuffer->data());
                         if(mResponse->mHeader.parser(tmpBuffer,&mResponse->mHeader) == NULL){
                             ALOGE("recv data parse http header fail ");
+                            mObserver->onFailed(PROTOCAL_FAILED);
                             return UNKNOWN_ERROR;
                         }else{
                             sp<BufferUtils> debugBuffer = new BufferUtils();
@@ -754,6 +740,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                     ALOGD("recv data fail %p size: %zd error:%s",
                             tmpBuffer->data(),tmpBuffer->size(),strerror(errno));
                     mError ++;
+                    mObserver->onFailed(NETWORK_FAILED);
                     return UNKNOWN_ERROR;
                 }else{
                     ALOGD("recv data complete %p size: %zd  error:%s",
@@ -763,13 +750,16 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
 
             }else{
                 ALOGE("http get recv data  fail!");
+                mObserver->onFailed(NETWORK_FAILED);
                 return UNKNOWN_ERROR;
             }
         }else if(ret == 0){
             ALOGE("http get recv data timeout !");
+            mObserver->onFailed(TIMEOUT_ERROR);
             return TIMEOUT_ERROR;
         }else{
             ALOGE("http get recv data  fail! ret = %d %s ",ret,strerror(errno));
+            mObserver->onFailed(UNKNOWN_ERROR);
             return UNKNOWN_ERROR;
         }
     }
@@ -783,32 +773,36 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             mResponse->mStatusCode == HttpHeader::StatusSeeOther||
             mResponse->mStatusCode == HttpHeader::StatusMovedPermanently||
             mResponse->mStatusCode == HttpHeader::StatusTemporaryRedirect ||
-            mResponse->mStatusCode == HttpHeader::StatusPermanentRedirect 
+            mResponse->mStatusCode == HttpHeader::StatusPermanentRedirect
       ){
-        //close fd 
+        //close fd
         close(mFd);
         mFd = -1;
         //do redirect
         if(doRelocation() != OK){
+            mObserver->onFailed(PROTOCAL_FAILED);
             return UNKNOWN_ERROR;
         }
     }
-    
+
     if(mResponse->mStatusCode >= HttpHeader::StatusBadRequest &&
             mResponse->mStatusCode <= HttpHeader::StatusUnavailableForLegalReasons){
         ALOGE("request format error code is %d ",mResponse->mStatusCode);
+        mObserver->onFailed(BAD_VALUE);
         return BAD_VALUE;
     }
 
     if(mResponse->mStatusCode >= HttpHeader::StatusInternalServerError &&
             mResponse->mStatusCode <= HttpHeader::StatusNetworkAuthenticationRequired){
         ALOGE("server error code is %d ",mResponse->mStatusCode);
+        mObserver->onFailed(PROTOCAL_FAILED);
         return UNKNOWN_ERROR;
     }
 
 
     if(mResponse->mStatusCode == HttpHeader::StatusSwitchingProtocols ){
         ALOGE("don't support switch protocol code is %d ",mResponse->mStatusCode);
+        mObserver->onFailed(BAD_VALUE);
         return BAD_VALUE;
     }
 
@@ -818,6 +812,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
         mResponse->mContentLength = ::atoi(len.c_str()); 
         if(mResponse->mContentLength < 0){
             ALOGE("content lenght is malform  %ld < 0",mResponse->mContentLength);
+            mObserver->onFailed(BAD_VALUE);
             return UNKNOWN_ERROR;
         }
     }else{
@@ -832,6 +827,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             mResponse->mUncompressed =false;
         }else{
             ALOGE("content encode is %s not support",contentEncoding.c_str());
+            mObserver->onFailed(BAD_VALUE);
             return UNKNOWN_ERROR;
         }
         mGzipFilter = new GzipDecodeFilter();
@@ -883,11 +879,15 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
 
             if(!mBufferFilter->endOfFile()){
                 ret = chunkedReader(recvBuffer,tv);
-            }else{
-                if(mObserver != NULL){
+                if(ret < 0){
+                    mObserver->onFailed(ret);
+                }else{
                     mObserver->onCompleted();
                 }
+            }else{
+                mObserver->onCompleted();
             }
+
             if(ret >= 0){
                 ret = recvBuffer->size();
             }
@@ -899,10 +899,13 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             }
             if(recvBuffer->size() < mResponse->mContentLength){
                 ret = identifyReader(recvBuffer,tv);
-            }else{
-                if(mObserver != NULL){
+                if(ret < 0){
+                    mObserver->onFailed(ret);
+                }else{
                     mObserver->onCompleted();
                 }
+            }else{
+                mObserver->onCompleted();
             }
             if(ret >= 0){
                 ret = recvBuffer->size();
@@ -916,7 +919,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             ALOGE("create file %s failed msg :%s ",mfilePath.c_str(),strerror(errno));
             return BAD_VALUE;
         }
-        //get content size 
+        //get content size
         //Content-Range :bytes 580-
         //Content-Range: 1-200/300\r\n"
         //
@@ -929,18 +932,14 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             count -= downloadSize;
             rawFile.append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
             if(count <= 0){
-                if(mObserver != NULL){
-                    mObserver->onCompleted();
-                }
+                mObserver->onCompleted();
                 return downloadSize;;
             }
         }
         ret = commonReader(rawFile,count,tv);
         if(ret < 0){
             ALOGE("download partial file %s failed",mfilePath.c_str());
-            if(mObserver != NULL){
-                mObserver->onFailed();
-            }
+            mObserver->onFailed(ret);
             return UNKNOWN_ERROR;
         }
 
@@ -971,9 +970,10 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                     mResponse->mContentLength,
                     mTask);
             dm->start();
-            dm->wait4Complete();
-            if(mObserver != NULL){
+            if(dm->wait4Complete() == OK){
                 mObserver->onCompleted();
+            }else{
+                mObserver->onFailed(UNKNOWN_ERROR);
             }
             delete dm;
             return OK;
@@ -984,6 +984,7 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
             int ret = rawFile.open(O_RDWR|O_CREAT);
             if(ret < 0){
                 ALOGE("create file %s failed msg :%s ",mfilePath.c_str(),strerror(errno));
+                mObserver->onFailed(BAD_VALUE);
                 return BAD_VALUE;
             }
             int count = mResponse->mContentLength;
@@ -992,24 +993,17 @@ int HttpTransfer::httpDoTransfer(HttpRequest *req){
                 count -= downloadSize;
                 rawFile.append(tmpBuffer->dataWithOffset(),tmpBuffer->size() - tmpBuffer->offset());
                 if(count <= 0){
-                    if(mObserver != NULL){
-                        mObserver->onCompleted();
-                    }
+                    mObserver->onCompleted();
                     return downloadSize;;
                 }
             }
             ret = commonReader(rawFile,count,tv);
             if(ret < 0){
                 ALOGE("download partial file %s failed",mfilePath.c_str());
-                if(mObserver != NULL){
-                    mObserver->onFailed();
-                }
+                mObserver->onFailed(ret);
                 return UNKNOWN_ERROR;
             }
-
-            if(mObserver != NULL){
-                mObserver->onCompleted();
-            }
+            mObserver->onCompleted();
             return mResponse->mContentLength;
         }
     }
@@ -1093,9 +1087,7 @@ int HttpTransfer::commonReader(RawFile &wfile,int count,struct timeval &tv){
                 if(n > 0){
                     wfile.append(tmpBuff,n);
                     nrecved += n;
-                    if(mObserver != NULL){
-                        mObserver->onProgress(nrecved,mResponse->mContentLength);
-                    }
+                    mObserver->onProgress(nrecved,mResponse->mContentLength);
                     //check header whether is complete
                 }else if(n < 0){
                     mError ++;
@@ -1159,18 +1151,17 @@ HttpTransfer::TransferObserver::TransferObserver(sp<TaskInfo> task){
     }
 }
 void HttpTransfer::TransferObserver::onStartConnect(){
+    ALOGD("start connecting...");
     if(mTask != NULL){
         mTask->onStatesChange((int)TASK_STATE_CONN,0,0,0);
     }
-    ALOGD("start connecting...");
 }
 //return false will stop this transfer or continue
-bool HttpTransfer::TransferObserver::onConnected(bool success){
+void HttpTransfer::TransferObserver::onConnected(){
     ALOGD("connect completely...");
     if(mTask != NULL){
         mTask->onStatesChange((int)TASK_STATE_CONNED,0,0,0);
     }
-    return true;
 }
 
 void HttpTransfer::TransferObserver::onSending(long bytes,long total){
@@ -1181,12 +1172,11 @@ void HttpTransfer::TransferObserver::onSending(long bytes,long total){
     return ;
 }
 
-bool HttpTransfer::TransferObserver::onSended(){
+void HttpTransfer::TransferObserver::onSended(){
     ALOGD("send completely...");
     if(mTask != NULL){
         mTask->onStatesChange((int)TASK_STATE_SENDED,0,0,0);
     }
-    return true;
 }
 
 void HttpTransfer::TransferObserver::onProgress(long bytes,long total){
@@ -1205,11 +1195,11 @@ void HttpTransfer::TransferObserver::onCompleted(){
     return;
 }
 
-void HttpTransfer::TransferObserver::onFailed(){
+void HttpTransfer::TransferObserver::onFailed(int error){
     if(mTask != NULL){
-        mTask->onStatesChange(TASK_STATE_FAIL,0,0,0);
+        mTask->onStatesChange(TASK_STATE_FAIL,error,0,0);
     }
-    ALOGD("http transfer failed");
+    ALOGD("http transfer failed error msg :%d ",error);
     return;
 }
 

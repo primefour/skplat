@@ -6,11 +6,11 @@
 #include"Timers.h"
 class SocksConnect{
     enum {
-        CONNECT_INIT,
-        CONNECT_CONNECTING,
-        CONNECT_CONNECTED,
-        CONNECT_CLOSE,
-        CONNECT_FAILED,
+        SOCK_CONNECT_INIT,
+        SOCK_CONNECT_CONNECTING,
+        SOCK_CONNECT_CONNECTED,
+        SOCK_CONNECT_CLOSE,
+        SOCK_CONNECT_FAILED,
     };
     public:
         /* create mutil-address connect*/
